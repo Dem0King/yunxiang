@@ -423,6 +423,8 @@ ul{list-style:none}
 .admin-image-meta{font-size:11px;color:var(--c-text-muted)}
 .admin-image-delete{width:32px;height:32px;border-radius:50%;background:rgba(220,38,38,.08);color:var(--c-error);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:background var(--tf)}
 .admin-image-delete:hover{background:rgba(220,38,38,.15)}
+.admin-image-replace{width:32px;height:32px;border-radius:50%;background:rgba(200,155,111,.1);color:var(--c-secondary);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:background var(--tf)}
+.admin-image-replace:hover{background:rgba(200,155,111,.25)}
 .admin-empty{text-align:center;padding:var(--space-3xl) var(--space-xl);color:var(--c-text-muted);font-size:13px}
 
 /* 管理员状态栏 */
@@ -1134,30 +1136,28 @@ ul{list-style:none}
   }
 
   // ═══════════════════════════════════════
-  // 管理员系统：登录、上传、图片管理
+  // 管理员系统：登录、上传、替换、删除
   // ═══════════════════════════════════════
   var GH_OWNER='Dem0King';
   var GH_REPO='yunxiang';
   var GH_BRANCH='main';
   var IMAGES_JSON_PATH='images/images.json';
   var IMAGES_DIR='images';
-  var ADMIN_PWD_SHA='240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9';
+  var ADMIN_PWD_SHA='5c3ef2eb5c7e527c99a859aafa16d1b77a8bc68ccde24e1e6cd24264688c4c8c';
 
-  function getGHHeaders(){
-    var t=localStorage.getItem('yxf_admin_token');
-    return t?{Authorization:'token '+t,'Content-Type':'application/json'}:{'Content-Type':'application/json'};
-  }
   function apiURL(path){return 'https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+path}
   function rawURL(path){return 'https://raw.githubusercontent.com/'+GH_OWNER+'/'+GH_REPO+'/'+GH_BRANCH+'/'+path}
-  function isLoggedIn(){return!!localStorage.getItem('yxf_admin_token')}
+  function getGHHeaders(){var t=localStorage.getItem('yxf_gh_token');return{Authorization:'token '+t,'Content-Type':'application/json'}}
+  function isLoggedIn(){return!!localStorage.getItem('yxf_gh_token')}
 
   async function sha256hex(s){
     var buf=new TextEncoder().encode(s);
     var hash=await crypto.subtle.digest('SHA-256',buf);
     return Array.from(new Uint8Array(hash)).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
   }
+  function readAsDataURL(file){return new Promise(function(r,j){var rd=new FileReader();rd.onload=function(){r(rd.result)};rd.onerror=j;rd.readAsDataURL(file)})}
 
-  // ── 登录 ──
+  // ── 登录系统（密码验证 + GitHub 令牌）──
   var loginModal=document.getElementById('loginModal');
   var loginPassword=document.getElementById('loginPassword');
   var loginSubmit=document.getElementById('loginSubmit');
@@ -1165,7 +1165,13 @@ ul{list-style:none}
   var loginClose=document.getElementById('loginClose');
   var footerAdmin=document.getElementById('footerAdmin');
 
-  function showLogin(){loginModal.classList.add('active');loginPassword.value='';loginError.style.display='none';loginPassword.classList.remove('error');setTimeout(function(){loginPassword.focus()},100)}
+  function showLogin(){
+    loginModal.classList.add('active');
+    loginPassword.value='';
+    loginError.style.display='none';
+    loginPassword.classList.remove('error');
+    setTimeout(function(){loginPassword.focus()},100);
+  }
   function hideLogin(){loginModal.classList.remove('active')}
 
   loginClose.addEventListener('click',hideLogin);
@@ -1176,10 +1182,26 @@ ul{list-style:none}
     if(!pwd){loginPassword.classList.add('error');return}
     var hash=await sha256hex(pwd);
     if(hash===ADMIN_PWD_SHA){
-      localStorage.setItem('yxf_admin_token',pwd);
+      // 密码正确，检查是否有 GitHub 令牌
+      if(!localStorage.getItem('yxf_gh_token')){
+        var token=prompt('首次登录，请粘贴你的 GitHub 令牌（ghp_ 开头）：');
+        if(!token||!token.startsWith('ghp_')){loginError.textContent='令牌格式错误，需要 ghp_ 开头';loginError.style.display='block';return}
+        localStorage.setItem('yxf_gh_token',token.trim());
+      }
+      // 验证令牌是否有效
+      try{
+        var testR=await fetch('https://api.github.com/user',{headers:{Authorization:'token '+localStorage.getItem('yxf_gh_token')}});
+        if(!testR.ok)throw new Error();
+      }catch(e){
+        localStorage.removeItem('yxf_gh_token');
+        loginError.textContent='令牌无效，请重新登录';
+        loginError.style.display='block';
+        return;
+      }
       hideLogin();
       onAdminLogin();
     }else{
+      loginError.textContent='密码错误，请重试';
       loginError.style.display='block';
       loginPassword.classList.add('error');
       setTimeout(function(){loginPassword.classList.remove('error')},500);
@@ -1198,8 +1220,13 @@ ul{list-style:none}
 
   function openAdminPanel(){adminPanel.classList.add('open');adminOverlay.classList.add('active');loadAdminImages()}
   function closeAdminPanel(){adminPanel.classList.remove('open');adminOverlay.classList.remove('active')}
-  function onAdminLogin(){adminStatus.classList.add('active');loadAdminImages()}
-  function onAdminLogout(){localStorage.removeItem('yxf_admin_token');adminStatus.classList.remove('active');closeAdminPanel();showToast('已退出登录')}
+  function onAdminLogin(){adminStatus.classList.add('active');showToast('登录成功');loadAdminImages()}
+  function onAdminLogout(){
+    localStorage.removeItem('yxf_gh_token');
+    adminStatus.classList.remove('active');
+    closeAdminPanel();
+    showToast('已退出登录');
+  }
 
   adminOpenBtn.addEventListener('click',openAdminPanel);
   adminClose.addEventListener('click',closeAdminPanel);
@@ -1219,8 +1246,6 @@ ul{list-style:none}
   uploadZone.addEventListener('drop',function(e){e.preventDefault();uploadZone.classList.remove('dragover');if(e.dataTransfer.files.length)handleFiles(e.dataTransfer.files)});
   fileInput.addEventListener('change',function(){if(fileInput.files.length)handleFiles(fileInput.files);fileInput.value=''});
 
-  function readAsDataURL(file){return new Promise(function(r,j){var rd=new FileReader();rd.onload=function(){r(rd.result)};rd.onerror=j;rd.readAsDataURL(file)})}
-
   async function handleFiles(files){
     var total=files.length;var done=0;
     uploadProgress.classList.add('active');
@@ -1229,41 +1254,58 @@ ul{list-style:none}
       if(file.size>10*1024*1024){progressText.textContent='跳过 '+file.name+'（超过10MB）';continue}
       progressText.textContent='上传 '+file.name+' ('+(i+1)+'/'+total+')';
       progressFill.style.width=Math.round((i/total)*100)+'%';
-      try{await uploadImage(file);done++}catch(err){progressText.textContent='上传失败: '+err.message}
+      try{await uploadImage(file);done++}catch(err){showToast('上传失败: '+err.message)}
     }
-    progressFill.style.width='100%';progressText.textContent='完成！成功上传 '+done+' 张';
+    progressFill.style.width='100%';
+    progressText.textContent='完成！成功上传 '+done+' 张';
+    showToast('成功上传 '+done+' 张图片');
     setTimeout(function(){uploadProgress.classList.remove('active');progressFill.style.width='0'},2500);
     await loadImages();
     await loadAdminImages();
   }
 
-  async function uploadImage(file){
+  async function uploadImage(file,replaceName){
     var ext=file.name.split('.').pop().toLowerCase()||'jpg';
-    var fname='img_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)+'.'+ext;
+    var fname=replaceName||('img_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)+'.'+ext);
     var dataURL=await readAsDataURL(file);
     var base64=dataURL.split(',')[1];
-    var token=localStorage.getItem('yxf_admin_token');
-    var headers={Authorization:'token '+token,'Content-Type':'application/json'};
+    var headers=getGHHeaders();
 
-    var r1=await fetch(apiURL(IMAGES_DIR+'/'+fname),{
-      method:'PUT',headers:headers,
-      body:JSON.stringify({message:'添加图片: '+fname,content:base64,branch:GH_BRANCH})
-    });
+    // 如果是替换，先获取旧文件的 sha
+    var oldSha=null;
+    if(replaceName){
+      try{var ro=await fetch(apiURL(IMAGES_DIR+'/'+fname)+'?ref='+GH_BRANCH,{headers:{Authorization:'token '+localStorage.getItem('yxf_gh_token')}});if(ro.ok){var od=await ro.json();oldSha=od.sha}}catch(e){}
+    }
+
+    // 上传图片文件
+    var body={message:(replaceName?'替换图片: ':'添加图片: ')+fname,content:base64,branch:GH_BRANCH};
+    if(oldSha)body.sha=oldSha;
+    var r1=await fetch(apiURL(IMAGES_DIR+'/'+fname),{method:'PUT',headers:headers,body:JSON.stringify(body)});
     if(!r1.ok)throw new Error('上传失败('+r1.status+')');
     var d1=await r1.json();
 
+    // 更新 images.json
     var images=[];
-    try{
-      var r0=await fetch(rawURL(IMAGES_JSON_PATH)+'?t='+Date.now());
-      if(r0.ok)images=await r0.json();
-    }catch(e){}
-    images.unshift({name:fname,url:rawURL(IMAGES_DIR+'/'+fname),sha:d1.content.sha,time:new Date().toISOString()});
+    try{var r0=await fetch(rawURL(IMAGES_JSON_PATH)+'?t='+Date.now());if(r0.ok)images=await r0.json()}catch(e){}
+
+    if(replaceName){
+      // 替换模式：更新已有记录
+      var found=false;
+      for(var j=0;j<images.length;j++){
+        if(images[j].name===fname){
+          images[j].sha=d1.content.sha;
+          images[j].time=new Date().toISOString();
+          images[j].url=rawURL(IMAGES_DIR+'/'+fname)+'?t='+Date.now();
+          found=true;break;
+        }
+      }
+      if(!found)images.unshift({name:fname,url:rawURL(IMAGES_DIR+'/'+fname),sha:d1.content.sha,time:new Date().toISOString()});
+    }else{
+      images.unshift({name:fname,url:rawURL(IMAGES_DIR+'/'+fname),sha:d1.content.sha,time:new Date().toISOString()});
+    }
 
     var curSha=null;
-    try{
-      var rc=await fetch(apiURL(IMAGES_JSON_PATH)+'?ref='+GH_BRANCH,{headers:{Authorization:'token '+token}});
-      if(rc.ok){var cd=await rc.json();curSha=cd.sha}
-    }catch(e){}
+    try{var rc=await fetch(apiURL(IMAGES_JSON_PATH)+'?ref='+GH_BRANCH,{headers:{Authorization:'token '+localStorage.getItem('yxf_gh_token')}});if(rc.ok){var cd=await rc.json();curSha=cd.sha}}catch(e){}
 
     var r2=await fetch(apiURL(IMAGES_JSON_PATH),{
       method:'PUT',headers:headers,
@@ -1272,9 +1314,8 @@ ul{list-style:none}
     if(!r2.ok)throw new Error('更新列表失败('+r2.status+')');
   }
 
-  // ── 展示图片 ──
+  // ── 展示图片（游客可见）──
   var galleryGrid=document.getElementById('galleryGrid');
-  var galleryEmpty=document.getElementById('galleryEmpty');
 
   async function loadImages(){
     try{
@@ -1305,7 +1346,7 @@ ul{list-style:none}
     galleryGrid.querySelectorAll('.scroll-reveal').forEach(function(el){io.observe(el)});
   }
 
-  // ── 管理员图片列表 ──
+  // ── 管理员图片列表（含替换和删除）──
   var adminImageList=document.getElementById('adminImageList');
 
   async function loadAdminImages(){
@@ -1321,33 +1362,63 @@ ul{list-style:none}
   function renderAdminImages(images){
     adminImageList.innerHTML='';
     if(!images||!images.length){adminImageList.innerHTML='<div class="admin-empty">暂无图片</div>';return}
-    images.forEach(function(img){
+    images.forEach(function(img,idx){
       var d=document.createElement('div');
       d.className='admin-image-item';
       d.innerHTML='<img class="admin-image-thumb" src="'+img.url+'" alt="">'
-        +'<div class="admin-image-info"><div class="admin-image-name">'+img.name+'</div><div class="admin-image-meta">'+(img.time?new Date(img.time).toLocaleDateString():'')+'</div></div>'
-        +'<button class="admin-image-delete" title="删除">&times;</button>';
+        +'<div class="admin-image-info"><div class="admin-image-name">图片 '+(idx+1)+'</div><div class="admin-image-meta">'+(img.time?new Date(img.time).toLocaleDateString():'')+'</div></div>'
+        +'<div style="display:flex;gap:6px;flex-shrink:0">'
+        +'<button class="admin-image-replace" title="替换">↻</button>'
+        +'<button class="admin-image-delete" title="删除">&times;</button>'
+        +'</div>';
+      // 替换按钮
+      d.querySelector('.admin-image-replace').addEventListener('click',function(){replaceImage(img)});
+      // 删除按钮
       d.querySelector('.admin-image-delete').addEventListener('click',function(){deleteImage(img)});
       adminImageList.appendChild(d);
     });
   }
 
+  // ── 替换图片 ──
+  function replaceImage(img){
+    var inp=document.createElement('input');
+    inp.type='file';inp.accept='image/*';
+    inp.addEventListener('change',async function(){
+      if(!inp.files.length)return;
+      var file=inp.files[0];
+      if(file.size>10*1024*1024){showToast('文件超过10MB');return}
+      showToast('正在替换图片...');
+      try{
+        await uploadImage(file,img.name);
+        showToast('图片替换成功！');
+        await loadImages();
+        await loadAdminImages();
+      }catch(e){showToast('替换失败: '+e.message)}
+    });
+    inp.click();
+  }
+
+  // ── 删除图片 ──
   async function deleteImage(img){
     if(!confirm('确定删除这张图片？'))return;
-    var token=localStorage.getItem('yxf_admin_token');
-    var headers={Authorization:'token '+token,'Content-Type':'application/json'};
+    showToast('正在删除...');
+    var headers=getGHHeaders();
+    var token=localStorage.getItem('yxf_gh_token');
 
+    // 获取文件 sha 并删除
     var fileSha=img.sha;
     if(!fileSha){
       try{var ri=await fetch(apiURL(IMAGES_DIR+'/'+img.name)+'?ref='+GH_BRANCH,{headers:{Authorization:'token '+token}});if(ri.ok){var id=await ri.json();fileSha=id.sha}}catch(e){}
     }
     if(fileSha){
-      await fetch(apiURL(IMAGES_DIR+'/'+img.name),{
+      var rd=await fetch(apiURL(IMAGES_DIR+'/'+img.name),{
         method:'DELETE',headers:headers,
         body:JSON.stringify({message:'删除图片: '+img.name,sha:fileSha,branch:GH_BRANCH})
       });
+      if(!rd.ok)showToast('删除文件失败('+rd.status+')');
     }
 
+    // 更新 images.json
     var images=[];
     try{var r=await fetch(rawURL(IMAGES_JSON_PATH)+'?t='+Date.now());if(r.ok)images=await r.json()}catch(e){}
     images=images.filter(function(i){return i.name!==img.name});
@@ -1360,9 +1431,9 @@ ul{list-style:none}
       body:JSON.stringify({message:'更新图片列表',content:btoa(unescape(encodeURIComponent(JSON.stringify(images,null,2)))),branch:GH_BRANCH,sha:curSha})
     });
 
+    showToast('图片已删除');
     await loadImages();
     await loadAdminImages();
-    showToast('图片已删除');
   }
 
   // ── 灯箱 ──
