@@ -1,0 +1,18 @@
+{
+  "name": "云祥家具城",
+  "short_name": "云祥家具",
+  "description": "云祥家具城线上展厅 — 温暖每一个家",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#faf8f5",
+  "theme_color": "#3d2b1f",
+  "orientation": "portrait-primary",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%233d2b1f' rx='32'/%3E%3Cpath d='M48 136 C32 136 20 124 20 108 C20 92 32 84 48 84 C48 60 68 44 96 44 C124 44 144 60 144 84 C160 84 172 92 172 108 C172 124 160 136 144 136' stroke='%23c89b6f' stroke-width='10' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cline x1='40' y1='152' x2='152' y2='152' stroke='%23c89b6f' stroke-width='10' stroke-linecap='round'/%3E%3Cline x1='56' y1='152' x2='56' y2='168' stroke='%23c89b6f' stroke-width='10' stroke-linecap='round'/%3E%3Cline x1='136' y1='152' x2='136' y2='168' stroke='%23c89b6f' stroke-width='10' stroke-linecap='round'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}

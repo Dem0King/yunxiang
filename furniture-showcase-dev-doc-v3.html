@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>云祥家具城线上展厅 — 开发文档 v3.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+@page { size: 210mm 297mm; margin: 0; }
+:root {
+  --c-bg: #faf8f5;
+  --c-text: #2c2218;
+  --c-primary: #3d2b1f;
+  --c-secondary: #c89b6f;
+  --c-accent: #d4a574;
+  --c-border: #e8e0d5;
+  --c-code-bg: #f5f0e8;
+  --c-code-text: #3d2b1f;
+  --c-table-header: #f0ebe3;
+  --c-heading: #6b4423;
+  --c-muted: #8b7d6b;
+  --c-cover-bg: #3d2b1f;
+  --c-cover-text: #faf8f5;
+  --c-cover-accent: #c89b6f;
+  --c-success: #16a34a;
+  --c-warning: #f59e0b;
+  --c-error: #dc2626;
+  --c-info: #3b82f6;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0; width: 210mm;
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: 'Noto Sans SC', 'Inter', sans-serif;
+  font-size: 13px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+@media screen {
+  html { display: flex; justify-content: center; background: #333; }
+  body { margin: 20px auto; box-shadow: 0 0 20px rgba(0,0,0,.3); }
+}
+/* Cover */
+.cover {
+  width: 210mm; height: 297mm;
+  background: linear-gradient(160deg, #3d2b1f 0%, #5c3a25 60%, #3d2b1f 100%);
+  color: var(--c-cover-text);
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  break-after: page; overflow: hidden; position: relative;
+}
+.cover::before {
+  content: ''; position: absolute; top: 0; right: 0;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle at 70% 30%, rgba(200,155,111,.15), transparent 70%);
+  pointer-events: none;
+}
+.cover::after {
+  content: ''; position: absolute; bottom: 0; left: 0;
+  width: 300px; height: 300px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 70%, rgba(212,165,116,.1), transparent 70%);
+  pointer-events: none;
+}
+.cover-tag {
+  font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--c-cover-accent); margin-bottom: 50px; font-weight: 500;
+}
+.cover-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 60px; font-weight: 900; line-height: 1.15;
+  margin-bottom: 28px; letter-spacing: 0.05em;
+}
+.cover-subtitle {
+  font-size: 20px; font-weight: 400; opacity: .85;
+  margin-bottom: 50px; letter-spacing: 0.1em;
+}
+.cover-divider {
+  width: 60px; height: 3px; background: var(--c-cover-accent);
+  margin-bottom: 50px; border-radius: 2px;
+}
+.cover-meta {
+  font-size: 14px; opacity: .7; text-align: center; line-height: 2.2;
+}
+/* Content */
+.main-content { padding: 45px 50px 35px 50px; }
+/* Chapter Header */
+.chapter-header {
+  break-after: avoid; break-inside: avoid;
+  margin-top: 28px; margin-bottom: 20px;
+  display: flex; align-items: baseline; gap: 16px;
+  border-bottom: 2px solid var(--c-secondary); padding-bottom: 10px;
+}
+.chapter-header:first-child { margin-top: 0; }
+.chapter-num {
+  font-family: 'Inter', sans-serif;
+  font-size: 36px; font-weight: 900;
+  color: var(--c-secondary); line-height: 1;
+}
+.chapter-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 22px; font-weight: 700; color: var(--c-heading);
+}
+/* Section */
+h2.section-title {
+  font-size: 15px; font-weight: 700; color: var(--c-primary);
+  margin-top: 22px; margin-bottom: 10px;
+  padding-left: 10px; border-left: 3px solid var(--c-secondary);
+  break-after: avoid;
+}
+h3.sub-title {
+  font-size: 13px; font-weight: 600; color: var(--c-heading);
+  margin-top: 16px; margin-bottom: 8px; break-after: avoid;
+}
+p.body-text { margin-bottom: 10px; text-align: justify; }
+ul, ol { margin: 8px 0 12px 20px; }
+li { margin-bottom: 4px; }
+strong { color: var(--c-primary); font-weight: 600; }
+/* Code */
+pre.code-block {
+  background: var(--c-code-bg);
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin: 10px 0;
+  font-family: 'JetBrains Mono', 'Liberation Mono', monospace;
+  font-size: 11px; line-height: 1.6;
+  color: var(--c-code-text);
+  white-space: pre-wrap; word-wrap: break-word;
+  break-inside: avoid; overflow-x: hidden;
+}
+pre.ascii-art {
+  background: var(--c-code-bg);
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin: 10px 0;
+  font-family: 'JetBrains Mono', 'Liberation Mono', monospace;
+  font-size: 10px; line-height: 1.4;
+  white-space: pre; break-inside: avoid;
+  overflow-x: auto;
+}
+code.inline {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--c-code-bg); padding: 1px 5px;
+  border-radius: 3px; font-size: 11px; color: var(--c-primary);
+}
+/* Table */
+table.data-table {
+  width: 100%; border-collapse: collapse;
+  margin: 10px 0; break-inside: avoid;
+  font-size: 12px;
+}
+table.data-table th {
+  background: var(--c-table-header);
+  border: 1px solid var(--c-border);
+  padding: 7px 10px; text-align: left;
+  font-weight: 600; color: var(--c-primary);
+}
+table.data-table td {
+  border: 1px solid var(--c-border);
+  padding: 6px 10px; vertical-align: top;
+}
+table.data-table tr:nth-child(even) td { background: #fdfbf8; }
+/* Callout */
+.callout {
+  background: #fdf6ed;
+  border-left: 4px solid var(--c-secondary);
+  border-radius: 0 6px 6px 0;
+  padding: 12px 16px; margin: 12px 0;
+  break-inside: avoid;
+}
+.callout-title {
+  font-weight: 700; color: var(--c-primary);
+  font-size: 12px; margin-bottom: 4px;
+}
+.callout-body { font-size: 12px; color: var(--c-text); }
+.callout.info { background: #eff6ff; border-left-color: var(--c-info); }
+.callout.warn { background: #fffbeb; border-left-color: var(--c-warning); }
+.callout.success { background: #f0fdf4; border-left-color: var(--c-success); }
+/* Color Swatch */
+.color-swatch {
+  display: inline-block; width: 14px; height: 14px;
+  border-radius: 3px; vertical-align: middle;
+  border: 1px solid var(--c-border); margin-right: 6px;
+}
+/* LOGO Mockup */
+.logo-mockup-box {
+  display: flex; align-items: center; gap: 20px;
+  padding: 24px; background: #fff;
+  border: 1px solid var(--c-border); border-radius: 8px;
+  margin: 10px 0; break-inside: avoid;
+}
+.logo-mockup-a {
+  width: 70px; height: 45px; position: relative; flex-shrink: 0;
+}
+.logo-mockup-a .cloud {
+  width: 100%; height: 100%; background: var(--c-secondary);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; position: relative;
+}
+.logo-mockup-a .cloud::before, .logo-mockup-a .cloud::after {
+  content: ''; position: absolute; background: var(--c-secondary); border-radius: 50%;
+}
+.logo-mockup-a .cloud::before { width: 30px; height: 30px; top: -12px; left: 8px; }
+.logo-mockup-a .cloud::after { width: 26px; height: 26px; top: -8px; right: 8px; }
+.logo-mockup-b {
+  font-family: 'Inter', sans-serif; font-size: 32px; font-weight: 900;
+  color: var(--c-primary); letter-spacing: -0.02em; flex-shrink: 0;
+}
+.logo-mockup-c {
+  font-family: 'Noto Serif SC', serif; font-size: 28px; font-weight: 700;
+  color: var(--c-primary); position: relative; flex-shrink: 0;
+}
+.logo-mockup-c .dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--c-secondary); margin-left: 4px; vertical-align: super;
+}
+.logo-label-text { font-size: 13px; color: var(--c-muted); }
+/* Ending */
+.ending {
+  width: 210mm; height: 297mm;
+  background: linear-gradient(160deg, #3d2b1f 0%, #5c3a25 60%, #3d2b1f 100%);
+  color: var(--c-cover-text);
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  break-before: page; overflow: hidden; position: relative;
+}
+.ending::before {
+  content: ''; position: absolute; top: 50%; left: 50%;
+  width: 500px; height: 500px; border-radius: 50%;
+  transform: translate(-50%,-50%);
+  background: radial-gradient(circle, rgba(200,155,111,.1), transparent 70%);
+}
+.ending-line { width: 60px; height: 3px; background: var(--c-cover-accent); margin-bottom: 30px; border-radius: 2px; }
+.ending-title { font-family: 'Noto Serif SC', serif; font-size: 42px; font-weight: 700; margin-bottom: 12px; }
+.ending-subtitle { font-size: 16px; opacity: .7; margin-bottom: 40px; }
+.ending-contact { font-size: 13px; opacity: .6; text-align: center; line-height: 2.2; }
+/* Spec list */
+.spec-list { list-style: none; margin: 8px 0; padding: 0; }
+.spec-list li { padding: 3px 0; padding-left: 16px; position: relative; }
+.spec-list li::before { content: '—'; position: absolute; left: 0; color: var(--c-secondary); }
+/* Inline tag */
+.tag-pill {
+  display: inline-block; padding: 1px 8px; border-radius: 10px;
+  font-size: 11px; font-weight: 500; margin-right: 4px;
+}
+.tag-p0 { background: #fef2f2; color: #dc2626; }
+.tag-p1 { background: #fffbeb; color: #d97706; }
+.tag-p2 { background: #f0fdf4; color: #16a34a; }
+</style>
+</head>
+<body>
+
+<!-- ========== COVER ========== -->
+<div class="cover">
+  <div class="cover-tag">开发文档 v3.0</div>
+  <div class="cover-title">云祥家具城</div>
+  <div class="cover-subtitle">线上展厅 · 开发文档</div>
+  <div class="cover-divider"></div>
+  <div class="cover-meta">
+    <div>2026 年 8 月</div>
+    <div>恭城 · 燕新路</div>
+  </div>
+</div>
+
+<!-- ========== MAIN CONTENT ========== -->
+<div class="main-content">
+
+<!-- ===== CHAPTER 1 ===== -->
+<div class="chapter-header">
+  <div class="chapter-num">01</div>
+  <div class="chapter-title">项目概述</div>
+</div>
+
+<h2 class="section-title">1.1 项目定位</h2>
+<p class="body-text">云祥家具城线上展厅是一个面向 C 端个人客户的<strong>家具产品展示网站</strong>。核心功能是「看」——让客户通过手机或电脑快速浏览门店代理的品牌和产品，产生购买意向后引导到店或在线咨询。</p>
+<p class="body-text">设计方向：融合 Kimi 前端审美（Bento Grid + 毛玻璃 + 渐变）与喜临门官网的专业产品展示风格，做一个<strong>温暖、有品质感、不花哨</strong>的现代家具展示网站。</p>
+
+<h2 class="section-title">1.2 项目信息</h2>
+<table class="data-table">
+  <tbody>
+    <tr><th style="width:25%">门店名称</th><td>云祥家具城</td></tr>
+    <tr><th>门店地址</th><td>恭城燕新路（地图可搜索「云祥家具城」）</td></tr>
+    <tr><th>营业时间</th><td>10:00 — 18:00</td></tr>
+    <tr><th>联系电话</th><td>18177310007 / 13457337032 / 18978398756</td></tr>
+    <tr><th>微信号</th><td>同手机号（三个号码均可加微信）</td></tr>
+    <tr><th>代理品牌</th><td>喜临门（核心品牌）、睡宝床店</td></tr>
+    <tr><th>目标客户</th><td>C 端个人客户</td></tr>
+    <tr><th>计划域名</th><td>yunxiang.com（待购买）</td></tr>
+    <tr><th>参考网站</th><td>Kimi (moonshot.cn) / 喜临门 (sleemon.cn)</td></tr>
+    <tr><th>风格偏好</th><td>温暖一点、别太花哨</td></tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">1.3 核心需求</h2>
+<table class="data-table">
+  <thead>
+    <tr><th style="width:8%">优先级</th><th style="width:22%">功能</th><th>说明</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><span class="tag-pill tag-p0">P0</span></td><td>品牌分类展示</td><td>按品牌（喜临门、睡宝）浏览产品</td></tr>
+    <tr><td><span class="tag-pill tag-p0">P0</span></td><td>家具类型分类</td><td>按品类（客餐厅、卧室、书房等）浏览，支持二级分类</td></tr>
+    <tr><td><span class="tag-pill tag-p0">P0</span></td><td>产品详情页</td><td>高清图片 + 参数 + 描述 + 联系入口</td></tr>
+    <tr><td><span class="tag-pill tag-p0">P0</span></td><td>联系入口</td><td>3 个电话号码 + 微信 + 到店地址</td></tr>
+    <tr><td><span class="tag-pill tag-p1">P1</span></td><td>首页轮播</td><td>主推品牌/活动展示，支持手势滑动</td></tr>
+    <tr><td><span class="tag-pill tag-p1">P1</span></td><td>搜索功能</td><td>按关键词找产品，支持联想提示</td></tr>
+    <tr><td><span class="tag-pill tag-p1">P1</span></td><td>响应式适配</td><td>手机端体验优先，Mobile-first</td></tr>
+    <tr><td><span class="tag-pill tag-p1">P1</span></td><td>交互动效</td><td>滚动入场动画、微交互、导航渐变</td></tr>
+    <tr><td><span class="tag-pill tag-p2">P2</span></td><td>收藏/分享</td><td>客户收藏喜欢的产品（本地存储）</td></tr>
+    <tr><td><span class="tag-pill tag-p2">P2</span></td><td>门店信息</td><td>地址、地图嵌入、营业时间</td></tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">1.4 技术选型</h2>
+<table class="data-table">
+  <thead>
+    <tr><th style="width:18%">层面</th><th style="width:30%">技术</th><th>理由</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>框架</td><td>React 19 + TypeScript</td><td>生态最大，类型安全，AI 辅助开发友好</td></tr>
+    <tr><td>构建工具</td><td>Vite 6</td><td>极快冷启动，按需编译</td></tr>
+    <tr><td>样式方案</td><td>Tailwind CSS 4</td><td>原子化 CSS，零自定义 CSS 即可出效果</td></tr>
+    <tr><td>动效</td><td>Framer Motion</td><td>声明式动画，滚动入场/布局动画一步到位</td></tr>
+    <tr><td>路由</td><td>React Router 7</td><td>文件约定路由，SSR 预留</td></tr>
+    <tr><td>图片优化</td><td>下一代图片 (WebP/AVIF) + 懒加载</td><td>家具站图片是命脉</td></tr>
+    <tr><td>部署</td><td>Vercel 免费版</td><td>零配置部署，全球 CDN，自带 SSL</td></tr>
+    <tr><td>数据源</td><td>本地 JSON / Markdown</td><td>初期无需后端，后期可接 CMS</td></tr>
+  </tbody>
+</table>
+
+<!-- ===== CHAPTER 2 ===== -->
+<div class="chapter-header">
+  <div class="chapter-num">02</div>
+  <div class="chapter-title">品牌设计</div>
+</div>
+
+<h2 class="section-title">2.1 LOGO 设计概念</h2>
+<p class="body-text">以下提供三个 LOGO 设计方向，选定后可交由设计师细化或用 AI 工具生成矢量文件。</p>
+
+<h3 class="sub-title">方案 A — 云 · 椅（推荐）</h3>
+<div class="logo-mockup-box">
+  <div class="logo-mockup-a"><div class="cloud"></div></div>
+  <div>
+    <div style="font-size:16px;font-weight:700;color:var(--c-primary);margin-bottom:4px;">云祥家具城</div>
+    <div class="logo-label-text">云朵造型同时勾勒出椅背轮廓，呼应「云祥」之名与家具行业属性</div>
+  </div>
+</div>
+<ul class="spec-list">
+  <li>形态：圆润云朵 + 椅背弧线双重意象</li>
+  <li>颜色：暖木色 #c89b6f 主色，深胡桃 #3d2b1f 辅助</li>
+  <li>气质：温暖、亲和、有家的感觉</li>
+  <li>适用场景：门头招牌、网站 LOGO、微信头像、名片</li>
+</ul>
+
+<h3 class="sub-title">方案 B — YX 字母组合</h3>
+<div class="logo-mockup-box">
+  <div class="logo-mockup-b">YX</div>
+  <div>
+    <div style="font-size:16px;font-weight:700;color:var(--c-primary);margin-bottom:4px;">YUNXIANG</div>
+    <div class="logo-label-text">Y 与 X 交织形成几何标记，现代感强，适合小尺寸场景</div>
+  </div>
+</div>
+<ul class="spec-list">
+  <li>形态：Y（生长）+ X（稳固）的几何交织</li>
+  <li>颜色：深胡桃 #3d2b1f 单色，极简</li>
+  <li>气质：现代、专业、国际化</li>
+  <li>适用场景：网站 Favicon、APP 图标、水印</li>
+</ul>
+
+<h3 class="sub-title">方案 C — 极简文字标</h3>
+<div class="logo-mockup-box">
+  <div class="logo-mockup-c">云祥<span class="dot"></span></div>
+  <div>
+    <div style="font-size:16px;font-weight:700;color:var(--c-primary);margin-bottom:4px;">云祥 · YUNXIANG</div>
+    <div class="logo-label-text">「云祥」二字用衬线字体，右上方点缀暖木色圆点，简洁大方</div>
+  </div>
+</div>
+<ul class="spec-list">
+  <li>形态：纯文字 + 暖木色点缀圆点</li>
+  <li>颜色：深胡桃文字 + 暖木色圆点</li>
+  <li>气质：优雅、克制、高级感</li>
+  <li>适用场景：全场景通用，尤其适合印刷品</li>
+</ul>
+
+<div class="callout">
+  <div class="callout-title">建议</div>
+  <div class="callout-body">推荐方案 A（云 · 椅），辨识度最高且与家具行业关联性强。可搭配方案 C 的文字标作为组合 LOGO 使用。</div>
+</div>
+
+<h2 class="section-title">2.2 Slogan 提案</h2>
+<table class="data-table">
+  <thead>
+    <tr><th style="width:5%">#</th><th style="width:40%">Slogan</th><th>风格说明</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>1</td><td><strong>云祥家具，温暖每一个家</strong></td><td>温暖、直接、好记，与品牌名呼应</td></tr>
+    <tr><td>2</td><td><strong>让家，成为你最想待的地方</strong></td><td>情感化、有画面感，适合首页 Hero</td></tr>
+    <tr><td>3</td><td><strong>好家具，选云祥</strong></td><td>朗朗上口、三段式，适合广告语</td></tr>
+  </tbody>
+</table>
+<div class="callout info">
+  <div class="callout-title">建议</div>
+  <div class="callout-body">首页 Hero 区使用 Slogan 2（情感化），页脚和联系区使用 Slogan 1（品牌名呼应），广告物料使用 Slogan 3。</div>
+</div>
+
+<h2 class="section-title">2.3 品牌色系（暖色调）</h2>
+<p class="body-text">基于「温暖一点、别太花哨」的风格偏好，品牌色从原来的深墨蓝调整为<strong>暖木质色调</strong>，呼应家具行业的材质感。</p>
+<table class="data-table">
+  <thead>
+    <tr><th style="width:20%">角色</th><th style="width:15%">色值</th><th style="width:15%">色样</th><th>用途</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>主色 (Primary)</td><td>#3d2b1f</td><td><span class="color-swatch" style="background:#3d2b1f"></span>深胡桃</td><td>页头背景、主按钮、标题文字</td></tr>
+    <tr><td>辅色 (Secondary)</td><td>#c89b6f</td><td><span class="color-swatch" style="background:#c89b6f"></span>暖木色</td><td>强调色、链接、图标、分隔线</td></tr>
+    <tr><td>点缀 (Accent)</td><td>#d4a574</td><td><span class="color-swatch" style="background:#d4a574"></span>胡桃木</td><td>Hover 态、标签底色、装饰元素</td></tr>
+    <tr><td>背景 (Background)</td><td>#faf8f5</td><td><span class="color-swatch" style="background:#faf8f5"></span>暖白</td><td>页面背景</td></tr>
+    <tr><td>卡片背景</td><td>#ffffff</td><td><span class="color-swatch" style="background:#ffffff"></span>纯白</td><td>产品卡片、弹窗</td></tr>
+    <tr><td>正文文字</td><td>#2c2218</td><td><span class="color-swatch" style="background:#2c2218"></span>暖黑</td><td>正文、次要标题</td></tr>
+    <tr><td>次要文字</td><td>#8b7d6b</td><td><span class="color-swatch" style="background:#8b7d6b"></span>暖灰</td><td>辅助说明、标签文字</td></tr>
+    <tr><td>边框</td><td>#e8e0d5</td><td><span class="color-swatch" style="background:#e8e0d5"></span>暖边框</td><td>卡片边框、表格线</td></tr>
+  </tbody>
+</table>
+
+<h3 class="sub-title">语义色</h3>
+<table class="data-table">
+  <tbody>
+    <tr><td><span class="color-swatch" style="background:#16a34a"></span>成功 #16a34a</td><td>「有货」「包安装」</td></tr>
+    <tr><td><span class="color-swatch" style="background:#f59e0b"></span>警告 #f59e0b</td><td>「限时优惠」「少量库存」</td></tr>
+    <tr><td><span class="color-swatch" style="background:#dc2626"></span>错误 #dc2626</td><td>「缺货」</td></tr>
+    <tr><td><span class="color-swatch" style="background:#3b82f6"></span>信息 #3b82f6</td><td>提示信息</td></tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">2.4 参考网站分析</h2>
+<table class="data-table">
+  <thead>
+    <tr><th style="width:18%">参考站</th><th style="width:40%">设计特征</th><th>借鉴点</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Kimi (moonshot.cn)</td><td>Bento Grid 布局、毛玻璃效果、渐变背景、大留白、克制动效</td><td>首页布局结构、卡片设计、滚动入场动画节奏</td></tr>
+    <tr><td>喜临门 (sleemon.cn)</td><td>产品大图展示、品牌叙事、专业参数呈现、蓝色系（我们改为暖色系）</td><td>产品详情页结构、品牌馆页面、参数展示方式</td></tr>
+  </tbody>
+</table>
+
+<!-- ===== CHAPTER 3 ===== -->
+<div class="chapter-header">
+  <div class="chapter-num">03</div>
+  <div class="chapter-title">设计系统</div>
+</div>
+
+<h2 class="section-title">3.1 间距系统 (Spacing Scale)</h2>
+<p class="body-text">4px 基准制，所有间距必须是 4 的倍数。这是保证页面视觉一致性的基础。</p>
+<pre class="code-block">间距 Token (Tailwind 对应):
+  4    → xs      组件内部最小间距 (图标与文字)
+  8    → sm      组件内部间距
+  12   → md      组件内部间距 (大)
+  16   → base    组件之间默认间距
+  20   → lg      列表项间距
+  24   → xl      卡片间距 / 区块内部留白
+  32   → 2xl     区块内部留白 (大)
+  40   → 3xl     区块之间留白
+  48   → 4xl     区块之间留白 (大)
+  64   → 5xl     大区块之间留白
+  80   → 6xl     移动端首屏区块间距
+  96   → 7xl     桌面端首屏区块间距
+
+使用规则:
+  组件内部间距    → 8 / 12 / 16
+  组件之间间距    → 16 / 24
+  区块内部留白    → 32 / 48
+  区块之间留白    → 64 / 80 (移动端 48 / 64)</pre>
+
+<h2 class="section-title">3.2 字体阶梯 (Type Scale)</h2>
+<table class="data-table">
+  <thead>
+    <tr><th style="width:14%">角色</th><th style="width:20%">桌面端</th><th style="width:20%">移动端</th><th>用途</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Display</td><td>48px / 56px / 700</td><td>32px / 40px / 700</td><td>首屏大标题</td></tr>
+    <tr><td>H1</td><td>32px / 40px / 700</td><td>24px / 32px / 700</td><td>页面标题</td></tr>
+    <tr><td>H2</td><td>24px / 32px / 600</td><td>20px / 28px / 600</td><td>区块标题</td></tr>
+    <tr><td>H3</td><td>20px / 28px / 600</td><td>18px / 26px / 600</td><td>卡片标题</td></tr>
+    <tr><td>Body-L</td><td>18px / 28px / 400</td><td>16px / 24px / 400</td><td>正文 (大)</td></tr>
+    <tr><td>Body</td><td>16px / 24px / 400</td><td>14px / 22px / 400</td><td>正文 (默认)</td></tr>
+    <tr><td>Body-S</td><td>14px / 22px / 400</td><td>13px / 20px / 400</td><td>正文 (小)</td></tr>
+    <tr><td>Caption</td><td>12px / 18px / 500</td><td>12px / 18px / 500</td><td>标签 / 辅助文字</td></tr>
+    <tr><td>Overline</td><td>11px / 16px / 600</td><td>11px / 16px / 600</td><td>品牌名 / 分类标签 (letter-spacing: 0.08em)</td></tr>
+  </tbody>
+</table>
+<p class="body-text"><strong>字体族：</strong>Noto Sans SC (中文正文) / Noto Serif SC (标题) / Inter (英文) / JetBrains Mono (代码)</p>
+
+<h2 class="section-title">3.3 圆角系统</h2>
+<table class="data-table">
+  <tbody>
+    <tr><th style="width:20%">Token</th><th style="width:15%">值</th><th>用途</th></tr>
+    <tr><td>rounded-sm</td><td>4px</td><td>小标签、输入框</td></tr>
+    <tr><td>rounded-md</td><td>8px</td><td>按钮、小卡片</td></tr>
+    <tr><td>rounded-lg</td><td>12px</td><td>产品卡片、弹窗</td></tr>
+    <tr><td>rounded-xl</td><td>16px</td><td>大卡片、Bento Grid 单元</td></tr>
+    <tr><td>rounded-2xl</td><td>24px</td><td>特色区块</td></tr>
+    <tr><td>rounded-full</td><td>9999px</td><td>头像、标签胶囊、圆形按钮</td></tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">3.4 阴影系统</h2>
+<table class="data-table">
+  <tbody>
+    <tr><th style="width:20%">Token</th><th style="width:45%">值</th><th>用途</th></tr>
+    <tr><td>shadow-sm</td><td>0 1px 2px rgba(60,43,31,.05)</td><td>默认卡片</td></tr>
+    <tr><td>shadow-md</td><td>0 4px 6px rgba(60,43,31,.07), 0 2px 4px rgba(60,43,31,.05)</td><td>Hover 卡片</td></tr>
+    <tr><td>shadow-lg</td><td>0 10px 15px rgba(60,43,31,.08), 0 4px 6px rgba(60,43,31,.05)</td><td>弹窗、浮层</td></tr>
+    <tr><td>shadow-xl</td><td>0 20px 25px rgba(60,43,31,.1), 0 8px 10px rgba(60,43,31,.04)</td><td>模态框</td></tr>
+  </tbody>
+</table>
+<div class="callout">
+  <div class="callout-title">注意</div>
+  <div class="callout-body">阴影颜色使用 rgba(60,43,31, ...) 即深胡桃色的半透明版本，而非默认的黑色，保证暖色调一致性。</div>
+</div>
+
+<h2 class="section-title">3.5 动画曲线</h2>
+<pre class="code-block">/* 缓动函数 */
+--ease-out:   cubic-bezier(0.16, 1, 0.3, 1);   /* 入场动画 */
+--ease-in:    cubic-bezier(0.7, 0, 0.84, 0);   /* 退场动画 */
+--ease-in-out: cubic-bezier(0.65, 0, 0.35, 1); /* 状态切换 */
+--ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* 弹性 (Hover) */
+
+/* 时长标准 */
+--duration-fast: 150ms;     /* 微交互 (hover/click) */
+--duration-normal: 250ms;   /* 常规过渡 */
+--duration-slow: 400ms;     /* 入场动画 */
+--duration-slower: 600ms;   /* 大范围滚动入场 */</pre>
+
+<h2 class="section-title">3.6 响应式断点</h2>
+<table class="data-table">
+  <tbody>
+    <tr><th style="width:15%">断点</th><th style="width:15%">值</th><th>设备</th></tr>
+    <tr><td>sm</td><td>640px</td><td>手机竖屏</td></tr>
+    <tr><td>md</td><td>768px</td><td>手机横屏 / 小平板</td></tr>
+    <tr><td>lg</td><td>1024px</td><td>平板 / 小笔记本</td></tr>
+    <tr><td>xl</td><td>1280px</td><td>桌面</td></tr>
+    <tr><td>2xl</td><td>1536px</td><td>大屏</td></tr>
+  </tbody>
+</table>
+<p class="body-text"><strong>策略：</strong>Mobile-first，默认样式为移动端，使用 <code class="inline">min-width</code> 逐步升级。</p>
+
+<!-- ===== CHAPTER 4 ===== -->
+<div class="chapter-header">
+  <div class="chapter-num">04</div>
+  <div class="chapter-title">组件规范</div>
+</div>
+
+<h2 class="section-title">4.1 按钮系统</h2>
+<p class="body-text">4 种变体 × 5 种状态 × 3 种尺寸，覆盖全站所有交互场景。</p>
+
+<h3 class="sub-title">按钮变体</h3>
+<table class="data-table">
+  <tbody>
+    <tr><th style="width:15%">变体</th><th style="width:35%">样式</th><th>用途</th></tr>
+    <tr><td>Primary</td><td>深胡桃实底 + 白字</td><td>核心转化动作（立即咨询、预约到店）</td></tr>
+    <tr><td>Secondary</td><td>暖木色描边 + 深胡桃字</td><td>次要动作（了解更多、查看详情）</td></tr>
+    <tr><td>Ghost</td><td>透明 + 文字色</td><td>导航、筛选</td></tr>
+    <tr><td>Text</td><td>无背景无边框 + 链接色</td><td>链接式按钮</td></tr>
+  </tbody>
+</table>
+
+<h3 class="sub-title">按钮状态</h3>
+<table class="data-table">
+  <tbody>
+    <tr><th style="width:15%">状态</th><th style="width:25%">触发</th><th>视觉变化</th></tr>
+    <tr><td>Default</td><td>默认</td><td>基准态</td></tr>
+    <tr><td>Hover</td><td>鼠标悬停</td><td>背景明度 +5%，阴影增强，scale(1.02)</td></tr>
+    <tr><td>Active</td><td>按下</td><td>scale(0.98)，背景明度 -5%</td></tr>
+    <tr><td>Focus</td><td>键盘聚焦</td><td>2px outline #c89b6f + 2px offset（无障碍）</td></tr>
+    <tr><td>Disabled</td><td>不可用</td><td>opacity: 0.4，cursor: not-allowed</td></tr>
+  </tbody>
+</table>
+
+<h3 class="sub-title">按钮尺寸</h3>
+<table class="data-table">
+  <tbody>
+    <tr><th style="width:15%">尺寸</th><th style="width:15%">高度</th><th style="width:15%">内边距</th><th>字号</th></tr>
+    <tr><td>Large</td><td>48px</td><td>32px</td><td>16px (CTA)</td></tr>
+    <tr><td>Medium</td><td>40px</td><td>24px</td><td>14px (常规)</td></tr>
+    <tr><td>Small</td><td>32px</td><td>16px</td><td>13px (标签/筛选)</td></tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">4.2 产品卡片</h2>
+<h3 class="sub-title">完整交互状态</h3>
+<pre class="code-block">卡片交互规范:
+
+Hover (桌面端):
+  - 卡片整体: translateY(-8px) + shadow-md → shadow-lg
+  - 产品图片: scale(1.05), transition 400ms ease-out
+  - 底部浮层: 「查看详情」按钮从 opacity:0 → 1, translateY(8px) → 0
+  - 品牌标签: 微弹 scale(1.05), transition 200ms
+
+Active (按下):
+  - 整体: scale(0.99), transition 150ms
+
+Focus (键盘):
+  - 2px outline #c89b6f + 2px offset
+
+触屏 (移动端):
+  - 去掉 Hover 态 (移动端无 hover)
+  - 整卡可点击，跳转详情页
+  - 长按弹出操作菜单 (收藏 / 分享)</pre>
+
+<h3 class="sub-title">卡片结构</h3>
+<pre class="ascii-art">┌─────────────────────────┐
+│  [品牌标签]    [收藏图标] │
+│                         │
+│    ┌─────────────┐      │
+│    │             │      │
+│    │  产品主图    │      │
+│    │  (1:1)      │      │
+│    │             │      │
+│    └─────────────┘      │
+│                         │
+│  产品名称 (H3, 2行截断)  │
+│  ¥价格  ¥原价(划线)      │
+│  [标签] [标签]           │
+│                         │
+│  ┌─ Hover 浮层 ───────┐ │
+│  │  查看详情 →         │ │
+│  └────────────────────┘ │
+└─────────────────────────┘</pre>
+
+<h2 class="section-title">4.3 导航栏</h2>
+<h3 class="sub-title">桌面端</h3>
+<ul class="spec-list">
+  <li>固定顶部，高度 64px，背景从透明 → 暖白 (滚动 100px 后)</li>
+  <li>左侧：LOGO + 「云祥家具城」</li>
+  <li>中间：首页 / 品牌馆 / 产品 / 关于我们</li>
+  <li>右侧：搜索图标 + 「立即咨询」Primary 按钮</li>
+</ul>
+<h3 class="sub-title">移动端</h3>
+<ul class="spec-list">
+  <li>顶部高度 56px，LOGO + 搜索图标 + 菜单图标</li>
+  <li>底部 Tab 栏 (固定)：首页 / 品牌 / 产品 / 关于</li>
+  <li>Tab 图标热区 48×48px，图标 + 文字</li>
+  <li>当前页 Tab 高亮：暖木色图标 + 文字</li>
+</ul>
+
+<h2 class="section-title">4.4 筛选栏</h2>
+<ul class="spec-list">
+  <li>桌面端：左侧侧边栏筛选 (品牌 + 品类 + 价格区间 + 排序)</li>
+  <li>移动端：底部抽屉弹出筛选 (点击「筛选」按钮触发)</li>
+  <li>已选筛选条件以标签胶囊形式展示在顶部，可单独清除</li>
+  <li>筛选结果实时更新，带数量统计</li>
+</ul>
+
+<h2 class="section-title">4.5 表单组件</h2>
+<p class="body-text">用于「预约到店」和「在线咨询」表单。</p>
+<table class="data-table">
+  <tbody>
+    <tr><th style="width:20%">组件</th><th style="width:30%">样式</th><th>交互</th></tr>
+    <tr><td>输入框</td><td>高 44px, 圆角 8px, 暖边框</td><td>Focus 时边框变暖木色 + 阴影</td></tr>
+    <tr><td>选择器</td><td>下拉选择, 支持品牌/品类</td><td>移动端用原生 Select</td></tr>
+    <tr><td>文本域</td><td>最小高 96px, 可拉伸</td><td>同输入框</td></tr>
+    <tr><td>提交按钮</td><td>Primary Large, 全宽(移动端)</td><td>提交后显示成功提示</td></tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">4.6 标签 / 徽章</h2>
+<table class="data-table">
+  <tbody>
+    <tr><th style="width:20%">类型</th><th style="width:30%">样式</th><th>示例</th></tr>
+    <tr><td>品牌标签</td><td>暖木色底 + 深胡桃字, rounded-full</td><td>喜临门 / 睡宝</td></tr>
+    <tr><td>状态标签</td><td>语义色底 + 语义色字</td><td>有货 / 限时优惠 / 缺货</td></tr>
+    <tr><td>品类标签</td><td>暖白底 + 暖灰字, rounded-sm</td><td>床垫 / 沙发 / 餐桌</td></tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">4.7 底部联系栏（悬浮）</h2>
+<p class="body-text">全站通用悬浮底部联系栏，移动端常驻显示。</p>
+<pre class="ascii-art">桌面端 (底部悬浮条):
+┌──────────────────────────────────────────────────┐
+│  ☎ 18177310007  ☎ 13457337032  ☎ 18978398756     │
+│  📍 恭城燕新路  🕐 10:00-18:00  💬 微信咨询       │
+└──────────────────────────────────────────────────┘
+
+移动端 (底部双按钮):
+┌────────────┬────────────┐
+│  📞 电话    │  💬 微信    │
+│  181773..  │  在线咨询   │
+└────────────┴────────────┘</pre>
+
+<!-- ===== CHAPTER 5 ===== -->
+<div class="chapter-header">
+  <div class="chapter-num">05</div>
+  <div class="chapter-title">网站结构</div>
+</div>
+
+<h2 class="section-title">5.1 页面地图</h2>
+<pre class="ascii-art">云祥家具城线上展厅
+│
+├── 首页 /                        # 品牌印象 + 核心入口
+├── 品牌馆 /
+│   ├── 喜临门 /sleemon            # 核心品牌, 专场展示
+│   └── 睡宝 /shuibao             # 辅助品牌
+├── 产品 /
+│   ├── 全部产品 /products         # 筛选 + 网格
+│   ├── /products?brand=sleemon   # 按品牌筛选
+│   └── /products?category=...    # 按品类筛选
+├── 产品详情 /product/:slug        # 单品详情
+├── 关于我们 /about                # 门店介绍 + 地址
+└── 搜索 /search?q=...            # 搜索结果</pre>
+
+<h2 class="section-title">5.2 路由配置</h2>
+<pre class="code-block">// React Router 7 路由配置
+const routes = [
+  { path: '/',            element: &lt;HomePage /&gt; },
+  { path: '/sleemon',     element: &lt;BrandPage brand="sleemon" /&gt; },
+  { path: '/shuibao',     element: &lt;BrandPage brand="shuibao" /&gt; },
+  { path: '/products',    element: &lt;ProductListPage /&gt; },
+  { path: '/product/:slug', element: &lt;ProductDetailPage /&gt; },
+  { path: '/about',       element: &lt;AboutPage /&gt; },
+  { path: '/search',      element: &lt;SearchPage /&gt; },
+];</pre>
+
+<!-- ===== CHAPTER 6 ===== -->
+<div class="chapter-header">
+  <div class="chapter-num">06</div>
+  <div class="chapter-title">页面设计详细</div>
+</div>
+
+<h2 class="section-title">6.1 首页</h2>
+<h3 class="sub-title">结构 (从上到下)</h3>
+<table class="data-table">
+  <tbody>
+    <tr><th style="width:8%">#</th><th style="width:22%">区块</th><th>内容</th></tr>
+    <tr><td>1</td><td>导航栏</td><td>LOGO + 导航 + 咨询按钮</td></tr>
+    <tr><td>2</td><td>Hero 轮播</td><td>全屏主推品牌/活动，Slogan「让家，成为你最想待的地方」</td></tr>
+    <tr><td>3</td><td>品牌入口</td><td>Bento Grid: 喜临门 (大卡) + 睡宝 (小卡)</td></tr>
+    <tr><td>4</td><td>精选产品</td><td>8-12 款热销产品卡片网格</td></tr>
+    <tr><td>5</td><td>品类导航</td><td>客餐厅 / 卧室 / 书房 图标入口</td></tr>
+    <tr><td>6</td><td>关于我们</td><td>门店介绍 + 实景照片 + 营业时间</td></tr>
+    <tr><td>7</td><td>联系方式</td><td>3 个电话 + 微信 + 地址 + 地图</td></tr>
+    <tr><td>8</td><td>页脚</td><td>版权 + 品牌链接 + 营业时间</td></tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">6.2 品牌馆</h2>
+<h3 class="sub-title">喜临门（核心品牌）</h3>
+<ul class="spec-list">
+  <li>品牌 Hero：品牌 LOGO + 品牌故事 + 主推系列</li>
+  <li>产品网格：按系列分组展示（深睡系列、白露系列等）</li>
+  <li>品牌特色：独立袋装弹簧、抗菌防螨等技术亮点</li>
+  <li>专属 CTA：「喜临门专场预约」</li>
+</ul>
+<h3 class="sub-title">睡宝床店</h3>
+<ul class="spec-list">
+  <li>品牌 Hero：品牌 LOGO + 简介</li>
+  <li>产品网格：按品类展示</li>
+  <li>联系入口</li>
+</ul>
+
+<h2 class="section-title">6.3 产品列表页</h2>
+<ul class="spec-list">
+  <li>顶部：面包屑导航 + 页面标题</li>
+  <li>左侧 (桌面端)：筛选侧边栏 (品牌、品类、价格、排序)</li>
+  <li>移动端：筛选按钮 → 底部抽屉</li>
+  <li>主体：产品卡片网格 (桌面 3-4 列, 平板 2-3 列, 手机 2 列)</li>
+  <li>底部：上拉加载更多 (移动端) / 分页 (桌面端)</li>
+</ul>
+
+<h2 class="section-title">6.4 产品详情页</h2>
+<table class="data-table">
+  <tbody>
+    <tr><th style="width:8%">#</th><th style="width:22%">区块</th><th>内容</th></tr>
+    <tr><td>1</td><td>面包屑</td><td>首页 / 品牌 / 产品名</td></tr>
+    <tr><td>2</td><td>图片区</td><td>主图 + 缩略图列表, 移动端支持滑动</td></tr>
+    <tr><td>3</td><td>信息区</td><td>品牌标签 + 产品名 + 价格 (或「到店咨询」)</td></tr>
+    <tr><td>4</td><td>规格选择</td><td>尺寸 / 颜色 / 材质选项</td></tr>
+    <tr><td>5</td><td>参数表</td><td>规格、材质、保养说明等</td></tr>
+    <tr><td>6</td><td>描述区</td><td>产品描述 + 场景图</td></tr>
+    <tr><td>7</td><td>相关推荐</td><td>同品牌/同品类推荐 4 款</td></tr>
+    <tr><td>8</td><td>联系区</td><td>「咨询此产品」按钮 (带产品名跳转微信)</td></tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">6.5 关于我们</h2>
+<ul class="spec-list">
+  <li>门店介绍：云祥家具城简介</li>
+  <li>门店实景：门头照 + 店内环境照 (用户已有素材)</li>
+  <li>地址：恭城燕新路 + 地图嵌入 (可搜索「云祥家具城」)</li>
+  <li>营业时间：10:00 - 18:00</li>
+  <li>联系方式：3 个电话号码 + 微信号 (同手机号)</li>
+  <li>代理品牌：喜临门 + 睡宝</li>
+</ul>
+
+<h2 class="section-title">6.6 页面状态 (空 / 加载 / 错误)</h2>
+<h3 class="sub-title">Loading (加载中)</h3>
+<ul class="spec-list">
+  <li>首页：骨架屏模拟 Bento Grid 布局, 灰色块 + shimmer 动画</li>
+  <li>列表：卡片骨架屏 (图片灰块 + 文字灰条)</li>
+  <li>详情：图片区 Loading 占位 + 信息区骨架</li>
+</ul>
+<h3 class="sub-title">Empty (无数据)</h3>
+<ul class="spec-list">
+  <li>搜索无结果：插图 + 「没有找到相关产品」+ 推荐热销</li>
+  <li>筛选无结果：「试试减少筛选条件」+ 重置按钮</li>
+</ul>
+<h3 class="sub-title">Error (出错)</h3>
+<ul class="spec-list">
+  <li>图片加载失败：占位图 + 重试按钮</li>
+  <li>页面 404：品牌化 404 页 + 回首页按钮</li>
+</ul>
+
+<!-- ===== CHAPTER 7 ===== -->
+<div class="chapter-header">
+  <div class="chapter-num">07</div>
+  <div class="chapter-title">移动端适配</div>
+</div>
+
+<h2 class="section-title">7.1 触控目标尺寸</h2>
+<table class="data-table">
+  <tbody>
+    <tr><th style="width:30%">元素</th><th style="width:25%">最小尺寸</th><th>说明</th></tr>
+    <tr><td>最小可点击区域</td><td>44 × 44px</td><td>Apple HIG 标准</td></tr>
+    <tr><td>底部 Tab 图标热区</td><td>48 × 48px</td><td>含间距</td></tr>
+    <tr><td>按钮最小高度</td><td>44px</td><td>移动端所有按钮</td></tr>
+    <tr><td>卡片可点击区域</td><td>整卡可点</td><td>点击跳转详情页</td></tr>
+    <tr><td>筛选标签间距</td><td>≥ 8px</td><td>防止误触</td></tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">7.2 手势支持</h2>
+<table class="data-table">
+  <tbody>
+    <tr><th style="width:25%">场景</th><th style="width:25%">手势</th><th>说明</th></tr>
+    <tr><td>首页 Hero 轮播</td><td>左右滑动</td><td>Swiper.js 实现</td></tr>
+    <tr><td>详情页大图</td><td>双指缩放</td><td>Pinch-to-Zoom</td></tr>
+    <tr><td>图片灯箱</td><td>上下滑动关闭</td><td>类似微信图片浏览</td></tr>
+    <tr><td>列表加载</td><td>上拉触底加载</td><td>不是点按钮</td></tr>
+    <tr><td>返回</td><td>左滑返回</td><td>iOS 侧滑手势</td></tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">7.3 移动端特有交互</h2>
+<ul class="spec-list">
+  <li>悬浮返回顶部按钮 (滚动 > 2 屏后出现, 右下角)</li>
+  <li>筛选改为底部抽屉弹出 (不是下拉菜单)</li>
+  <li>产品详情底部联系栏改为「电话」「微信」双按钮悬浮</li>
+  <li>长按产品图片 → 保存到相册 / 分享</li>
+  <li>点击电话号码 → 一键拨号 (tel: 链接)</li>
+</ul>
+
+<!-- ===== CHAPTER 8 ===== -->
+<div class="chapter-header">
+  <div class="chapter-num">08</div>
+  <div class="chapter-title">动效方案</div>
+</div>
+
+<h2 class="section-title">8.1 动效原则</h2>
+<div class="callout">
+  <div class="callout-title">三原则</div>
+  <div class="callout-body">
+    1. 服务内容 — 动效引导注意力，不抢注意力<br>
+    2. 有意义 — 不做无理由的装饰动画<br>
+    3. 快速 — 交互动画 150-250ms, 入场动画 400-600ms
+  </div>
+</div>
+<table class="data-table">
+  <tbody>
+    <tr><th style="width:30%">该用动效</th><th style="width:30%">不该用动效</th></tr>
+    <tr>
+      <td>首屏标题入场 (第一印象)<br>卡片滚动入场 (节奏感)<br>导航栏渐变 (状态反馈)<br>数字滚动 (价格冲击力)<br>Hover 微交互 (反馈感)</td>
+      <td>每个标题都逐字浮现<br>所有图片都 3D 倾斜<br>筛选时卡片翻转动画<br>页面切换时全屏遮罩<br>自动播放的背景动画</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">8.2 核心动效实现</h2>
+<pre class="code-block">// 滚动入场动画 (Framer Motion)
+import { motion } from 'framer-motion';
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 40 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-80px" },
+  transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+};
+
+// 用法
+&lt;motion.div {...fadeInUp}&gt;
+  &lt;ProductCard product={product} /&gt;
+&lt;/motion.div&gt;
+
+// 错位入场 (子元素依次出现)
+const staggerContainer = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.08 }
+  }
+};
+const staggerItem = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+};</pre>
+
+<h2 class="section-title">8.3 可访问性 (Accessibility)</h2>
+<pre class="code-block">/* 尊重用户的动画偏好设置 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Framer Motion 中检测 */
+import { useReducedMotion } from 'framer-motion';
+const shouldReduceMotion = useReducedMotion();
+// 条件渲染: shouldReduceMotion ? staticVersion : animatedVersion</pre>
+<div class="callout warn">
+  <div class="callout-title">必须实现</div>
+  <div class="callout-body">prefers-reduced-motion 是无障碍的硬性要求，不做会导致部分用户眩晕。所有动效方案必须配套降级方案。</div>
+</div>
+
+<!-- ===== CHAPTER 9 ===== -->
+<div class="chapter-header">
+  <div class="chapter-num">09</div>
+  <div class="chapter-title">数据结构设计</div>
+</div>
+
+<h2 class="section-title">9.1 品牌数据</h2>
+<pre class="code-block">// src/data/brands.ts
+interface Brand {
+  id: string;
+  name: string;           // 品牌名
+  slug: string;           // URL 友好名
+  logo: string;           // LOGO 图片路径
+  banner: string;         // 品牌馆 Banner
+  description: string;    // 品牌介绍
+  story: string;          // 品牌故事 (长文本)
+  features: string[];     // 品牌特色
+  isPrimary: boolean;     // 是否核心品牌
+  displayOrder: number;   // 展示顺序
+}
+
+const brands: Brand[] = [
+  {
+    id: 'sleemon',
+    name: '喜临门',
+    slug: 'sleemon',
+    logo: '/brands/sleemon-logo.png',
+    banner: '/brands/sleemon-banner.webp',
+    description: '中国床垫行业龙头品牌',
+    story: '喜临门专注睡眠科学 40 年...',
+    features: ['独立袋装弹簧', '抗菌防螨', '人体工学设计'],
+    isPrimary: true,
+    displayOrder: 1,
+  },
+  {
+    id: 'shuibao',
+    name: '睡宝床店',
+    slug: 'shuibao',
+    logo: '/brands/shuibao-logo.png',
+    banner: '/brands/shuibao-banner.webp',
+    description: '品质床品，舒适睡眠',
+    story: '...',
+    features: ['性价比高', '款式多样'],
+    isPrimary: false,
+    displayOrder: 2,
+  },
+];</pre>
+
+<h2 class="section-title">9.2 品类数据 (二级分类)</h2>
+<pre class="code-block">// src/data/categories.ts
+interface Category {
+  id: string;
+  name: string;
+  icon: string;           // 图标 (emoji 或 SVG)
+  children?: Category[];  // 二级分类
+}
+
+const categories: Category[] = [
+  {
+    id: 'living-room',
+    name: '客餐厅',
+    icon: '🛋️',
+    children: [
+      { id: 'sofa',         name: '沙发',     icon: '🛋️' },
+      { id: 'dining-table',  name: '餐桌',     icon: '🍽️' },
+      { id: 'dining-chair',  name: '餐椅',     icon: '🪑' },
+      { id: 'tv-cabinet',    name: '电视柜',   icon: '📺' },
+    ]
+  },
+  {
+    id: 'bedroom',
+    name: '卧室',
+    icon: '🛏️',
+    children: [
+      { id: 'mattress',  name: '床垫',  icon: '🛏️' },
+      { id: 'bed',       name: '床架',  icon: '🛏️' },
+      { id: 'wardrobe',  name: '衣柜',  icon: '🗄️' },
+      { id: 'nightstand', name: '床头柜', icon: '📦' },
+    ]
+  },
+  {
+    id: 'study',
+    name: '书房',
+    icon: '📚',
+    children: [
+      { id: 'desk',       name: '书桌',   icon: '🖥️' },
+      { id: 'chair',       name: '书椅',   icon: '🪑' },
+      { id: 'bookshelf',  name: '书柜',   icon: '📚' },
+    ]
+  },
+];</pre>
+
+<h2 class="section-title">9.3 产品数据 (扩展字段)</h2>
+<pre class="code-block">// src/data/products.ts
+interface Product {
+  id: string;
+  name: string;            // 产品名
+  slug: string;           // URL 友好名 (/product/sleemon-deepsleep-pro)
+  brandId: string;        // 品牌ID
+  categoryId: string;     // 一级品类
+  subCategoryId: string;  // 二级品类
+
+  // 图片
+  mainImage: string;      // 主图 (白底, 1200×1200)
+  detailImages: string[]; // 详情图 (场景图, 1600×1000)
+  thumbnails: string[];   // 缩略图
+
+  // 价格
+  price: number;           // 售价
+  originalPrice?: number;  // 原价 (做划线对比, 可选)
+  showPrice: boolean;      // 是否展示价格 (部分品牌不允许线上标价)
+  discount?: string;       // 折扣文案 ("5折")
+
+  // 规格
+  sizes: string[];         // 可选尺寸 ["1.5m", "1.8m", "2.0m"]
+  colors: { name: string; hex: string; image: string }[];
+
+  // 参数
+  material: string;        // 主材质 (筛选用)
+  series: string;          // 产品系列
+  specs: { label: string; value: string }[]; // 参数表
+
+  // 评价
+  rating: number;          // 评分 (1-5)
+  reviewCount: number;     // 评价数
+  stock: 'in-stock' | 'low-stock' | 'out-of-stock';
+
+  // 其他
+  description: string;     // 产品描述
+  video?: string;          // 产品视频
+  relatedIds: string[];    // 相关产品ID
+  isFeatured: boolean;     // 是否首页推荐
+  createdAt: string;       // 上架时间 (排序用)
+}</pre>
+
+<!-- ===== CHAPTER 10 ===== -->
+<div class="chapter-header">
+  <div class="chapter-num">10</div>
+  <div class="chapter-title">图片规范</div>
+</div>
+
+<h2 class="section-title">10.1 图片规格</h2>
+<table class="data-table">
+  <thead>
+    <tr><th style="width:18%">类型</th><th style="width:20%">尺寸</th><th style="width:12%">格式</th><th style="width:12%">大小</th><th>说明</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>产品主图</td><td>1200×1200px</td><td>WebP</td><td>&lt;200KB</td><td>白底, 正方形</td></tr>
+    <tr><td>产品详情图</td><td>1600×1000px</td><td>WebP</td><td>&lt;300KB</td><td>场景图, 宽幅</td></tr>
+    <tr><td>品牌 Banner</td><td>1920×600px</td><td>WebP</td><td>&lt;400KB</td><td>品牌馆顶部</td></tr>
+    <tr><td>首页 Hero</td><td>1920×1080px</td><td>WebP</td><td>&lt;500KB</td><td>首屏大图</td></tr>
+    <tr><td>缩略图</td><td>200×200px</td><td>WebP</td><td>&lt;30KB</td><td>列表缩略</td></tr>
+    <tr><td>门店照片</td><td>1600×1000px</td><td>WebP</td><td>&lt;300KB</td><td>关于我们页</td></tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">10.2 命名规范</h2>
+<pre class="code-block">目录结构:
+/public/
+  /products/
+    /{product-id}/
+      main.webp            # 主图
+      detail-01.webp       # 详情图 1
+      detail-02.webp       # 详情图 2
+      scene-01.webp        # 场景图 1
+      thumbnail.webp       # 缩略图
+  /brands/
+    /{brand-id}/
+      logo.png             # 品牌 LOGO (PNG, 带透明)
+      banner.webp          # 品牌 Banner
+  /store/
+    front.webp             # 门头照
+    interior-01.webp      # 店内环境 1
+    interior-02.webp      # 店内环境 2</pre>
+
+<h2 class="section-title">10.3 加载策略</h2>
+<ul class="spec-list">
+  <li>首屏图片：优先加载，<code class="inline">fetchpriority="high"</code></li>
+  <li>非首屏图片：懒加载 <code class="inline">loading="lazy"</code></li>
+  <li>响应式：使用 <code class="inline">srcset</code> 提供 1x/2x 适配</li>
+  <li>占位：低质量模糊占位图 (LQIP) 或骨架屏</li>
+  <li>格式：优先 WebP, 回退 JPEG</li>
+</ul>
+<div class="callout info">
+  <div class="callout-title">现有素材处理</div>
+  <div class="callout-body">用户目前有手机拍摄的产品图片。上线前建议：1) 裁剪为正方形主图；2) 压缩为 WebP 格式；3) 后期逐步补拍专业白底图替换。</div>
+</div>
+
+<!-- ===== CHAPTER 11 ===== -->
+<div class="chapter-header">
+  <div class="chapter-num">11</div>
+  <div class="chapter-title">SEO 方案</div>
+</div>
+
+<h2 class="section-title">11.1 页面 SEO</h2>
+<table class="data-table">
+  <tbody>
+    <tr><th style="width:20%">页面</th><th style="width:40%">Title 模板</th><th>Description</th></tr>
+    <tr><td>首页</td><td>云祥家具城 - 喜临门/睡宝家具 | 恭城燕新路</td><td>恭城云祥家具城，代理喜临门、睡宝等品牌，主营床垫、沙发、床架、衣柜等家具。地址：燕新路，营业时间10:00-18:00。</td></tr>
+    <tr><td>产品详情</td><td>{产品名} - {品牌} - 云祥家具城 | 恭城</td><td>{产品描述前80字}...恭城云祥家具城现货展示，欢迎到店体验。</td></tr>
+    <tr><td>品牌馆</td><td>{品牌名}家具 - 云祥家具城 | 恭城燕新路</td><td>{品牌介绍前80字}...云祥家具城{品牌名}专场展示。</td></tr>
+    <tr><td>关于我们</td><td>关于云祥家具城 - 恭城燕新路 | 门店介绍</td><td>云祥家具城位于恭城燕新路，代理喜临门、睡宝等品牌家具...</td></tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">11.2 结构化数据</h2>
+<pre class="code-block">// 产品详情页 JSON-LD (Product Schema)
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "喜临门深睡精灵Pro床垫",
+  "brand": { "@type": "Brand", "name": "喜临门" },
+  "image": "https://yunxiang.com/products/.../main.webp",
+  "description": "...",
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "CNY",
+    "price": "5999",
+    "availability": "https://schema.org/InStock",
+    "seller": { "@type": "Store", "name": "云祥家具城" }
+  }
+}
+
+// 门店信息 (LocalBusiness Schema)
+{
+  "@context": "https://schema.org",
+  "@type": "FurnitureStore",
+  "name": "云祥家具城",
+  "address": "恭城燕新路",
+  "telephone": ["18177310007", "13457337032", "18978398756"],
+  "openingHours": "Mo-Su 10:00-18:00"
+}</pre>
+
+<h2 class="section-title">11.3 URL 规范</h2>
+<pre class="code-block">URL 设计 (语义化, 不用参数):
+  /                          → 首页
+  /sleemon                   → 喜临门品牌馆
+  /shuibao                   → 睡宝品牌馆
+  /products                  → 全部产品
+  /products?brand=sleemon    → 喜临门产品筛选
+  /products?category=mattress → 床垫品类筛选
+  /product/sleemon-deepsleep-pro → 产品详情
+  /about                     → 关于我们
+  /search?q=床垫              → 搜索结果
+
+图片 alt 文本规范:
+  "喜临门深睡精灵Pro床垫 - 产品主图"
+  "喜临门深睡精灵Pro床垫 - 场景图1"
+  "云祥家具城门店门头照"</pre>
+
+<!-- ===== CHAPTER 12 ===== -->
+<div class="chapter-header">
+  <div class="chapter-num">12</div>
+  <div class="chapter-title">转化路径设计</div>
+</div>
+
+<h2 class="section-title">12.1 转化路径</h2>
+<pre class="ascii-art">首页 Hero CTA ──→ 预约到店(表单: 姓名+电话+意向品牌)
+                                    │
+                                    ↓
+                            提交成功提示
+                            "已收到，24小时内专人联系"
+                            + 自动复制微信号
+                            + 跳转微信客服
+
+产品详情 ──→ 「咨询此产品」按钮
+                    │ (自动带产品名)
+                    ↓
+              弹出联系面板:
+              ☎ 18177310007 (一键拨号)
+              ☎ 13457337032 (一键拨号)
+              ☎ 18978398756 (一键拨号)
+              💬 微信咨询 (微信号同手机号)
+
+品牌馆 ──→ 「品牌专场预约」按钮
+              │
+              ↓
+          表单: 姓名+电话+意向产品类型
+
+底部联系栏(全站) → 电话 / 微信 (随时可达)</pre>
+
+<h2 class="section-title">12.2 联系入口布局</h2>
+<table class="data-table">
+  <tbody>
+    <tr><th style="width:15%">位置</th><th style="width:30%">入口形式</th><th>触发动作</th></tr>
+    <tr><td>导航栏右侧</td><td>「立即咨询」按钮</td><td>弹出联系面板</td></tr>
+    <tr><td>首页底部区块</td><td>3 个电话 + 微信 + 地址</td><td>点击拨号 / 复制微信</td></tr>
+    <tr><td>产品详情底部</td><td>「咨询此产品」按钮</td><td>弹出联系面板 (带产品名)</td></tr>
+    <tr><td>移动端悬浮栏</td><td>电话 / 微信 双按钮</td><td>一键拨号 / 复制微信</td></tr>
+    <tr><td>关于我们页</td><td>完整联系信息 + 地图</td><td>点击拨号 / 地图导航</td></tr>
+  </tbody>
+</table>
+
+<!-- ===== CHAPTER 13 ===== -->
+<div class="chapter-header">
+  <div class="chapter-num">13</div>
+  <div class="chapter-title">项目结构</div>
+</div>
+
+<h2 class="section-title">13.1 目录结构</h2>
+<pre class="ascii-art">yunxiang-furniture/
+├── public/
+│   ├── products/          # 产品图片
+│   ├── brands/            # 品牌素材
+│   ├── store/             # 门店照片
+│   └── favicon.ico
+├── src/
+│   ├── components/
+│   │   ├── layout/        # Header, Footer, MobileTab
+│   │   ├── ui/            # Button, Card, Tag, Input
+│   │   ├── product/       # ProductCard, ProductGrid
+│   │   └── common/        # ContactBar, SearchBar
+│   ├── pages/
+│   │   ├── HomePage.tsx
+│   │   ├── BrandPage.tsx
+│   │   ├── ProductListPage.tsx
+│   │   ├── ProductDetailPage.tsx
+│   │   ├── AboutPage.tsx
+│   │   └── SearchPage.tsx
+│   ├── data/
+│   │   ├── brands.ts      # 品牌数据
+│   │   ├── categories.ts  # 品类数据
+│   │   └── products.ts     # 产品数据
+│   ├── hooks/             # 自定义 Hook
+│   ├── lib/               # 工具函数
+│   ├── styles/
+│   │   └── globals.css    # Tailwind 全局样式
+│   ├── App.tsx            # 根组件 + 路由
+│   └── main.tsx           # 入口
+├── tailwind.config.ts
+├── vite.config.ts
+└── package.json</pre>
+
+<h2 class="section-title">13.2 关键依赖</h2>
+<table class="data-table">
+  <tbody>
+    <tr><th style="width:30%">包名</th><th style="width:15%">版本</th><th>用途</th></tr>
+    <tr><td>react</td><td>^19</td><td>UI 框架</td></tr>
+    <tr><td>react-router-dom</td><td>^7</td><td>路由</td></tr>
+    <tr><td>framer-motion</td><td>^11</td><td>动效</td></tr>
+    <tr><td>tailwindcss</td><td>^4</td><td>样式</td></tr>
+    <tr><td>swiper</td><td>^11</td><td>移动端轮播</td></tr>
+    <tr><td>lucide-react</td><td>latest</td><td>图标库</td></tr>
+    <tr><td>clsx</td><td>^2</td><td>条件 className</td></tr>
+  </tbody>
+</table>
+
+<!-- ===== CHAPTER 14 ===== -->
+<div class="chapter-header">
+  <div class="chapter-num">14</div>
+  <div class="chapter-title">性能优化</div>
+</div>
+
+<h2 class="section-title">14.1 图片策略</h2>
+<ul class="spec-list">
+  <li>所有产品图片转换为 WebP 格式 (比 JPEG 小 30-50%)</li>
+  <li>使用 <code class="inline">srcset</code> 提供响应式图片 (1x/2x)</li>
+  <li>非首屏图片懒加载 (<code class="inline">loading="lazy"</code>)</li>
+  <li>低质量占位图 (LQIP) 提升感知速度</li>
+  <li>图片 CDN 缓存 (Vercel 自带)</li>
+</ul>
+
+<h2 class="section-title">14.2 动画性能</h2>
+<ul class="spec-list">
+  <li>只动画 transform 和 opacity (GPU 加速)</li>
+  <li>避免动画 width/height/top/left (触发重排)</li>
+  <li>大量元素动画时使用 <code class="inline">will-change</code></li>
+  <li>滚动动画使用 IntersectionObserver (Framer Motion 已内置)</li>
+  <li>移动端减少动画数量 (性能优先)</li>
+</ul>
+
+<h2 class="section-title">14.3 首屏加载</h2>
+<ul class="spec-list">
+  <li>路由级别代码分割 (React.lazy + Suspense)</li>
+  <li>产品数据预取 (首页加载时预取产品列表)</li>
+  <li>关键 CSS 内联 (Tailwind 自动处理)</li>
+  <li>字体预加载 (<code class="inline">preload</code>)</li>
+  <li>目标: 首屏 LCP &lt; 2.5s, FID &lt; 100ms</li>
+</ul>
+
+<!-- ===== CHAPTER 15 ===== -->
+<div class="chapter-header">
+  <div class="chapter-num">15</div>
+  <div class="chapter-title">部署方案</div>
+</div>
+
+<h2 class="section-title">15.1 Vercel 部署 (推荐)</h2>
+<pre class="code-block"># 1. 代码推送到 GitHub
+git remote add origin https://github.com/xxx/yunxiang-furniture.git
+git push -u origin main
+
+# 2. Vercel 导入项目
+#    - 访问 vercel.com → New Project → 选择仓库
+#    - 框架自动识别为 Vite
+#    - 构建命令: npm run build
+#    - 输出目录: dist
+
+# 3. 绑定域名 yunxiang.com
+#    - Settings → Domains → Add Domain
+#    - 添加 yunxiang.com 和 www.yunxiang.com
+#    - 按提示在域名 DNS 添加 A 记录 / CNAME
+
+# 4. 自动部署
+#    - 每次推送 main 分支自动触发构建
+#    - Preview 分支自动生成预览链接</pre>
+
+<h2 class="section-title">15.2 Nginx 自部署 (备选)</h2>
+<pre class="code-block"># Nginx 配置
+server {
+    listen 80;
+    server_name yunxiang.com www.yunxiang.com;
+    root /var/www/yunxiang/dist;
+    index index.html;
+
+    # SPA 路由回退
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # 图片缓存
+    location ~* \.(webp|jpg|png|svg)$ {
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # SSL (Let's Encrypt)
+    # certbot --nginx -d yunxiang.com -d www.yunxiang.com
+}</pre>
+
+<h2 class="section-title">15.3 成本预估</h2>
+<table class="data-table">
+  <tbody>
+    <tr><th style="width:25%">项目</th><th style="width:25%">方案</th><th style="width:20%">费用</th><th>说明</th></tr>
+    <tr><td>域名</td><td>yunxiang.com</td><td>~60 元/年</td><td>.com 域名</td></tr>
+    <tr><td>托管</td><td>Vercel 免费版</td><td>0 元</td><td>足够初期流量</td></tr>
+    <tr><td>图片存储</td><td>本地 / Vercel</td><td>0 元</td><td>初期图片放 public 目录</td></tr>
+    <tr><td>SSL</td><td>Vercel 自带</td><td>0 元</td><td>自动续期</td></tr>
+    <tr><td><strong>合计</strong></td><td></td><td><strong>~60 元/年</strong></td><td>仅域名费用</td></tr>
+  </tbody>
+</table>
+
+<!-- ===== CHAPTER 16 ===== -->
+<div class="chapter-header">
+  <div class="chapter-num">16</div>
+  <div class="chapter-title">开发计划</div>
+</div>
+
+<h2 class="section-title">16.1 分阶段交付</h2>
+<table class="data-table">
+  <thead>
+    <tr><th style="width:12%">阶段</th><th style="width:15%">周期</th><th style="width:33%">交付内容</th><th>目标</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>MVP</td><td>1-2 周</td><td>首页 + 产品列表 + 产品详情 + 联系入口</td><td>能看产品 + 能联系到店</td></tr>
+    <tr><td>v1.0</td><td>+1 周</td><td>品牌馆 + 搜索 + 关于我们 + 动效</td><td>完整展示体验</td></tr>
+    <tr><td>v1.5</td><td>+1 周</td><td>移动端优化 + SEO + 性能调优</td><td>上线就绪</td></tr>
+    <tr><td>v2.0</td><td>后续</td><td>收藏 / 预约表单 / 数据统计</td><td>运营增强</td></tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">16.2 MVP 必做清单</h2>
+<ul class="spec-list">
+  <li>首页: Hero + 品牌入口 + 精选产品 + 联系方式</li>
+  <li>产品列表: 网格 + 基础筛选 (品牌/品类)</li>
+  <li>产品详情: 图片 + 参数 + 联系入口</li>
+  <li>移动端响应式</li>
+  <li>底部悬浮联系栏 (3 个电话 + 微信)</li>
+  <li>产品数据录入 (JSON)</li>
+  <li>图片处理 (裁剪 + 压缩)</li>
+</ul>
+
+<!-- ===== CHAPTER 17 ===== -->
+<div class="chapter-header">
+  <div class="chapter-num">17</div>
+  <div class="chapter-title">后续扩展方向</div>
+</div>
+
+<table class="data-table">
+  <thead>
+    <tr><th style="width:20%">功能</th><th style="width:15%">优先级</th><th>说明</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>后台管理系统</td><td>中</td><td>React + shadcn/ui 做简单 CRUD 后台</td></tr>
+    <tr><td>在线预约到店</td><td>中</td><td>表单 + 微信通知</td></tr>
+    <tr><td>数据统计</td><td>中</td><td>接入百度统计 / Google Analytics</td></tr>
+    <tr><td>微信小程序</td><td>中</td><td>用 Taro 复用 React 代码</td></tr>
+    <tr><td>AI 智能推荐</td><td>低</td><td>根据客户偏好推荐产品</td></tr>
+    <tr><td>3D 产品展示</td><td>低</td><td>Three.js + GLTF, 360 度旋转</td></tr>
+    <tr><td>客户评价系统</td><td>低</td><td>收集反馈, 展示在产品详情页</td></tr>
+    <tr><td>微信公众号打通</td><td>中</td><td>关注后推送新品 / 活动</td></tr>
+  </tbody>
+</table>
+
+<div class="callout success">
+  <div class="callout-title">总结</div>
+  <div class="callout-body">
+    技术栈：React 19 + TypeScript + Vite 6 + Tailwind CSS 4 + Framer Motion<br><br>
+    设计语言：暖木质色调（深胡桃 + 暖木色），温暖但不花哨<br><br>
+    核心三件事：<strong>图片拍好、页面做漂亮、联系方式放醒目</strong>。动效是锦上添花，不是必须项。<br><br>
+    上线路径：MVP（1-2 周可看产品能联系）→ v1.0（完整体验）→ v1.5（上线就绪）<br><br>
+    年成本：~60 元（仅域名）
+  </div>
+</div>
+
+</div><!-- /main-content -->
+
+<!-- ========== ENDING ========== -->
+<div class="ending">
+  <div class="ending-line"></div>
+  <div class="ending-title">开始构建</div>
+  <div class="ending-subtitle">云祥家具城 · 线上展厅</div>
+  <div class="ending-contact">
+    <div>恭城 · 燕新路</div>
+    <div>18177310007 / 13457337032 / 18978398756</div>
+    <div>营业时间 10:00 — 18:00</div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#3d2b1f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="云祥家具城">
+<meta name="description" content="云祥家具城，恭城燕新路家具展厅，代理喜临门、琪辉功能沙发。沙发、床、床垫、餐桌、衣柜等品牌家具，温暖每一个家。">
+<meta name="format-detection" content="telephone=no">
+<meta name="wx:title" content="云祥家具城 — 温暖每一个家">
+<meta name="wx:desc" content="恭城燕新路家具展厅，代理喜临门、琪辉功能沙发">
+<!-- 微信/OpenGraph 分享卡片 -->
+<meta property="og:title" content="云祥家具城 — 温暖每一个家">
+<meta property="og:description" content="恭城燕新路家具展厅，代理喜临门、琪辉功能沙发。到店体验，让家成为你最想待的地方。">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="云祥家具城">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="云祥家具城 — 温暖每一个家">
+<meta name="twitter:description" content="恭城燕新路家具展厅，代理喜临门、琪辉功能沙发。">
+<title>云祥家具城 — 温暖每一个家 | 恭城燕新路</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' fill='%233d2b1f' rx='8'/%3E%3Cpath d='M12 34 C8 34 5 31 5 27 C5 23 8 21 12 21 C12 15 17 11 24 11 C31 11 36 15 36 21 C40 21 43 23 43 27 C43 31 40 34 36 34' stroke='%23c89b6f' stroke-width='2.5' stroke-linecap='round' fill='none'/%3E%3Cline x1='10' y1='38' x2='38' y2='38' stroke='%23c89b6f' stroke-width='2.5' stroke-linecap='round'/%3E%3Cline x1='14' y1='38' x2='14' y2='42' stroke='%23c89b6f' stroke-width='2.5' stroke-linecap='round'/%3E%3Cline x1='34' y1='38' x2='34' y2='42' stroke='%23c89b6f' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%233d2b1f' rx='32'/%3E%3Cpath d='M48 136 C32 136 20 124 20 108 C20 92 32 84 48 84 C48 60 68 44 96 44 C124 44 144 60 144 84 C160 84 172 92 172 108 C172 124 160 136 144 136' stroke='%23c89b6f' stroke-width='10' stroke-linecap='round' fill='none'/%3E%3Cline x1='40' y1='152' x2='152' y2='152' stroke='%23c89b6f' stroke-width='10' stroke-linecap='round'/%3E%3Cline x1='56' y1='152' x2='56' y2='168' stroke='%23c89b6f' stroke-width='10' stroke-linecap='round'/%3E%3Cline x1='136' y1='152' x2='136' y2='168' stroke='%23c89b6f' stroke-width='10' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<style>
+/* ═══════════════════════════════════════════════════════
+   云祥家具城 — V3  玻璃拟态 + 琪辉品牌 + 移动扫码优化
+   ═══════════════════════════════════════════════════════ */
+:root {
+  --space-xs:4px; --space-sm:8px; --space-md:12px; --space-base:16px;
+  --space-lg:20px; --space-xl:24px; --space-2xl:32px; --space-3xl:40px;
+  --space-4xl:48px; --space-5xl:64px; --space-6xl:80px; --space-7xl:96px;
+  --c-bg:#faf8f5; --c-text:#2c2218; --c-text-muted:#8b7d6b;
+  --c-primary:#3d2b1f; --c-secondary:#c89b6f; --c-accent:#d4a574;
+  --c-border:#e8e0d5; --c-card-bg:#fff; --c-heading:#6b4423;
+  --c-success:#16a34a; --c-warning:#f59e0b; --c-error:#dc2626; --c-info:#3b82f6;
+  --font-heading:"Noto Serif SC","Songti SC",serif;
+  --font-body:"Noto Sans SC","PingFang SC","Microsoft YaHei UI",system-ui,sans-serif;
+  --radius-sm:6px; --radius-md:10px; --radius-lg:16px; --radius-xl:24px;
+  --shadow-sm:0 1px 3px rgba(61,43,31,.08);
+  --shadow-md:0 4px 12px rgba(61,43,31,.1);
+  --shadow-lg:0 12px 32px rgba(61,43,31,.15);
+  --ease:cubic-bezier(.2,0,0,1);
+  --ease-spring:cubic-bezier(.34,1.56,.64,1);
+  --tf:150ms var(--ease); --td:200ms var(--ease); --ts:400ms var(--ease);
+  /* ═══ 玻璃拟态变量 ═══ */
+  --glass-bg:rgba(255,255,255,.55);
+  --glass-bg-strong:rgba(255,255,255,.72);
+  --glass-bg-dark:rgba(61,43,31,.55);
+  --glass-border:rgba(255,255,255,.45);
+  --glass-border-dark:rgba(200,155,111,.35);
+  --glass-blur:blur(16px);
+  --glass-blur-strong:blur(24px);
+  --glass-shadow:0 8px 32px rgba(61,43,31,.08);
+  --glass-shadow-hover:0 16px 48px rgba(61,43,31,.12);
+  --glass-inset:inset 0 1px 0 rgba(255,255,255,.5);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--font-body);font-size:16px;line-height:1.6;color:var(--c-text);background:var(--c-bg);overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+ul{list-style:none}
+
+/* ═══ 滚动进度条 (玻璃质感) ═══ */
+.scroll-progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--c-secondary),var(--c-accent));z-index:200;transition:width .1s linear;box-shadow:0 0 8px rgba(200,155,111,.5)}
+
+/* ═══ 入场动画 ═══ */
+@keyframes riseIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes drift{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-12px) rotate(2deg)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes pulse-ring{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.5);opacity:0}}
+@keyframes glass-shine{0%{transform:translateX(-100%) rotate(35deg)}100%{transform:translateX(200%) rotate(35deg)}}
+.rise{opacity:0;animation:riseIn .6s var(--ease) forwards}
+.rise-1{animation-delay:.05s}.rise-2{animation-delay:.18s}.rise-3{animation-delay:.31s}.rise-4{animation-delay:.44s}.rise-5{animation-delay:.57s}.rise-6{animation-delay:.7s}
+.scroll-reveal{opacity:0;transform:translateY(30px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.scroll-reveal.visible{opacity:1;transform:translateY(0)}
+.scroll-reveal.delay-1{transition-delay:.1s}.scroll-reveal.delay-2{transition-delay:.2s}.scroll-reveal.delay-3{transition-delay:.3s}
+@media(prefers-reduced-motion:reduce){.rise,.scroll-reveal{animation:none!important;opacity:1!important;transform:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+.container{max-width:1200px;margin:0 auto;padding:0 var(--space-xl)}
+.section{padding:var(--space-6xl) 0}
+.section-label{font-size:12px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--c-secondary);margin-bottom:var(--space-base)}
+.section-title{font-family:var(--font-heading);font-size:clamp(28px,4vw,40px);font-weight:700;line-height:1.2;color:var(--c-primary);margin-bottom:var(--space-base)}
+.section-desc{font-size:16px;line-height:1.7;color:var(--c-text-muted);max-width:30em}
+
+/* ═══ 玻璃拟态通用类 ═══ */
+.glass{background:var(--glass-bg);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow),var(--glass-inset)}
+.glass-strong{background:var(--glass-bg-strong);backdrop-filter:var(--glass-blur-strong);-webkit-backdrop-filter:var(--glass-blur-strong);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow),var(--glass-inset)}
+.glass-dark{background:var(--glass-bg-dark);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border-dark);box-shadow:0 8px 32px rgba(0,0,0,.12)}
+
+/* ═══ 导航栏 (玻璃拟态) ═══ */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:var(--space-base) 0;background:rgba(250,248,245,.65);backdrop-filter:var(--glass-blur-strong);-webkit-backdrop-filter:var(--glass-blur-strong);border-bottom:1px solid rgba(255,255,255,.3);transition:padding var(--td),box-shadow var(--td),background var(--td)}
+.nav.scrolled{background:rgba(250,248,245,.85);box-shadow:0 4px 24px rgba(61,43,31,.06);padding:var(--space-sm) 0}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 var(--space-xl);display:flex;align-items:center;justify-content:space-between;gap:var(--space-xl)}
+.nav-logo{display:flex;align-items:center;gap:var(--space-sm);font-family:var(--font-heading);font-size:20px;font-weight:700;color:var(--c-primary);flex-shrink:0;transition:transform var(--tf)}
+.nav-logo:active{transform:scale(.96)}
+.nav-logo svg{width:36px;height:36px;flex-shrink:0}
+.nav-links{display:flex;align-items:center;gap:var(--space-2xl)}
+.nav-links a{font-size:15px;font-weight:500;color:var(--c-text);transition:color var(--tf);position:relative}
+.nav-links a:hover{color:var(--c-secondary)}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--c-secondary);transition:width var(--td)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{display:inline-flex;align-items:center;gap:var(--space-sm);padding:10px 20px;background:var(--c-primary);color:#fff;border-radius:var(--radius-md);font-size:14px;font-weight:500;transition:background var(--tf),transform var(--tf);white-space:nowrap}
+.nav-cta:hover{background:#2a1e15;transform:scale(1.02)}
+.nav-cta:active{transform:scale(.98)}
+.nav-cta svg{width:16px;height:16px}
+.nav-toggle{display:none;width:44px;height:44px;align-items:center;justify-content:center}
+.nav-toggle svg{width:24px;height:24px}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .nav-toggle{display:flex}
+  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:rgba(250,248,245,.92);backdrop-filter:var(--glass-blur-strong);-webkit-backdrop-filter:var(--glass-blur-strong);padding:var(--space-xl);gap:var(--space-lg);border-bottom:1px solid var(--c-border);box-shadow:var(--shadow-md);animation:fadeIn .2s var(--ease)}
+}
+
+/* ═══ Hero ═══ */
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;background:linear-gradient(135deg,#3d2b1f 0%,#2a1e15 60%,#1a1208 100%);color:#faf8f5;overflow:hidden}
+/* 玻璃光斑装饰 */
+.hero-glow{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;opacity:.15}
+.hero-glow-1{top:-5%;right:-5%;width:500px;height:500px;background:var(--c-secondary)}
+.hero-glow-2{bottom:-10%;left:-5%;width:400px;height:400px;background:var(--c-accent);opacity:.1}
+/* 浮动云朵装饰 */
+.hero-cloud{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(200,155,111,.12),transparent 70%);pointer-events:none;animation:drift 8s ease-in-out infinite}
+.hero-cloud-1{top:10%;right:5%;width:320px;height:320px;animation-duration:7s}
+.hero-cloud-2{bottom:15%;left:0;width:280px;height:280px;animation-duration:9s;animation-delay:1s}
+.hero-cloud-3{top:40%;right:30%;width:200px;height:200px;animation-duration:11s;animation-delay:2s}
+/* 视差容器 */
+.hero-bg{position:absolute;inset:0;will-change:transform}
+.hero-inner{max-width:1200px;margin:0 auto;padding:120px var(--space-xl) var(--space-6xl);width:100%;position:relative;z-index:1}
+.hero-tag{display:inline-block;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:var(--c-accent);margin-bottom:var(--space-xl);font-weight:500;padding:6px 16px;border-radius:100px;background:rgba(200,155,111,.1);border:1px solid rgba(200,155,111,.2)}
+.hero-title{font-family:var(--font-heading);font-size:clamp(36px,6vw,64px);font-weight:900;line-height:1.15;letter-spacing:.02em;margin-bottom:var(--space-xl);max-width:14em}
+.hero-title .accent{color:var(--c-accent)}
+.hero-subtitle{font-size:clamp(16px,2vw,18px);line-height:1.7;opacity:.85;max-width:30em;margin-bottom:var(--space-3xl)}
+.hero-actions{display:flex;gap:var(--space-base);flex-wrap:wrap}
+.btn-primary{display:inline-flex;align-items:center;gap:var(--space-sm);padding:14px 28px;background:var(--c-secondary);color:#fff;border-radius:var(--radius-md);font-size:15px;font-weight:600;transition:background var(--tf),transform var(--tf),box-shadow var(--tf);box-shadow:0 4px 14px rgba(200,155,111,.3)}
+.btn-primary:hover{background:#b08855;transform:translateY(-2px);box-shadow:0 8px 24px rgba(200,155,111,.4)}
+.btn-primary:active{transform:translateY(0) scale(.98)}
+.btn-primary svg{width:18px;height:18px;transition:transform var(--tf)}
+.btn-primary:hover svg{transform:translateX(3px)}
+.btn-ghost{display:inline-flex;align-items:center;gap:var(--space-sm);padding:14px 28px;border:1.5px solid rgba(250,248,245,.3);color:#faf8f5;border-radius:var(--radius-md);font-size:15px;font-weight:500;transition:border-color var(--tf),background var(--tf)}
+.btn-ghost:hover{border-color:var(--c-accent);background:rgba(212,165,116,.1)}
+.btn-ghost svg{width:18px;height:18px}
+/* Hero 统计 — 玻璃卡片 */
+.hero-stats{display:flex;gap:var(--space-2xl);margin-top:var(--space-5xl);padding-top:var(--space-3xl);border-top:1px solid rgba(250,248,245,.15)}
+.hero-stat{display:flex;flex-direction:column;gap:var(--space-xs)}
+.hero-stat-num{font-family:var(--font-heading);font-size:32px;font-weight:700;color:var(--c-accent)}
+.hero-stat-label{font-size:13px;opacity:.7}
+@media(max-width:640px){.hero-stats{flex-wrap:wrap;gap:var(--space-2xl)}.hero-stat-num{font-size:24px}}
+/* 滚动提示 */
+.scroll-hint{position:absolute;bottom:var(--space-3xl);left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:var(--space-xs);opacity:.5;animation:fadeIn 1s var(--ease) 1s both}
+.scroll-hint svg{width:24px;height:24px;animation:drift 2s ease-in-out infinite}
+.scroll-hint span{font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+
+/* ═══ 品牌馆 (3 品牌 + 玻璃卡片) ═══ */
+.brands{background:var(--c-bg)}
+.brand-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:var(--space-xl);margin-top:var(--space-3xl)}
+.brand-card{background:var(--glass-bg);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:var(--radius-xl);overflow:hidden;transition:transform var(--td),box-shadow var(--td);box-shadow:var(--glass-shadow),var(--glass-inset);position:relative}
+.brand-card:hover{transform:translateY(-8px);box-shadow:var(--glass-shadow-hover),var(--glass-inset)}
+/* 玻璃光斑效果 */
+.brand-card::before{content:'';position:absolute;top:0;left:0;right:0;height:40%;background:linear-gradient(180deg,rgba(255,255,255,.3),transparent);pointer-events:none;z-index:0}
+/* 玻璃流光扫过 */
+.brand-card::after{content:'';position:absolute;top:0;left:0;width:60%;height:100%;background:linear-gradient(115deg,transparent,rgba(255,255,255,.15),transparent);transform:translateX(-100%) rotate(35deg);transition:transform .8s var(--ease);pointer-events:none;z-index:0}
+.brand-card:hover::after{transform:translateX(250%) rotate(35deg)}
+.brand-card-body{padding:var(--space-3xl);position:relative;z-index:1}
+.brand-badge{display:inline-block;font-size:12px;font-weight:600;padding:4px 12px;border-radius:100px;margin-bottom:var(--space-base)}
+.brand-badge.core{background:rgba(200,155,111,.15);color:var(--c-secondary);border:1px solid rgba(200,155,111,.25)}
+.brand-badge.partner{background:rgba(107,68,35,.1);color:var(--c-heading);border:1px solid rgba(107,68,35,.15)}
+.brand-badge.new{background:rgba(22,163,74,.12);color:var(--c-success);border:1px solid rgba(22,163,74,.2)}
+.brand-name{font-family:var(--font-heading);font-size:28px;font-weight:700;color:var(--c-primary);margin-bottom:var(--space-sm)}
+.brand-card.feature .brand-name{font-size:32px}
+.brand-desc{font-size:15px;line-height:1.7;color:var(--c-text-muted);margin-bottom:var(--space-xl)}
+.brand-card.feature{grid-row:span 1}
+.brand-card-img{width:100%;height:180px;background:linear-gradient(135deg,rgba(240,235,227,.6),rgba(232,224,213,.4));display:flex;align-items:center;justify-content:center;color:var(--c-text-muted);font-size:14px;font-weight:500;position:relative;overflow:hidden}
+.brand-card-img::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);background-size:200% 100%;animation:shimmer 2.5s infinite}
+@media(max-width:1024px){.brand-grid{grid-template-columns:1fr 1fr}.brand-card.feature{grid-column:span 2}}
+@media(max-width:640px){.brand-grid{grid-template-columns:1fr}.brand-card.feature{grid-column:span 1}}
+
+/* ═══ 品类导航 ═══ */
+.categories{background:#fff}
+.category-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-xl);margin-top:var(--space-3xl)}
+.category-card{padding:var(--space-3xl) var(--space-2xl);border:1px solid var(--c-border);border-radius:var(--radius-lg);text-align:center;transition:border-color var(--td),transform var(--td),background var(--td);cursor:pointer;background:rgba(255,255,255,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.category-card:hover{border-color:var(--c-secondary);transform:translateY(-4px);background:rgba(253,251,248,.8);box-shadow:var(--shadow-md)}
+.category-card:focus-visible{outline:2px solid var(--c-secondary);outline-offset:2px}
+.category-card:active{transform:scale(.98)}
+.category-icon{width:56px;height:56px;margin:0 auto var(--space-base);color:var(--c-secondary);transition:transform var(--td)}
+.category-card:hover .category-icon{transform:scale(1.1) rotate(-5deg)}
+.category-name{font-family:var(--font-heading);font-size:18px;font-weight:600;color:var(--c-primary);margin-bottom:var(--space-xs)}
+.category-desc{font-size:13px;color:var(--c-text-muted);line-height:1.5}
+@media(max-width:768px){.category-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.category-grid{grid-template-columns:1fr}}
+
+/* ═══ 精选产品 — Bento Grid + 玻璃卡片 ═══ */
+.products{background:var(--c-bg)}
+.product-bento{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:auto auto;gap:var(--space-xl);margin-top:var(--space-3xl)}
+.product-card{background:var(--glass-bg);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:var(--radius-xl);overflow:hidden;transition:transform var(--td),box-shadow var(--td);display:flex;flex-direction:column;position:relative;box-shadow:var(--glass-shadow)}
+.product-card:hover{transform:translateY(-6px);box-shadow:var(--glass-shadow-hover)}
+.product-card:focus-visible{outline:2px solid var(--c-secondary);outline-offset:2px}
+/* Bento: 第1张占2列2行 */
+.product-card.feature{grid-column:span 2;grid-row:span 2}
+.product-card.feature .product-img{aspect-ratio:16/10}
+/* 3D 倾斜容器 */
+.product-tilt{transition:transform .2s var(--ease);transform-style:preserve-3d}
+.product-img{width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,rgba(240,235,227,.6),rgba(232,224,213,.4));display:flex;align-items:center;justify-content:center;color:var(--c-text-muted);font-size:13px;position:relative;overflow:hidden}
+.product-img::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);background-size:200% 100%;animation:shimmer 3s infinite}
+.product-tag{position:absolute;top:var(--space-sm);left:var(--space-sm);font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px;background:rgba(200,155,111,.9);color:#fff;z-index:1;backdrop-filter:blur(4px)}
+.product-tag.new{background:rgba(22,163,74,.85)}
+/* hover 浮层 — 玻璃质感 */
+.product-overlay{position:absolute;inset:0;background:rgba(61,43,31,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity var(--td);pointer-events:none}
+.product-card:hover .product-overlay{opacity:1}
+.product-overlay span{color:#fff;font-size:14px;font-weight:600;padding:10px 24px;border:1.5px solid rgba(250,248,245,.4);border-radius:100px;transform:translateY(10px);transition:transform var(--td);background:rgba(255,255,255,.1)}
+.product-card:hover .product-overlay span{transform:translateY(0)}
+.product-body{padding:var(--space-lg);flex:1;display:flex;flex-direction:column}
+.product-brand{font-size:12px;color:var(--c-secondary);font-weight:600;letter-spacing:.05em;margin-bottom:var(--space-xs)}
+.product-name{font-family:var(--font-heading);font-size:16px;font-weight:600;color:var(--c-primary);margin-bottom:var(--space-sm);line-height:1.4}
+.product-card.feature .product-name{font-size:22px}
+.product-desc{font-size:13px;color:var(--c-text-muted);line-height:1.5;margin-bottom:var(--space-base);flex:1}
+.product-card.feature .product-desc{font-size:14px}
+.product-action{display:inline-flex;align-items:center;gap:var(--space-xs);font-size:14px;font-weight:500;color:var(--c-secondary);transition:gap var(--tf)}
+.product-action:hover{gap:var(--space-sm)}
+@media(max-width:1024px){
+  .product-bento{grid-template-columns:repeat(2,1fr)}
+  .product-card.feature{grid-column:span 2;grid-row:span 1}
+  .product-card.feature .product-img{aspect-ratio:16/9}
+}
+@media(max-width:480px){
+  .product-bento{grid-template-columns:1fr}
+  .product-card.feature{grid-column:span 1}
+}
+
+/* ═══ 数据统计 (玻璃卡片) ═══ */
+.stats{background:#fff;padding:var(--space-5xl) 0}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-xl);max-width:1000px;margin:0 auto}
+.stat-item{text-align:center;padding:var(--space-2xl) var(--space-base);border-radius:var(--radius-lg);background:rgba(255,255,255,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:transform var(--td)}
+.stat-item:hover{transform:translateY(-4px)}
+.stat-num{font-family:var(--font-heading);font-size:clamp(32px,5vw,48px);font-weight:900;color:var(--c-primary);line-height:1}
+.stat-num .plus{color:var(--c-secondary)}
+.stat-label{font-size:13px;color:var(--c-text-muted);margin-top:var(--space-sm)}
+@media(max-width:768px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* ═══ 门店信息 ═══ */
+.store{background:var(--c-primary);color:#faf8f5;position:relative;overflow:hidden}
+.store::before{content:'';position:absolute;top:-20%;right:-10%;width:500px;height:500px;background:radial-gradient(circle,rgba(200,155,111,.08),transparent 70%);pointer-events:none}
+.store .section-title{color:#faf8f5}
+.store .section-desc{color:rgba(250,248,245,.7)}
+.store .section-label{color:var(--c-accent)}
+.store-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3xl);margin-top:var(--space-3xl);align-items:start}
+.store-info{display:flex;flex-direction:column;gap:var(--space-2xl)}
+.store-info-item{display:flex;gap:var(--space-base);align-items:flex-start}
+.store-info-icon{width:44px;height:44px;border-radius:var(--radius-md);background:rgba(200,155,111,.15);border:1px solid rgba(200,155,111,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--c-accent)}
+.store-info-icon svg{width:22px;height:22px}
+.store-info-label{font-size:13px;color:rgba(250,248,245,.6);margin-bottom:var(--space-xs)}
+.store-info-value{font-size:16px;font-weight:500;line-height:1.6}
+.store-info-value a{color:var(--c-accent);transition:opacity var(--tf)}
+.store-info-value a:hover{opacity:.8}
+/* 门店玻璃卡片 */
+.store-card{background:rgba(255,255,255,.06);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-lg);padding:var(--space-3xl)}
+.store-map{width:100%;height:320px;border-radius:var(--radius-lg);background:rgba(200,155,111,.1);border:1px solid rgba(200,155,111,.2);display:flex;align-items:center;justify-content:center;color:rgba(250,248,245,.5);font-size:14px}
+@media(max-width:768px){.store-grid{grid-template-columns:1fr}}
+
+/* ═══ 联系 CTA ═══ */
+.contact{background:var(--c-bg);text-align:center}
+.contact-card{max-width:700px;margin:var(--space-3xl) auto 0;background:var(--glass-bg-strong);backdrop-filter:var(--glass-blur-strong);-webkit-backdrop-filter:var(--glass-blur-strong);border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:var(--space-5xl) var(--space-3xl);box-shadow:var(--glass-shadow),var(--glass-inset);position:relative;overflow:hidden}
+.contact-card::before{content:'';position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.3),transparent);pointer-events:none}
+.contact-title{font-family:var(--font-heading);font-size:28px;font-weight:700;color:var(--c-primary);margin-bottom:var(--space-base);position:relative}
+.contact-desc{font-size:15px;color:var(--c-text-muted);margin-bottom:var(--space-3xl);line-height:1.7;position:relative}
+.contact-phones{display:flex;justify-content:center;gap:var(--space-2xl);margin-bottom:var(--space-3xl);flex-wrap:wrap;position:relative}
+.contact-phone{display:flex;flex-direction:column;align-items:center;gap:var(--space-xs)}
+.contact-phone a{font-family:var(--font-heading);font-size:24px;font-weight:700;color:var(--c-primary);transition:color var(--tf)}
+.contact-phone a:hover{color:var(--c-secondary)}
+.contact-phone-label{font-size:12px;color:var(--c-text-muted)}
+.contact-actions{display:flex;justify-content:center;gap:var(--space-base);flex-wrap:wrap;position:relative}
+.btn-warm{display:inline-flex;align-items:center;gap:var(--space-sm);padding:14px 28px;background:var(--c-secondary);color:#fff;border-radius:var(--radius-md);font-size:15px;font-weight:600;transition:background var(--tf),transform var(--tf),box-shadow var(--tf);box-shadow:0 4px 14px rgba(200,155,111,.3)}
+.btn-warm:hover{background:#b08855;transform:translateY(-2px);box-shadow:0 8px 24px rgba(200,155,111,.4)}
+.btn-warm:active{transform:scale(.98)}
+.btn-warm svg{width:18px;height:18px}
+.btn-outline{display:inline-flex;align-items:center;gap:var(--space-sm);padding:14px 28px;border:1.5px solid var(--c-border);color:var(--c-primary);border-radius:var(--radius-md);font-size:15px;font-weight:500;transition:border-color var(--tf),background var(--tf)}
+.btn-outline:hover{border-color:var(--c-secondary);background:#fdfbf8}
+.btn-outline svg{width:18px;height:18px}
+@media(max-width:640px){.contact-phones{flex-direction:column;gap:var(--space-lg)}.contact-phone a{font-size:20px}}
+
+/* ═══ Footer ═══ */
+.footer{background:var(--c-primary);color:rgba(250,248,245,.7);padding:var(--space-4xl) 0 calc(var(--space-3xl) + 70px)}
+.footer-inner{max-width:1200px;margin:0 auto;padding:0 var(--space-xl);display:flex;justify-content:space-between;align-items:center;gap:var(--space-xl);flex-wrap:wrap}
+.footer-brand{display:flex;align-items:center;gap:var(--space-sm);font-family:var(--font-heading);font-size:18px;font-weight:700;color:#faf8f5}
+.footer-brand svg{width:32px;height:32px}
+.footer-links{display:flex;gap:var(--space-2xl)}
+.footer-links a{font-size:14px;transition:color var(--tf)}
+.footer-links a:hover{color:var(--c-accent)}
+.footer-copy{font-size:13px;color:rgba(250,248,245,.4)}
+@media(max-width:640px){.footer-inner{flex-direction:column;text-align:center}.footer-links{flex-wrap:wrap;justify-content:center}}
+
+/* ═══ 悬浮电话按钮 (玻璃拟态) ═══ */
+.fab{position:fixed;bottom:80px;right:var(--space-xl);z-index:90;display:none}
+.fab a{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:rgba(200,155,111,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;box-shadow:0 8px 24px rgba(200,155,111,.4),inset 0 1px 0 rgba(255,255,255,.3);transition:transform var(--tf);position:relative;border:1px solid rgba(255,255,255,.2)}
+.fab a:hover{transform:scale(1.05)}
+.fab a:active{transform:scale(.95)}
+.fab a svg{width:24px;height:24px}
+.fab a::before{content:'';position:absolute;inset:0;border-radius:50%;background:var(--c-secondary);animation:pulse-ring 2s ease-out infinite;z-index:-1}
+@media(max-width:768px){.fab{display:block}}
+
+/* ═══ 底部 Tab 栏 (玻璃拟态强化) ═══ */
+.tabbar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.75);backdrop-filter:blur(24px) saturate(1.8);-webkit-backdrop-filter:blur(24px) saturate(1.8);border-top:1px solid rgba(255,255,255,.5);display:none;z-index:95;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -4px 24px rgba(61,43,31,.06)}
+.tabbar-inner{display:flex;justify-content:space-around;align-items:center;height:56px;max-width:500px;margin:0 auto}
+.tabbar-item{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--c-text-muted);font-size:10px;font-weight:500;transition:color var(--tf);min-width:44px;min-height:44px;justify-content:center}
+.tabbar-item.active{color:var(--c-secondary)}
+.tabbar-item svg{width:22px;height:22px}
+@media(max-width:768px){.tabbar{display:block}}
+
+/* ═══ 回到顶部 (玻璃) ═══ */
+.back-top{position:fixed;bottom:80px;left:var(--space-xl);z-index:88;opacity:0;pointer-events:none;transition:opacity var(--td),transform var(--td);transform:translateY(10px)}
+.back-top.visible{opacity:1;pointer-events:auto;transform:translateY(0)}
+.back-top button{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:var(--shadow-md);border:1px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;color:var(--c-primary);transition:transform var(--tf)}
+.back-top button:hover{transform:scale(1.05)}
+.back-top button:active{transform:scale(.95)}
+.back-top svg{width:22px;height:22px}
+@media(max-width:768px){.back-top{bottom:140px}}
+
+/* ═══ 占位图通用样式 ═══ */
+.placeholder-img{display:flex;align-items:center;justify-content:center;color:var(--c-text-muted);position:relative}
+.placeholder-img svg{flex-shrink:0}
+
+/* ═══ 关于我们 ═══ */
+.about{background:#fff}
+.about-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-xl);margin-top:var(--space-3xl)}
+.about-card{padding:var(--space-3xl) var(--space-2xl);border:1px solid var(--c-border);border-radius:var(--radius-lg);text-align:center;transition:border-color var(--td),transform var(--td),box-shadow var(--td);background:rgba(255,255,255,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.about-card:hover{border-color:var(--c-secondary);transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.about-icon{width:56px;height:56px;margin:0 auto var(--space-base);color:var(--c-secondary);transition:transform var(--td)}
+.about-card:hover .about-icon{transform:scale(1.1) rotate(-5deg)}
+.about-card-title{font-family:var(--font-heading);font-size:20px;font-weight:600;color:var(--c-primary);margin-bottom:var(--space-sm)}
+.about-card-desc{font-size:14px;color:var(--c-text-muted);line-height:1.7}
+@media(max-width:768px){.about-grid{grid-template-columns:1fr}}
+@media(min-width:769px) and (max-width:1024px){.about-grid{grid-template-columns:1fr 1fr 1fr}}
+
+/* ═══ 电话复制提示 ═══ */
+.copy-toast{position:fixed;bottom:160px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(61,43,31,.9);color:#faf8f5;padding:10px 24px;border-radius:100px;font-size:14px;font-weight:500;z-index:300;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.copy-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ═══ 门店地图占位增强 ═══ */
+.store-map{flex-direction:column;gap:var(--space-sm)}
+</style>
+</head>
+<body>
+
+<!-- 滚动进度条 -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- ═══ 导航栏 ═══ -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo" aria-label="云祥家具城">
+      <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <path d="M12 34 C8 34 5 31 5 27 C5 23 8 21 12 21 C12 15 17 11 24 11 C31 11 36 15 36 21 C40 21 43 23 43 27 C43 31 40 34 36 34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="10" y1="38" x2="38" y2="38" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="14" y1="38" x2="14" y2="42" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="34" y1="38" x2="34" y2="42" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <span>云祥家具城</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#brands">品牌馆</a></li>
+      <li><a href="#categories">品类</a></li>
+      <li><a href="#products">精选产品</a></li>
+      <li><a href="#about">关于我们</a></li>
+      <li><a href="#store">门店信息</a></li>
+      <li><a href="#contact">联系我们</a></li>
+    </ul>
+    <a href="tel:18177310007" class="nav-cta">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>立即咨询</span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="菜单" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══ Hero ═══ -->
+<section class="hero" id="hero">
+  <!-- 玻璃光斑 + 浮动云朵 -->
+  <div class="hero-bg" id="heroBg">
+    <div class="hero-glow hero-glow-1"></div>
+    <div class="hero-glow hero-glow-2"></div>
+    <div class="hero-cloud hero-cloud-1"></div>
+    <div class="hero-cloud hero-cloud-2"></div>
+    <div class="hero-cloud hero-cloud-3"></div>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-tag rise rise-1">云祥家具城 · 恭城燕新路</div>
+    <h1 class="hero-title rise rise-2">
+      <span class="accent">云祥</span>家具，<br>温暖每一个家
+    </h1>
+    <p class="hero-subtitle rise rise-3">
+      代理喜临门、琪辉功能沙发，精选沙发、床、床垫、餐桌、衣柜等品牌家具。到店体验，让家成为你最想待的地方。
+    </p>
+    <div class="hero-actions rise rise-4">
+      <a href="#products" class="btn-primary">
+        <span>浏览产品</span>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a href="tel:18177310007" class="btn-ghost">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>电话咨询</span>
+      </a>
+    </div>
+    <div class="hero-stats rise rise-5">
+      <div class="hero-stat">
+        <div class="hero-stat-num" data-count="2">0</div>
+        <div class="hero-stat-label">代理品牌</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num" data-count="7" data-suffix="+">0</div>
+        <div class="hero-stat-label">家具品类</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num" style="font-size:24px">10:00–18:00</div>
+        <div class="hero-stat-label">每日营业</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 5v14M19 12l-7 7-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span>向下滚动</span>
+  </div>
+</section>
+
+<!-- ═══ 品牌馆 ═══ -->
+<section class="section brands" id="brands">
+  <div class="container">
+    <div class="scroll-reveal">
+      <div class="section-label">品牌馆</div>
+      <h2 class="section-title">代理品牌</h2>
+      <p class="section-desc">精选优质家具品牌，从床垫到功能沙发，为每一个家庭提供温暖舒适的生活体验。</p>
+    </div>
+    <div class="brand-grid">
+      <!-- 核心品牌：喜临门（大卡） -->
+      <div class="brand-card feature scroll-reveal">
+        <div class="brand-card-img placeholder-img" style="background:linear-gradient(135deg,#f5ebe0,#dcc9b3)">
+          <svg viewBox="0 0 64 64" fill="none" aria-hidden="true" style="width:48px;height:48px;opacity:.45"><rect x="10" y="20" width="44" height="18" rx="4" stroke="currentColor" stroke-width="2.5"/><path d="M8 38h48v6a3 3 0 0 1-3 3H11a3 3 0 0 1-3-3v-6z" stroke="currentColor" stroke-width="2.5"/><path d="M16 38v-8M48 38v-8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M22 14l10-6 10 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="brand-card-body">
+          <span class="brand-badge core">核心品牌</span>
+          <h3 class="brand-name">喜临门</h3>
+          <p class="brand-desc">喜临门家居，专注睡眠与健康，国内领先的床垫品牌。以优质弹簧、乳胶、记忆棉技术，为每一个家庭带来健康好睡眠。云祥家具城为喜临门恭城区域代理，全系产品均可到店体验。</p>
+        </div>
+      </div>
+      <!-- 新增品牌：琪辉功能沙发 -->
+      <div class="brand-card scroll-reveal delay-1">
+        <div class="brand-card-img placeholder-img" style="background:linear-gradient(135deg,#e8ddd0,#c9b89a)">
+          <svg viewBox="0 0 64 64" fill="none" aria-hidden="true" style="width:48px;height:48px;opacity:.45"><path d="M8 36V24a5 5 0 0 1 5-5h38a5 5 0 0 1 5 5v12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M6 36h52v8a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3v-8z" stroke="currentColor" stroke-width="2.5"/><path d="M14 36v-5M50 36v-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="32" cy="14" r="3" stroke="currentColor" stroke-width="2"/><path d="M26 19v-5M38 19v-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="brand-card-body">
+          <span class="brand-badge new">新增品牌</span>
+          <h3 class="brand-name">琪辉功能沙发</h3>
+          <p class="brand-desc">琪辉功能沙发，专注多功能沙发领域，可躺可坐可睡，一键电动调节，小户型也能舒适自如。</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 品类导航 ═══ -->
+<section class="section categories" id="categories">
+  <div class="container">
+    <div class="scroll-reveal">
+      <div class="section-label">家具品类</div>
+      <h2 class="section-title">找到适合你家的</h2>
+      <p class="section-desc">从客厅到卧室，从餐厅到书房，全品类覆盖。</p>
+    </div>
+    <div class="category-grid">
+      <div class="category-card scroll-reveal" tabindex="0" role="button" aria-label="沙发">
+        <div class="category-icon">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M8 28V18a4 4 0 0 1 4-4h24a4 4 0 0 1 4 4v10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M6 28h36v8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-8z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M12 28v-4M36 28v-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        </div>
+        <h3 class="category-name">沙发</h3>
+        <p class="category-desc">客厅的核心，家的温度</p>
+      </div>
+      <div class="category-card scroll-reveal delay-1" tabindex="0" role="button" aria-label="功能沙发">
+        <div class="category-icon">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M8 30V20a4 4 0 0 1 4-4h24a4 4 0 0 1 4 4v10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M6 30h36v6a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-6z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 30v-3M34 30v-3" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M20 14v-4M28 14v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="8" r="1.5" fill="currentColor"/></svg>
+        </div>
+        <h3 class="category-name">功能沙发</h3>
+        <p class="category-desc">琪辉电动调节，可躺可睡</p>
+      </div>
+      <div class="category-card scroll-reveal delay-2" tabindex="0" role="button" aria-label="床">
+        <div class="category-icon">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M6 34V20a2 2 0 0 1 2-2h32a2 2 0 0 1 2 2v14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M6 28h36M6 34v4M42 34v4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><rect x="10" y="20" width="10" height="6" rx="1" stroke="currentColor" stroke-width="2"/></svg>
+        </div>
+        <h3 class="category-name">床</h3>
+        <p class="category-desc">好床，好梦，好日子</p>
+      </div>
+      <div class="category-card scroll-reveal" tabindex="0" role="button" aria-label="床垫">
+        <div class="category-icon">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="8" y="20" width="32" height="14" rx="3" stroke="currentColor" stroke-width="2.5"/><path d="M8 27h32" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3"/><path d="M14 24h4M30 24h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 34v3M36 34v3" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        </div>
+        <h3 class="category-name">床垫</h3>
+        <p class="category-desc">喜临门核心品类，健康好睡眠</p>
+      </div>
+      <div class="category-card scroll-reveal delay-1" tabindex="0" role="button" aria-label="餐桌">
+        <div class="category-icon">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M8 22h32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M14 22v16M34 22v16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M6 18h36" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity="0.4"/></svg>
+        </div>
+        <h3 class="category-name">餐桌</h3>
+        <p class="category-desc">一日三餐，家的团聚</p>
+      </div>
+      <div class="category-card scroll-reveal delay-2" tabindex="0" role="button" aria-label="衣柜">
+        <div class="category-icon">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="12" y="8" width="24" height="34" rx="2" stroke="currentColor" stroke-width="2.5"/><path d="M24 8v34" stroke="currentColor" stroke-width="2"/><circle cx="20" cy="25" r="1.5" fill="currentColor"/><circle cx="28" cy="25" r="1.5" fill="currentColor"/></svg>
+        </div>
+        <h3 class="category-name">衣柜</h3>
+        <p class="category-desc">收纳有序，生活有度</p>
+      </div>
+      <div class="category-card scroll-reveal" tabindex="0" role="button" aria-label="书桌椅">
+        <div class="category-icon">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M10 14h28" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M12 14v22M36 14v22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M14 24h20" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.4"/><rect x="18" y="28" width="8" height="8" rx="1" stroke="currentColor" stroke-width="2"/></svg>
+        </div>
+        <h3 class="category-name">书桌椅</h3>
+        <p class="category-desc">安静的角落，自己的世界</p>
+      </div>
+      <div class="category-card scroll-reveal delay-1" tabindex="0" role="button" aria-label="更多">
+        <div class="category-icon">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="12" cy="24" r="3" fill="currentColor"/><circle cx="24" cy="24" r="3" fill="currentColor"/><circle cx="36" cy="24" r="3" fill="currentColor"/></svg>
+        </div>
+        <h3 class="category-name">更多品类</h3>
+        <p class="category-desc">到店发现更多好物</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 关于我们 ═══ -->
+<section class="section about" id="about">
+  <div class="container">
+    <div class="scroll-reveal">
+      <div class="section-label">关于我们</div>
+      <h2 class="section-title">云祥家具城</h2>
+      <p class="section-desc">恭城燕新路老牌家具展厅，用心经营多年，为千家万户提供温暖舒适的家居方案。</p>
+    </div>
+    <div class="about-grid">
+      <div class="about-card scroll-reveal">
+        <div class="about-icon">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4L4 18v26h16V30h8v14h16V18L24 4z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 class="about-card-title">实体门店</h3>
+        <p class="about-card-desc">位于恭城燕新路，交通便利，欢迎到店亲身感受每一件家具的质感与舒适度。眼见为实，坐过才算数。</p>
+      </div>
+      <div class="about-card scroll-reveal delay-1">
+        <div class="about-icon">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4l5.09 10.31L40 16.18l-8 7.8 1.89 11.02L24 30.27l-9.89 4.73L16 23.98l-8-7.8 10.91-1.87L24 4z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 class="about-card-title">品牌授权</h3>
+        <p class="about-card-desc">喜临门恭城区域正式代理，琪辉功能沙发合作品牌。正品保障，售后无忧。</p>
+      </div>
+      <div class="about-card scroll-reveal delay-2">
+        <div class="about-icon">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2.5"/><path d="M24 12v12l8 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 class="about-card-title">贴心服务</h3>
+        <p class="about-card-desc">每天 10:00–18:00 营业，三个电话随时可咨询。微信号同手机号，加微信即可在线沟通，选家具不纠结。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 精选产品 — Bento Grid ═══ -->
+<section class="section products" id="products">
+  <div class="container">
+    <div class="scroll-reveal">
+      <div class="section-label">精选产品</div>
+      <h2 class="section-title">热门推荐</h2>
+      <p class="section-desc">以下为部分代表性产品，更多产品请到店咨询。</p>
+    </div>
+    <div class="product-bento">
+      <!-- 大卡 -->
+      <div class="product-card feature scroll-reveal" tabindex="0">
+        <div class="product-img placeholder-img" style="background:linear-gradient(135deg,#f0e6d8,#dcc9b3)">
+          <span class="product-tag">主推</span>
+          <svg viewBox="0 0 64 64" fill="none" aria-hidden="true" style="width:56px;height:56px;opacity:.35"><rect x="8" y="22" width="48" height="16" rx="4" stroke="currentColor" stroke-width="2.5"/><path d="M8 32h48" stroke="currentColor" stroke-width="2" stroke-dasharray="4 3"/><path d="M16 27h6M42 27h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M14 38v5M50 38v5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <div class="product-overlay"><span>查看详情</span></div>
+        </div>
+        <div class="product-body">
+          <div class="product-brand">喜临门</div>
+          <h3 class="product-name">深睡精灵 Pro 床垫</h3>
+          <p class="product-desc">独立袋装弹簧 + 乳胶舒适层，贴合人体曲线，静音抗干扰。喜临门旗舰系列，为深度睡眠而生。</p>
+          <a href="tel:18177310007" class="product-action">
+            <span>咨询价格</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:16px;height:16px;"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+      <!-- 琪辉功能沙发 -->
+      <div class="product-card scroll-reveal delay-1" tabindex="0">
+        <div class="product-img placeholder-img" style="background:linear-gradient(135deg,#e8ddd0,#c9b89a)">
+          <span class="product-tag new">新品</span>
+          <svg viewBox="0 0 64 64" fill="none" aria-hidden="true" style="width:44px;height:44px;opacity:.35"><path d="M8 36V24a5 5 0 0 1 5-5h38a5 5 0 0 1 5 5v12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M6 36h52v8a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3v-8z" stroke="currentColor" stroke-width="2.5"/><circle cx="32" cy="14" r="3" stroke="currentColor" stroke-width="2"/></svg>
+          <div class="product-overlay"><span>查看详情</span></div>
+        </div>
+        <div class="product-body">
+          <div class="product-brand">琪辉</div>
+          <h3 class="product-name">电动功能沙发</h3>
+          <p class="product-desc">一键电动调节，可躺可坐可睡。</p>
+          <a href="tel:18177310007" class="product-action">
+            <span>咨询价格</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:16px;height:16px;"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+      <!-- 喜临门沙发 -->
+      <div class="product-card scroll-reveal delay-2" tabindex="0">
+        <div class="product-img placeholder-img" style="background:linear-gradient(135deg,#f5ebe0,#dcc9b3)">
+          <svg viewBox="0 0 64 64" fill="none" aria-hidden="true" style="width:44px;height:44px;opacity:.35"><path d="M8 28V18a4 4 0 0 1 4-4h40a4 4 0 0 1 4 4v10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M6 28h52v10a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3V28z" stroke="currentColor" stroke-width="2.5"/><path d="M14 28v-6M50 28v-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <div class="product-overlay"><span>查看详情</span></div>
+        </div>
+        <div class="product-body">
+          <div class="product-brand">喜临门</div>
+          <h3 class="product-name">云呼吸系列沙发</h3>
+          <p class="product-desc">高密度回弹海绵，可拆洗面料。</p>
+          <a href="tel:18177310007" class="product-action">
+            <span>咨询价格</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:16px;height:16px;"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 门店信息 ═══ -->
+<section class="section store" id="store">
+  <div class="container">
+    <div class="scroll-reveal">
+      <div class="section-label">门店信息</div>
+      <h2 class="section-title">到店体验</h2>
+      <p class="section-desc">恭城燕新路，欢迎到店感受每一件家具的质感与温度。</p>
+    </div>
+    <div class="store-grid">
+      <div class="store-info scroll-reveal">
+        <div class="store-info-item">
+          <div class="store-info-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/></svg></div>
+          <div><div class="store-info-label">门店地址</div><div class="store-info-value">恭城燕新路 · 云祥家具城</div></div>
+        </div>
+        <div class="store-info-item">
+          <div class="store-info-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><polyline points="12 6 12 12 16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div><div class="store-info-label">营业时间</div><div class="store-info-value">每天 10:00 — 18:00</div></div>
+        </div>
+        <div class="store-info-item">
+          <div class="store-info-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div><div class="store-info-label">联系电话</div><div class="store-info-value"><a href="tel:18177310007">18177310007</a> · <a href="tel:13457337032">13457337032</a> · <a href="tel:18978398756">18978398756</a></div></div>
+        </div>
+        <div class="store-info-item">
+          <div class="store-info-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div><div class="store-info-label">微信咨询</div><div class="store-info-value">微信号同手机号</div></div>
+        </div>
+      </div>
+      <div class="store-map scroll-reveal placeholder-img" style="flex-direction:column;gap:12px">
+        <svg viewBox="0 0 48 48" fill="none" aria-hidden="true" style="width:40px;height:40px;opacity:.5">
+          <path d="M24 4C15.2 4 8 11.2 8 20c0 12 16 24 16 24s16-12 16-24c0-8.8-7.2-16-16-16z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="24" cy="20" r="5" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <span style="font-size:14px;font-weight:500">恭城燕新路 · 云祥家具城</span>
+        <a href="https://uri.amap.com/search?keyword=云祥家具城&city=恭城" target="_blank" rel="noopener" style="margin-top:8px;padding:8px 20px;background:rgba(200,155,111,.2);border:1px solid rgba(200,155,111,.3);border-radius:100px;font-size:13px;font-weight:500;color:var(--c-accent);transition:background .2s" onmouseover="this.style.background='rgba(200,155,111,.35)'" onmouseout="this.style.background='rgba(200,155,111,.2)'">打开地图导航</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 联系 CTA ═══ -->
+<section class="section contact" id="contact">
+  <div class="container">
+    <div class="scroll-reveal">
+      <div class="section-label" style="text-align:center">联系我们</div>
+      <h2 class="section-title" style="text-align:center">有疑问，随时联系</h2>
+    </div>
+    <div class="contact-card scroll-reveal">
+      <h3 class="contact-title">云祥家具，温暖每一个家</h3>
+      <p class="contact-desc">三个号码均可拨打，微信号同手机号。欢迎到店体验，或电话咨询。</p>
+      <div class="contact-phones">
+        <div class="contact-phone"><a href="tel:18177310007">18177310007</a><span class="contact-phone-label">电话 / 微信</span></div>
+        <div class="contact-phone"><a href="tel:13457337032">13457337032</a><span class="contact-phone-label">电话 / 微信</span></div>
+        <div class="contact-phone"><a href="tel:18978398756">18978398756</a><span class="contact-phone-label">电话 / 微信</span></div>
+      </div>
+      <div class="contact-actions">
+        <a href="tel:18177310007" class="btn-warm">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>立即拨打</span>
+        </a>
+        <a href="#store" class="btn-outline">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/></svg>
+          <span>到店导航</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Footer ═══ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <path d="M12 34 C8 34 5 31 5 27 C5 23 8 21 12 21 C12 15 17 11 24 11 C31 11 36 15 36 21 C40 21 43 23 43 27 C43 31 40 34 36 34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="10" y1="38" x2="38" y2="38" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="14" y1="38" x2="14" y2="42" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="34" y1="38" x2="34" y2="42" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <span>云祥家具城</span>
+    </div>
+    <div class="footer-links">
+      <a href="#brands">品牌馆</a>
+      <a href="#categories">品类</a>
+      <a href="#products">产品</a>
+      <a href="#about">关于</a>
+      <a href="#store">门店</a>
+      <a href="#contact">联系</a>
+    </div>
+    <div class="footer-copy">© 2026 云祥家具城 · 恭城燕新路</div>
+  </div>
+</footer>
+
+<!-- ═══ 悬浮电话按钮 (移动端) ═══ -->
+<div class="fab">
+  <a href="tel:18177310007" aria-label="拨打电话">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+</div>
+
+<!-- ═══ 回到顶部 ═══ -->
+<div class="back-top" id="backTop">
+  <button aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+</div>
+
+<!-- ═══ 底部 Tab 栏 (移动端) ═══ -->
+<nav class="tabbar" aria-label="底部导航">
+  <div class="tabbar-inner">
+    <a href="#hero" class="tabbar-item active" data-target="hero">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 22V12h6v10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>首页</span>
+    </a>
+    <a href="#products" class="tabbar-item" data-target="products">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 7l-8-4-8 4 8 4 8-4z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 7v10l8 4M20 7v10l-8 4M12 11v10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>产品</span>
+    </a>
+    <a href="#brands" class="tabbar-item" data-target="brands">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>品牌</span>
+    </a>
+    <a href="tel:18177310007" class="tabbar-item">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>联系</span>
+    </a>
+  </div>
+</nav>
+
+<!-- 复制提示 -->
+<div class="copy-toast" id="copyToast">已复制到剪贴板 ✓</div>
+
+<script>
+(function(){
+  'use strict';
+
+  // ── 电话号码点击复制 ──
+  var toast=document.getElementById('copyToast');
+  var toastTimer=null;
+  function showToast(msg){
+    if(!toast)return;
+    toast.textContent=msg||'已复制到剪贴板 ✓';
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer=setTimeout(function(){toast.classList.remove('show')},2000);
+  }
+  function copyText(text){
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){showToast('已复制: '+text)}).catch(function(){fallbackCopy(text)});
+    }else{fallbackCopy(text)}
+  }
+  function fallbackCopy(text){
+    var ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;left:-9999px';
+    document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');showToast('已复制: '+text)}catch(e){showToast('复制失败，请手动长按复制')}
+    document.body.removeChild(ta);
+  }
+  // 给所有电话链接添加长按复制
+  var phoneLinks=document.querySelectorAll('a[href^="tel:"]');
+  var pressTimer=null;
+  phoneLinks.forEach(function(link){
+    var phone=link.getAttribute('href').replace('tel:','');
+    // 移动端：长按复制，短按拨号
+    link.addEventListener('touchstart',function(e){
+      pressTimer=setTimeout(function(e){
+        e.preventDefault();
+        copyText(phone);
+        pressTimer='copied';
+      }.bind(null,e),600);
+    },{passive:true});
+    link.addEventListener('touchend',function(e){
+      if(pressTimer==='copied'){e.preventDefault();pressTimer=null;return}
+      clearTimeout(pressTimer);pressTimer=null;
+    });
+    link.addEventListener('touchmove',function(){clearTimeout(pressTimer);pressTimer=null},{passive:true});
+    // 桌面端：点击复制（因为桌面没有拨号功能）
+    if(!('ontouchstart'in window)){
+      link.addEventListener('click',function(e){
+        e.preventDefault();
+        copyText(phone);
+      });
+    }
+  });
+
+  // ── 滚动进度条 ──
+  var progress=document.getElementById('scrollProgress');
+  var nav=document.getElementById('nav');
+  var backTop=document.getElementById('backTop');
+  var ticking=false;
+
+  function onScroll(){
+    var st=window.scrollY;
+    var dh=document.documentElement.scrollHeight-window.innerHeight;
+    var pct=dh>0?(st/dh*100):0;
+    if(progress)progress.style.width=pct+'%';
+    if(nav){if(st>20)nav.classList.add('scrolled');else nav.classList.remove('scrolled')}
+    if(backTop){if(st>400)backTop.classList.add('visible');else backTop.classList.remove('visible')}
+    ticking=false;
+  }
+  window.addEventListener('scroll',function(){
+    if(!ticking){requestAnimationFrame(onScroll);ticking=true}
+  },{passive:true});
+
+  // ── 移动端菜单 ──
+  var navToggle=document.getElementById('navToggle');
+  var navLinks=document.getElementById('navLinks');
+  if(navToggle&&navLinks){
+    navToggle.addEventListener('click',function(){
+      var isOpen=navLinks.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded',isOpen);
+    });
+    navLinks.querySelectorAll('a').forEach(function(link){
+      link.addEventListener('click',function(){
+        navLinks.classList.remove('open');
+        navToggle.setAttribute('aria-expanded','false');
+      });
+    });
+  }
+
+  // ── Hero 视差 ──
+  var heroBg=document.getElementById('heroBg');
+  if(heroBg&&window.matchMedia('(min-width:769px)').matches){
+    window.addEventListener('scroll',function(){
+      var st=window.scrollY;
+      if(st<window.innerHeight){
+        heroBg.style.transform='translateY('+(st*0.3)+'px)';
+      }
+    },{passive:true});
+  }
+
+  // ── 入场动画 ──
+  if('IntersectionObserver'in window){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    },{threshold:0.1,rootMargin:'0px 0px -60px 0px'});
+    document.querySelectorAll('.scroll-reveal').forEach(function(el){io.observe(el)});
+  }else{
+    document.querySelectorAll('.scroll-reveal').forEach(function(el){el.classList.add('visible')});
+  }
+
+  // ── 数字计数动画 ──
+  function animateCount(el){
+    var target=parseInt(el.dataset.count,10)||0;
+    var suffix=el.dataset.suffix||'';
+    var duration=1200;
+    var startTime=null;
+    function step(ts){
+      if(!startTime)startTime=ts;
+      var progress=Math.min((ts-startTime)/duration,1);
+      var eased=1-Math.pow(1-progress,3);
+      el.textContent=Math.floor(eased*target)+(progress===1?suffix:'');
+      if(progress<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  var countEls=document.querySelectorAll('[data-count]');
+  if(countEls.length&&'IntersectionObserver'in window){
+    var countIO=new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          animateCount(entry.target);
+          countIO.unobserve(entry.target);
+        }
+      });
+    },{threshold:0.5});
+    countEls.forEach(function(el){countIO.observe(el)});
+  }
+
+  // ── 产品卡 3D 倾斜 ──
+  if(window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+    document.querySelectorAll('.product-card').forEach(function(card){
+      card.addEventListener('mousemove',function(e){
+        var rect=card.getBoundingClientRect();
+        var x=e.clientX-rect.left;
+        var y=e.clientY-rect.top;
+        var cx=rect.width/2;
+        var cy=rect.height/2;
+        var rx=((y-cy)/cy)*-6;
+        var ry=((x-cx)/cx)*6;
+        card.style.transform='perspective(800px) rotateX('+rx+'deg) rotateY('+ry+'deg) translateY(-4px)';
+      });
+      card.addEventListener('mouseleave',function(){
+        card.style.transform='';
+      });
+    });
+  }
+
+  // ── 回到顶部 ──
+  if(backTop){
+    backTop.querySelector('button').addEventListener('click',function(){
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  }
+
+  // ── 底部 Tab 高亮 ──
+  var tabItems=document.querySelectorAll('.tabbar-item[data-target]');
+  if(tabItems.length&&'IntersectionObserver'in window){
+    var tabIO=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          var id=e.target.id;
+          tabItems.forEach(function(t){
+            t.classList.toggle('active',t.dataset.target===id);
+          });
+        }
+      });
+    },{threshold:0.3});
+    tabItems.forEach(function(t){
+      var target=document.getElementById(t.dataset.target);
+      if(target)tabIO.observe(target);
+    });
+  }
+
+})();
+</script>
+
+</body>
+</html>
