@@ -895,7 +895,7 @@ body.admin-mode .product-overlay{display:none}
 </nav>
 
 <!-- 管理员浮动按钮 -->
-<button class="admin-fab" id="adminFab">已登录 · 点图换图 / 双击改字</button>
+<button class="admin-fab" id="adminFab">已登录 · 点击退出 · 长按图片更多</button>
 
 <!-- 复制提示 -->
 <div class="copy-toast" id="copyToast">已复制到剪贴板 ✓</div>
@@ -1285,7 +1285,10 @@ body.admin-mode .product-overlay{display:none}
   });
   loginPassword.addEventListener('keydown',function(e){if(e.key==='Enter')loginSubmit.click()});
   footerAdmin.addEventListener('click',function(){if(isLoggedIn()){showToast('已登录，点击图片可编辑')}else{showLogin()}});
-  adminFab.addEventListener('click',function(){showToast('点图片替换 · 双击文字编辑 · 底部+号加图')});
+  // 点击adminFab显示退出选项
+  adminFab.addEventListener('click',function(){
+    if(confirm('退出管理员模式？'))onAdminLogout();
+  });
 
   function onAdminLogin(){
     adminFab.classList.add('active');
@@ -1581,7 +1584,6 @@ body.admin-mode .product-overlay{display:none}
         inp.click();
       }
       imgDiv.addEventListener('click',handleProductImgClick);
-      imgDiv.addEventListener('touchend',function(e){e.preventDefault();handleProductImgClick(e)});
     });
     // 品牌图片 - 点击直接选择替换
     document.querySelectorAll('.brand-card .brand-card-img').forEach(function(imgDiv,idx){
@@ -1608,7 +1610,6 @@ body.admin-mode .product-overlay{display:none}
         inp.click();
       }
       imgDiv.addEventListener('click',handleBrandImgClick);
-      imgDiv.addEventListener('touchend',function(e){e.preventDefault();handleBrandImgClick(e)});
     });
   }
 
@@ -1716,34 +1717,28 @@ body.admin-mode .product-overlay{display:none}
         // 管理员：点击直接替换，长按显示菜单
         var pressTimer=null;
         var didLongPress=false;
-        d.addEventListener('touchstart',function(e){
+        d.addEventListener('touchstart',function(){
           didLongPress=false;
           pressTimer=setTimeout(function(){
             didLongPress=true;
             showAction(img,idx);
           },500);
         },{passive:true});
-        d.addEventListener('touchend',function(e){
-          clearTimeout(pressTimer);
-          if(!didLongPress){
-            e.preventDefault();
-            // 点击直接替换
-            var inp=document.createElement('input');inp.type='file';inp.accept='image/*';
-            inp.addEventListener('change',async function(){
-              if(!inp.files.length)return;
-              var file=inp.files[0];
-              if(file.size>20*1024*2048){showToast('文件太大');return}
-              showToast('正在压缩并替换...');
-              try{file=await compressImage(file);await uploadImage(file,img.name);showToast('替换成功')}catch(e){showToast('替换失败: '+e.message)}
-              await loadImages();
-            });
-            inp.click();
-          }
-        });
+        d.addEventListener('touchend',function(){clearTimeout(pressTimer)},{passive:true});
         d.addEventListener('touchmove',function(){clearTimeout(pressTimer)},{passive:true});
-        // 桌面端：点击显示菜单
         d.addEventListener('click',function(e){
-          if(!('ontouchstart' in window))showAction(img,idx);
+          if(didLongPress){didLongPress=false;return}
+          e.preventDefault();
+          var inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+          inp.addEventListener('change',async function(){
+            if(!inp.files.length)return;
+            var file=inp.files[0];
+            if(file.size>20*1024*1024){showToast('文件太大');return}
+            showToast('正在压缩并替换...');
+            try{file=await compressImage(file);await uploadImage(file,img.name);showToast('替换成功')}catch(err){showToast('替换失败: '+err.message)}
+            await loadImages();
+          });
+          inp.click();
         });
       }else{
         d.addEventListener('click',function(){openLightbox(img.url)});
