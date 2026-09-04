@@ -345,101 +345,50 @@ ul{list-style:none}
 /* ═══ 门店地图占位增强 ═══ */
 .store-map{flex-direction:column;gap:var(--space-sm)}
 
-/* ═══ 图片展厅 ═══ */
+/* ═══ 图片展厅（手机优先） ═══ */
 .gallery{background:#fff}
-.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-base);margin-top:var(--space-3xl)}
-.gallery-item{position:relative;aspect-ratio:4/3;border-radius:var(--radius-lg);overflow:hidden;cursor:pointer;transition:transform var(--td),box-shadow var(--td)}
-.gallery-item:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
-.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .4s var(--ease)}
-.gallery-item:hover img{transform:scale(1.05)}
-.gallery-item .gallery-overlay{position:absolute;inset:0;background:linear-gradient(transparent 50%,rgba(0,0,0,.5));opacity:0;transition:opacity var(--td);display:flex;align-items:flex-end;padding:var(--space-base)}
-.gallery-item:hover .gallery-overlay{opacity:1}
-.gallery-overlay span{color:#fff;font-size:13px;font-weight:500}
-.gallery-item .gallery-delete{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;background:rgba(220,38,38,.85);color:#fff;display:none;align-items:center;justify-content:center;font-size:16px;cursor:pointer;z-index:2;border:none;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
-.gallery-item:hover .gallery-delete{display:flex}
-.gallery-empty{grid-column:1/-1;text-align:center;padding:var(--space-5xl) var(--space-xl);color:var(--c-text-muted)}
-.gallery-empty svg{width:48px;height:48px;margin-bottom:var(--space-base);opacity:.3}
-.gallery-empty p{font-size:14px}
-@media(max-width:768px){.gallery-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:480px){.gallery-grid{grid-template-columns:1fr}}
+.gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-sm);margin-top:var(--space-2xl)}
+.gallery-item{position:relative;aspect-ratio:1;border-radius:var(--radius-md);overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.gallery-item img{width:100%;height:100%;object-fit:cover}
+.gallery-item.admin-edit::after{content:'点击编辑';position:absolute;inset:0;background:rgba(61,43,31,.45);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:500;opacity:0;transition:opacity .2s}
+.gallery-item.admin-edit:active::after{opacity:1}
+.gallery-add{aspect-ratio:1;border:2px dashed var(--c-border);border-radius:var(--radius-md);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--c-text-muted);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:border-color .2s,background .2s}
+.gallery-add:active{border-color:var(--c-secondary);background:rgba(200,155,111,.05)}
+.gallery-add svg{width:28px;height:28px;opacity:.5}
+.gallery-add span{font-size:12px}
+.gallery-empty{grid-column:1/-1;text-align:center;padding:var(--space-4xl) var(--space-xl);color:var(--c-text-muted)}
+.gallery-empty svg{width:40px;height:40px;margin-bottom:var(--space-sm);opacity:.25}
+.gallery-empty p{font-size:13px}
+@media(min-width:769px){
+  .gallery-grid{grid-template-columns:repeat(3,1fr);gap:var(--space-base);margin-top:var(--space-3xl)}
+}
 
-/* ═══ 登录弹窗 ═══ */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:500;display:none;align-items:center;justify-content:center;padding:var(--space-xl)}
+/* ═══ 登录弹窗 / 操作菜单 ═══ */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:500;display:none;align-items:flex-end;justify-content:center;padding:0}
 .modal-overlay.active{display:flex}
-.modal{background:var(--c-bg);border-radius:var(--radius-xl);padding:var(--space-3xl);max-width:400px;width:100%;position:relative;box-shadow:var(--shadow-lg)}
-.modal-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.05);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--c-text-muted);cursor:pointer;border:none;transition:background var(--tf)}
-.modal-close:hover{background:rgba(0,0,0,.1)}
-.modal h2{font-family:var(--font-heading);font-size:22px;font-weight:700;color:var(--c-primary);margin-bottom:var(--space-sm)}
-.modal p{font-size:14px;color:var(--c-text-muted);margin-bottom:var(--space-xl)}
-.modal-input{width:100%;height:48px;border:1.5px solid var(--c-border);border-radius:var(--radius-md);padding:0 var(--space-base);font-size:15px;font-family:var(--font-body);transition:border-color var(--tf),box-shadow var(--tf);background:#fff}
-.modal-input:focus{outline:none;border-color:var(--c-secondary);box-shadow:0 0 0 3px rgba(200,155,111,.15)}
+@media(min-width:769px){.modal-overlay{align-items:center;padding:var(--space-xl)}}
+.modal{background:var(--c-bg);border-radius:var(--radius-xl) var(--radius-xl) 0 0;padding:var(--space-2xl) var(--space-xl) calc(var(--space-2xl) + env(safe-area-inset-bottom));max-width:100%;width:100%;position:relative;box-shadow:var(--shadow-lg)}
+@media(min-width:769px){.modal{border-radius:var(--radius-xl);max-width:400px;padding:var(--space-3xl)}}
+.modal-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.05);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--c-text-muted);cursor:pointer;border:none}
+.modal h2{font-family:var(--font-heading);font-size:20px;font-weight:700;color:var(--c-primary);margin-bottom:var(--space-xs)}
+.modal p{font-size:13px;color:var(--c-text-muted);margin-bottom:var(--space-lg)}
+.modal-input{width:100%;height:48px;border:1.5px solid var(--c-border);border-radius:var(--radius-md);padding:0 var(--space-base);font-size:16px;font-family:var(--font-body);background:#fff}
+.modal-input:focus{outline:none;border-color:var(--c-secondary)}
 .modal-input.error{border-color:var(--c-error);animation:shake .4s}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-.modal-btn{width:100%;height:48px;background:var(--c-primary);color:#fff;border:none;border-radius:var(--radius-md);font-size:15px;font-weight:600;font-family:var(--font-body);cursor:pointer;margin-top:var(--space-base);transition:background var(--tf),transform var(--tf)}
-.modal-btn:hover{background:#2a1e15}
-.modal-btn:active{transform:scale(.98)}
+.modal-btn{width:100%;height:48px;background:var(--c-primary);color:#fff;border:none;border-radius:var(--radius-md);font-size:15px;font-weight:600;font-family:var(--font-body);cursor:pointer;margin-top:var(--space-sm);transition:background .15s,transform .15s}
+.modal-btn:active{transform:scale(.97)}
 .modal-error{font-size:13px;color:var(--c-error);margin-top:var(--space-sm);display:none}
 
-/* ═══ 管理员面板 ═══ */
-.admin-panel{position:fixed;top:0;right:-440px;width:420px;max-width:90vw;height:100vh;background:var(--c-bg);z-index:400;box-shadow:-8px 0 32px rgba(0,0,0,.1);transition:right .35s var(--ease);display:flex;flex-direction:column;overflow:hidden}
-.admin-panel.open{right:0}
-.admin-panel-header{display:flex;align-items:center;justify-content:space-between;padding:var(--space-xl);border-bottom:1px solid var(--c-border);flex-shrink:0}
-.admin-panel-header h3{font-family:var(--font-heading);font-size:18px;font-weight:700;color:var(--c-primary)}
-.admin-panel-body{flex:1;overflow-y:auto;padding:var(--space-xl)}
-.admin-panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:399;display:none}
-.admin-panel-overlay.active{display:block}
-.admin-btn{display:inline-flex;align-items:center;gap:var(--space-sm);padding:10px 20px;border-radius:var(--radius-md);font-size:14px;font-weight:500;font-family:var(--font-body);cursor:pointer;border:none;transition:background var(--tf),transform var(--tf)}
-.admin-btn-primary{background:var(--c-primary);color:#fff}
-.admin-btn-primary:hover{background:#2a1e15}
-.admin-btn-danger{background:var(--c-error);color:#fff}
-.admin-btn-danger:hover{background:#b91c1c}
-.admin-btn-ghost{background:transparent;color:var(--c-text-muted);border:1.5px solid var(--c-border)}
-.admin-btn-ghost:hover{border-color:var(--c-secondary);color:var(--c-primary)}
-.admin-btn:active{transform:scale(.96)}
+/* ═══ 管理员浮动按钮（手机端） ═══ */
+.admin-fab{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:89;display:none;padding:8px 20px;background:rgba(200,155,111,.9);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:100px;font-size:13px;font-weight:500;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 4px 16px rgba(200,155,111,.35);-webkit-tap-highlight-color:transparent}
+.admin-fab.active{display:block}
 
-/* 上传区域 */
-.upload-zone{border:2px dashed var(--c-border);border-radius:var(--radius-lg);padding:var(--space-3xl) var(--space-xl);text-align:center;cursor:pointer;transition:border-color var(--td),background var(--td);margin-bottom:var(--space-xl)}
-.upload-zone:hover,.upload-zone.dragover{border-color:var(--c-secondary);background:rgba(200,155,111,.05)}
-.upload-zone svg{width:40px;height:40px;color:var(--c-text-muted);margin-bottom:var(--space-sm)}
-.upload-zone p{font-size:14px;color:var(--c-text-muted)}
-.upload-zone .upload-hint{font-size:12px;color:var(--c-text-muted);margin-top:var(--space-xs);opacity:.7}
-.upload-zone input[type="file"]{display:none}
-
-/* 上传进度 */
-.upload-progress{margin-bottom:var(--space-lg);display:none}
-.upload-progress.active{display:block}
-.upload-progress-bar{height:6px;background:var(--c-border);border-radius:3px;overflow:hidden;margin-bottom:var(--space-xs)}
-.upload-progress-fill{height:100%;background:linear-gradient(90deg,var(--c-secondary),var(--c-accent));border-radius:3px;width:0;transition:width .3s}
-.upload-progress-text{font-size:12px;color:var(--c-text-muted)}
-
-/* 管理员图片列表 */
-.admin-images{margin-top:var(--space-xl)}
-.admin-images h4{font-size:14px;font-weight:600;color:var(--c-primary);margin-bottom:var(--space-base)}
-.admin-image-item{display:flex;align-items:center;gap:var(--space-base);padding:var(--space-sm);border:1px solid var(--c-border);border-radius:var(--radius-md);margin-bottom:var(--space-sm);transition:border-color var(--tf)}
-.admin-image-item:hover{border-color:var(--c-secondary)}
-.admin-image-thumb{width:56px;height:56px;border-radius:var(--radius-sm);object-fit:cover;flex-shrink:0}
-.admin-image-info{flex:1;min-width:0}
-.admin-image-name{font-size:13px;font-weight:500;color:var(--c-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.admin-image-meta{font-size:11px;color:var(--c-text-muted)}
-.admin-image-delete{width:32px;height:32px;border-radius:50%;background:rgba(220,38,38,.08);color:var(--c-error);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:background var(--tf)}
-.admin-image-delete:hover{background:rgba(220,38,38,.15)}
-.admin-image-replace{width:32px;height:32px;border-radius:50%;background:rgba(200,155,111,.1);color:var(--c-secondary);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:background var(--tf)}
-.admin-image-replace:hover{background:rgba(200,155,111,.25)}
-.admin-empty{text-align:center;padding:var(--space-3xl) var(--space-xl);color:var(--c-text-muted);font-size:13px}
-
-/* 管理员状态栏 */
-.admin-status{position:fixed;top:80px;right:var(--space-xl);z-index:90;display:none}
-.admin-status.active{display:block}
-.admin-status-btn{display:flex;align-items:center;gap:var(--space-sm);padding:8px 16px;background:rgba(200,155,111,.9);color:#fff;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer;border:none;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 4px 12px rgba(200,155,111,.3);transition:transform var(--tf)}
-.admin-status-btn:hover{transform:scale(1.03)}
-.admin-status-btn:active{transform:scale(.97)}
-.admin-status-btn svg{width:16px;height:16px}
-
-/* 灯箱 */
-.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:600;display:none;align-items:center;justify-content:center;cursor:zoom-out}
+/* ═══ 灯箱 ═══ */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:600;display:none;align-items:center;justify-content:center}
 .lightbox.active{display:flex}
-.lightbox img{max-width:90vw;max-height:90vh;object-fit:contain;border-radius:var(--radius-md)}
-.lightbox-close{position:absolute;top:20px;right:20px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;border:none;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.lightbox img{max-width:95vw;max-height:90vh;object-fit:contain}
+.lightbox-close{position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;border:none;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 </style>
 </head>
 <body>
@@ -754,6 +703,7 @@ ul{list-style:none}
         <p>暂无图片，敬请期待</p>
       </div>
     </div>
+    <input type="file" id="galleryFileInput" accept="image/*" style="display:none">
   </div>
 </section>
 
@@ -890,6 +840,9 @@ ul{list-style:none}
   </div>
 </nav>
 
+<!-- 管理员浮动按钮 -->
+<button class="admin-fab" id="adminFab">已登录 · 点图片可编辑</button>
+
 <!-- 复制提示 -->
 <div class="copy-toast" id="copyToast">已复制到剪贴板 ✓</div>
 
@@ -898,49 +851,24 @@ ul{list-style:none}
   <div class="modal">
     <button class="modal-close" id="loginClose">&times;</button>
     <h2>管理员登录</h2>
-    <p>输入管理密码以上传和管理图片</p>
+    <p>输入管理密码后可直接点击图片进行替换或删除</p>
     <input type="password" class="modal-input" id="loginPassword" placeholder="请输入管理密码" autocomplete="off">
     <button class="modal-btn" id="loginSubmit">登录</button>
-    <div class="modal-error" id="loginError">密码错误，请重试</div>
+    <div class="modal-error" id="loginError">密码错误</div>
   </div>
 </div>
 
-<!-- 管理员面板遮罩 -->
-<div class="admin-panel-overlay" id="adminOverlay"></div>
-
-<!-- 管理员面板 -->
-<div class="admin-panel" id="adminPanel">
-  <div class="admin-panel-header">
-    <h3>图片管理</h3>
-    <div style="display:flex;gap:8px">
-      <button class="admin-btn admin-btn-ghost" id="adminLogout">退出登录</button>
-      <button class="admin-btn admin-btn-ghost" id="adminClose">&times;</button>
+<!-- 图片操作菜单（点击图片弹出） -->
+<div class="modal-overlay" id="actionSheet">
+  <div class="modal" style="max-width:340px;text-align:center">
+    <button class="modal-close" id="actionClose">&times;</button>
+    <div style="margin-bottom:16px"><img id="actionPreview" style="width:100%;max-height:200px;object-fit:cover;border-radius:12px" alt=""></div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="modal-btn" id="actionReplace" style="background:var(--c-secondary)">替换这张图片</button>
+      <button class="modal-btn" id="actionDelete" style="background:#dc2626">删除这张图片</button>
+      <button class="modal-btn" id="actionView" style="background:transparent;color:var(--c-primary);border:1.5px solid var(--c-border)">查看大图</button>
     </div>
   </div>
-  <div class="admin-panel-body">
-    <div class="upload-zone" id="uploadZone">
-      <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 32V12M16 20l8-8 8 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 32v6a4 4 0 0 0 4 4h24a4 4 0 0 0 4-4v-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <p>点击或拖拽图片到此处上传</p>
-      <div class="upload-hint">支持 JPG、PNG、WebP，单张最大 10MB</div>
-      <input type="file" id="fileInput" accept="image/*" multiple>
-    </div>
-    <div class="upload-progress" id="uploadProgress">
-      <div class="upload-progress-bar"><div class="upload-progress-fill" id="progressFill"></div></div>
-      <div class="upload-progress-text" id="progressText">上传中...</div>
-    </div>
-    <div class="admin-images" id="adminImages">
-      <h4>已上传图片</h4>
-      <div id="adminImageList"></div>
-    </div>
-  </div>
-</div>
-
-<!-- 管理员状态按钮 -->
-<div class="admin-status" id="adminStatus">
-  <button class="admin-status-btn" id="adminOpenBtn">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <span>管理图片</span>
-  </button>
 </div>
 
 <!-- 灯箱 -->
@@ -1136,7 +1064,7 @@ ul{list-style:none}
   }
 
   // ═══════════════════════════════════════
-  // 管理员系统：登录、上传、替换、删除
+  // 管理员系统：点击图片直接替换/删除
   // ═══════════════════════════════════════
   var GH_OWNER='Dem0King';
   var GH_REPO='yunxiang';
@@ -1145,33 +1073,27 @@ ul{list-style:none}
   var IMAGES_DIR='images';
   var ADMIN_PWD_SHA='5c3ef2eb5c7e527c99a859aafa16d1b77a8bc68ccde24e1e6cd24264688c4c8c';
 
-  function apiURL(path){return 'https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+path}
-  function rawURL(path){return 'https://raw.githubusercontent.com/'+GH_OWNER+'/'+GH_REPO+'/'+GH_BRANCH+'/'+path}
-  function getGHHeaders(){var t=localStorage.getItem('yxf_gh_token');return{Authorization:'token '+t,'Content-Type':'application/json'}}
+  function apiURL(p){return 'https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+p}
+  function rawURL(p){return 'https://raw.githubusercontent.com/'+GH_OWNER+'/'+GH_REPO+'/'+GH_BRANCH+'/'+p}
   function isLoggedIn(){return!!localStorage.getItem('yxf_gh_token')}
 
   async function sha256hex(s){
     var buf=new TextEncoder().encode(s);
-    var hash=await crypto.subtle.digest('SHA-256',buf);
-    return Array.from(new Uint8Array(hash)).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
+    var h=await crypto.subtle.digest('SHA-256',buf);
+    return Array.from(new Uint8Array(h)).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
   }
-  function readAsDataURL(file){return new Promise(function(r,j){var rd=new FileReader();rd.onload=function(){r(rd.result)};rd.onerror=j;rd.readAsDataURL(file)})}
+  function readAsDataURL(f){return new Promise(function(r,j){var rd=new FileReader();rd.onload=function(){r(rd.result)};rd.onerror=j;rd.readAsDataURL(f)})}
 
-  // ── 登录系统（密码验证 + GitHub 令牌）──
+  // ── 登录 ──
   var loginModal=document.getElementById('loginModal');
   var loginPassword=document.getElementById('loginPassword');
   var loginSubmit=document.getElementById('loginSubmit');
   var loginError=document.getElementById('loginError');
   var loginClose=document.getElementById('loginClose');
   var footerAdmin=document.getElementById('footerAdmin');
+  var adminFab=document.getElementById('adminFab');
 
-  function showLogin(){
-    loginModal.classList.add('active');
-    loginPassword.value='';
-    loginError.style.display='none';
-    loginPassword.classList.remove('error');
-    setTimeout(function(){loginPassword.focus()},100);
-  }
+  function showLogin(){loginModal.classList.add('active');loginPassword.value='';loginError.style.display='none';loginPassword.classList.remove('error');setTimeout(function(){loginPassword.focus()},100)}
   function hideLogin(){loginModal.classList.remove('active')}
 
   loginClose.addEventListener('click',hideLogin);
@@ -1182,122 +1104,106 @@ ul{list-style:none}
     if(!pwd){loginPassword.classList.add('error');return}
     var hash=await sha256hex(pwd);
     if(hash===ADMIN_PWD_SHA){
-      // 密码正确，检查是否有 GitHub 令牌
       if(!localStorage.getItem('yxf_gh_token')){
-        var token=prompt('首次登录，请粘贴你的 GitHub 令牌（ghp_ 开头）：');
-        if(!token||!token.startsWith('ghp_')){loginError.textContent='令牌格式错误，需要 ghp_ 开头';loginError.style.display='block';return}
+        var token=prompt('首次登录，请粘贴 GitHub 令牌（ghp_ 开头）：');
+        if(!token||!token.startsWith('ghp_')){loginError.textContent='令牌格式错误';loginError.style.display='block';return}
         localStorage.setItem('yxf_gh_token',token.trim());
       }
-      // 验证令牌是否有效
-      try{
-        var testR=await fetch('https://api.github.com/user',{headers:{Authorization:'token '+localStorage.getItem('yxf_gh_token')}});
-        if(!testR.ok)throw new Error();
-      }catch(e){
-        localStorage.removeItem('yxf_gh_token');
-        loginError.textContent='令牌无效，请重新登录';
-        loginError.style.display='block';
-        return;
-      }
-      hideLogin();
-      onAdminLogin();
-    }else{
-      loginError.textContent='密码错误，请重试';
-      loginError.style.display='block';
-      loginPassword.classList.add('error');
-      setTimeout(function(){loginPassword.classList.remove('error')},500);
-    }
+      try{var tr=await fetch('https://api.github.com/user',{headers:{Authorization:'token '+localStorage.getItem('yxf_gh_token')}});if(!tr.ok)throw 0}catch(e){localStorage.removeItem('yxf_gh_token');loginError.textContent='令牌无效';loginError.style.display='block';return}
+      hideLogin();onAdminLogin();
+    }else{loginError.textContent='密码错误';loginError.style.display='block';loginPassword.classList.add('error');setTimeout(function(){loginPassword.classList.remove('error')},500)}
   });
   loginPassword.addEventListener('keydown',function(e){if(e.key==='Enter')loginSubmit.click()});
-  footerAdmin.addEventListener('click',function(){if(isLoggedIn()){openAdminPanel()}else{showLogin()}});
+  footerAdmin.addEventListener('click',function(){if(isLoggedIn()){showToast('已登录，点击图片可编辑')}else{showLogin()}});
+  adminFab.addEventListener('click',function(){showToast('已登录，直接点击图片即可替换或删除')});
 
-  // ── 管理员面板 ──
-  var adminPanel=document.getElementById('adminPanel');
-  var adminOverlay=document.getElementById('adminOverlay');
-  var adminStatus=document.getElementById('adminStatus');
-  var adminOpenBtn=document.getElementById('adminOpenBtn');
-  var adminClose=document.getElementById('adminClose');
-  var adminLogout=document.getElementById('adminLogout');
-
-  function openAdminPanel(){adminPanel.classList.add('open');adminOverlay.classList.add('active');loadAdminImages()}
-  function closeAdminPanel(){adminPanel.classList.remove('open');adminOverlay.classList.remove('active')}
-  function onAdminLogin(){adminStatus.classList.add('active');showToast('登录成功');loadAdminImages()}
+  function onAdminLogin(){
+    adminFab.classList.add('active');
+    showToast('登录成功，点击图片可编辑');
+    renderGallery(lastImages);
+  }
   function onAdminLogout(){
     localStorage.removeItem('yxf_gh_token');
-    adminStatus.classList.remove('active');
-    closeAdminPanel();
+    adminFab.classList.remove('active');
+    renderGallery(lastImages);
     showToast('已退出登录');
   }
 
-  adminOpenBtn.addEventListener('click',openAdminPanel);
-  adminClose.addEventListener('click',closeAdminPanel);
-  adminOverlay.addEventListener('click',closeAdminPanel);
-  adminLogout.addEventListener('click',onAdminLogout);
+  // ── 图片操作菜单 ──
+  var actionSheet=document.getElementById('actionSheet');
+  var actionClose=document.getElementById('actionClose');
+  var actionPreview=document.getElementById('actionPreview');
+  var actionReplace=document.getElementById('actionReplace');
+  var actionDelete=document.getElementById('actionDelete');
+  var actionView=document.getElementById('actionView');
+  var currentActionImg=null;
 
-  // ── 图片上传 ──
-  var uploadZone=document.getElementById('uploadZone');
-  var fileInput=document.getElementById('fileInput');
-  var uploadProgress=document.getElementById('uploadProgress');
-  var progressFill=document.getElementById('progressFill');
-  var progressText=document.getElementById('progressText');
-
-  uploadZone.addEventListener('click',function(){fileInput.click()});
-  uploadZone.addEventListener('dragover',function(e){e.preventDefault();uploadZone.classList.add('dragover')});
-  uploadZone.addEventListener('dragleave',function(){uploadZone.classList.remove('dragover')});
-  uploadZone.addEventListener('drop',function(e){e.preventDefault();uploadZone.classList.remove('dragover');if(e.dataTransfer.files.length)handleFiles(e.dataTransfer.files)});
-  fileInput.addEventListener('change',function(){if(fileInput.files.length)handleFiles(fileInput.files);fileInput.value=''});
-
-  async function handleFiles(files){
-    var total=files.length;var done=0;
-    uploadProgress.classList.add('active');
-    for(var i=0;i<files.length;i++){
-      var file=files[i];
-      if(file.size>10*1024*1024){progressText.textContent='跳过 '+file.name+'（超过10MB）';continue}
-      progressText.textContent='上传 '+file.name+' ('+(i+1)+'/'+total+')';
-      progressFill.style.width=Math.round((i/total)*100)+'%';
-      try{await uploadImage(file);done++}catch(err){showToast('上传失败: '+err.message)}
-    }
-    progressFill.style.width='100%';
-    progressText.textContent='完成！成功上传 '+done+' 张';
-    showToast('成功上传 '+done+' 张图片');
-    setTimeout(function(){uploadProgress.classList.remove('active');progressFill.style.width='0'},2500);
-    await loadImages();
-    await loadAdminImages();
+  function showAction(img){
+    currentActionImg=img;
+    actionPreview.src=img.url;
+    actionSheet.classList.add('active');
   }
+  function hideAction(){actionSheet.classList.remove('active');currentActionImg=null}
 
+  actionClose.addEventListener('click',hideAction);
+  actionSheet.addEventListener('click',function(e){if(e.target===actionSheet)hideAction()});
+
+  // 替换
+  actionReplace.addEventListener('click',function(){
+    if(!currentActionImg)return;
+    hideAction();
+    var inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+    inp.addEventListener('change',async function(){
+      if(!inp.files.length)return;
+      var file=inp.files[0];
+      if(file.size>10*1024*1024){showToast('文件超过10MB');return}
+      showToast('正在替换...');
+      try{await uploadImage(file,currentActionImg.name);showToast('替换成功')}catch(e){showToast('替换失败: '+e.message)}
+      await loadImages();
+    });
+    inp.click();
+  });
+
+  // 删除
+  actionDelete.addEventListener('click',async function(){
+    if(!currentActionImg)return;
+    if(!confirm('确定删除？'))return;
+    hideAction();
+    showToast('正在删除...');
+    try{await deleteImage(currentActionImg);showToast('已删除')}catch(e){showToast('删除失败: '+e.message)}
+    await loadImages();
+  });
+
+  // 查看大图
+  actionView.addEventListener('click',function(){if(currentActionImg){hideAction();openLightbox(currentActionImg.url)}});
+
+  // ── 图片上传/替换/删除 ──
   async function uploadImage(file,replaceName){
     var ext=file.name.split('.').pop().toLowerCase()||'jpg';
     var fname=replaceName||('img_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)+'.'+ext);
     var dataURL=await readAsDataURL(file);
     var base64=dataURL.split(',')[1];
-    var headers=getGHHeaders();
+    var token=localStorage.getItem('yxf_gh_token');
+    var headers={Authorization:'token '+token,'Content-Type':'application/json'};
 
-    // 如果是替换，先获取旧文件的 sha
     var oldSha=null;
     if(replaceName){
-      try{var ro=await fetch(apiURL(IMAGES_DIR+'/'+fname)+'?ref='+GH_BRANCH,{headers:{Authorization:'token '+localStorage.getItem('yxf_gh_token')}});if(ro.ok){var od=await ro.json();oldSha=od.sha}}catch(e){}
+      try{var ro=await fetch(apiURL(IMAGES_DIR+'/'+fname)+'?ref='+GH_BRANCH,{headers:headers});if(ro.ok){var od=await ro.json();oldSha=od.sha}}catch(e){}
     }
 
-    // 上传图片文件
-    var body={message:(replaceName?'替换图片: ':'添加图片: ')+fname,content:base64,branch:GH_BRANCH};
+    var body={message:(replaceName?'替换':'添加')+'图片: '+fname,content:base64,branch:GH_BRANCH};
     if(oldSha)body.sha=oldSha;
     var r1=await fetch(apiURL(IMAGES_DIR+'/'+fname),{method:'PUT',headers:headers,body:JSON.stringify(body)});
     if(!r1.ok)throw new Error('上传失败('+r1.status+')');
     var d1=await r1.json();
 
-    // 更新 images.json
     var images=[];
     try{var r0=await fetch(rawURL(IMAGES_JSON_PATH)+'?t='+Date.now());if(r0.ok)images=await r0.json()}catch(e){}
 
     if(replaceName){
-      // 替换模式：更新已有记录
       var found=false;
       for(var j=0;j<images.length;j++){
-        if(images[j].name===fname){
-          images[j].sha=d1.content.sha;
-          images[j].time=new Date().toISOString();
-          images[j].url=rawURL(IMAGES_DIR+'/'+fname)+'?t='+Date.now();
-          found=true;break;
-        }
+        if(images[j].name===fname){images[j].sha=d1.content.sha;images[j].time=new Date().toISOString();images[j].url=rawURL(IMAGES_DIR+'/'+fname)+'?t='+Date.now();found=true;break}
       }
       if(!found)images.unshift({name:fname,url:rawURL(IMAGES_DIR+'/'+fname),sha:d1.content.sha,time:new Date().toISOString()});
     }else{
@@ -1305,136 +1211,86 @@ ul{list-style:none}
     }
 
     var curSha=null;
-    try{var rc=await fetch(apiURL(IMAGES_JSON_PATH)+'?ref='+GH_BRANCH,{headers:{Authorization:'token '+localStorage.getItem('yxf_gh_token')}});if(rc.ok){var cd=await rc.json();curSha=cd.sha}}catch(e){}
+    try{var rc=await fetch(apiURL(IMAGES_JSON_PATH)+'?ref='+GH_BRANCH,{headers:headers});if(rc.ok){var cd=await rc.json();curSha=cd.sha}}catch(e){}
 
-    var r2=await fetch(apiURL(IMAGES_JSON_PATH),{
-      method:'PUT',headers:headers,
-      body:JSON.stringify({message:'更新图片列表',content:btoa(unescape(encodeURIComponent(JSON.stringify(images,null,2)))),branch:GH_BRANCH,sha:curSha})
-    });
+    var r2=await fetch(apiURL(IMAGES_JSON_PATH),{method:'PUT',headers:headers,body:JSON.stringify({message:'更新图片列表',content:btoa(unescape(encodeURIComponent(JSON.stringify(images,null,2)))),branch:GH_BRANCH,sha:curSha})});
     if(!r2.ok)throw new Error('更新列表失败('+r2.status+')');
   }
 
-  // ── 展示图片（游客可见）──
+  async function deleteImage(img){
+    var token=localStorage.getItem('yxf_gh_token');
+    var headers={Authorization:'token '+token,'Content-Type':'application/json'};
+    var fileSha=img.sha;
+    if(!fileSha){
+      try{var ri=await fetch(apiURL(IMAGES_DIR+'/'+img.name)+'?ref='+GH_BRANCH,{headers:headers});if(ri.ok){var id=await ri.json();fileSha=id.sha}}catch(e){}
+    }
+    if(fileSha){
+      await fetch(apiURL(IMAGES_DIR+'/'+img.name),{method:'DELETE',headers:headers,body:JSON.stringify({message:'删除图片: '+img.name,sha:fileSha,branch:GH_BRANCH})});
+    }
+    var images=[];
+    try{var r=await fetch(rawURL(IMAGES_JSON_PATH)+'?t='+Date.now());if(r.ok)images=await r.json()}catch(e){}
+    images=images.filter(function(i){return i.name!==img.name});
+    var curSha=null;
+    try{var rc=await fetch(apiURL(IMAGES_JSON_PATH)+'?ref='+GH_BRANCH,{headers:headers});if(rc.ok){var cd=await rc.json();curSha=cd.sha}}catch(e){}
+    await fetch(apiURL(IMAGES_JSON_PATH),{method:'PUT',headers:headers,body:JSON.stringify({message:'更新图片列表',content:btoa(unescape(encodeURIComponent(JSON.stringify(images,null,2)))),branch:GH_BRANCH,sha:curSha})});
+  }
+
+  // ── 展示图片（核心渲染）──
   var galleryGrid=document.getElementById('galleryGrid');
+  var galleryFileInput=document.getElementById('galleryFileInput');
+  var lastImages=[];
 
   async function loadImages(){
     try{
       var r=await fetch(rawURL(IMAGES_JSON_PATH)+'?t='+Date.now());
       if(!r.ok)return;
-      var images=await r.json();
-      renderGallery(images);
+      lastImages=await r.json();
+      renderGallery(lastImages);
     }catch(e){}
   }
 
   function renderGallery(images){
     galleryGrid.innerHTML='';
     if(!images||!images.length){
-      galleryGrid.innerHTML='<div class="gallery-empty"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="6" y="10" width="36" height="28" rx="3" stroke="currentColor" stroke-width="2.5"/><circle cx="18" cy="22" r="4" stroke="currentColor" stroke-width="2"/><path d="M6 34l10-10 8 8 6-6 12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><p>暂无图片，敬请期待</p></div>';
+      if(isLoggedIn()){
+        galleryGrid.innerHTML='<div class="gallery-add" id="galleryAddFirst"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>添加第一张图片</span></div>';
+        document.getElementById('galleryAddFirst').addEventListener('click',function(){galleryFileInput.click()});
+      }else{
+        galleryGrid.innerHTML='<div class="gallery-empty"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="6" y="10" width="36" height="28" rx="3" stroke="currentColor" stroke-width="2.5"/><circle cx="18" cy="22" r="4" stroke="currentColor" stroke-width="2"/><path d="M6 34l10-10 8 8 6-6 12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><p>暂无图片，敬请期待</p></div>';
+      }
       return;
     }
     images.forEach(function(img){
       var d=document.createElement('div');
-      d.className='gallery-item scroll-reveal';
-      d.innerHTML='<img src="'+img.url+'" alt="门店图片" loading="lazy">'
-        +'<div class="gallery-overlay"><span>点击放大</span></div>';
-      d.addEventListener('click',function(){openLightbox(img.url)});
+      d.className='gallery-item'+(isLoggedIn()?' admin-edit':'');
+      d.innerHTML='<img src="'+img.url+'" alt="门店图片" loading="lazy">';
+      if(isLoggedIn()){
+        d.addEventListener('click',function(){showAction(img)});
+      }else{
+        d.addEventListener('click',function(){openLightbox(img.url)});
+      }
       galleryGrid.appendChild(d);
     });
-    var io=new IntersectionObserver(function(entries){
-      entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}})
-    },{threshold:0.1});
-    galleryGrid.querySelectorAll('.scroll-reveal').forEach(function(el){io.observe(el)});
-  }
-
-  // ── 管理员图片列表（含替换和删除）──
-  var adminImageList=document.getElementById('adminImageList');
-
-  async function loadAdminImages(){
-    if(!isLoggedIn())return;
-    try{
-      var r=await fetch(rawURL(IMAGES_JSON_PATH)+'?t='+Date.now());
-      if(!r.ok){adminImageList.innerHTML='<div class="admin-empty">暂无图片</div>';return}
-      var images=await r.json();
-      renderAdminImages(images);
-    }catch(e){adminImageList.innerHTML='<div class="admin-empty">暂无图片</div>'}
-  }
-
-  function renderAdminImages(images){
-    adminImageList.innerHTML='';
-    if(!images||!images.length){adminImageList.innerHTML='<div class="admin-empty">暂无图片</div>';return}
-    images.forEach(function(img,idx){
-      var d=document.createElement('div');
-      d.className='admin-image-item';
-      d.innerHTML='<img class="admin-image-thumb" src="'+img.url+'" alt="">'
-        +'<div class="admin-image-info"><div class="admin-image-name">图片 '+(idx+1)+'</div><div class="admin-image-meta">'+(img.time?new Date(img.time).toLocaleDateString():'')+'</div></div>'
-        +'<div style="display:flex;gap:6px;flex-shrink:0">'
-        +'<button class="admin-image-replace" title="替换">↻</button>'
-        +'<button class="admin-image-delete" title="删除">&times;</button>'
-        +'</div>';
-      // 替换按钮
-      d.querySelector('.admin-image-replace').addEventListener('click',function(){replaceImage(img)});
-      // 删除按钮
-      d.querySelector('.admin-image-delete').addEventListener('click',function(){deleteImage(img)});
-      adminImageList.appendChild(d);
-    });
-  }
-
-  // ── 替换图片 ──
-  function replaceImage(img){
-    var inp=document.createElement('input');
-    inp.type='file';inp.accept='image/*';
-    inp.addEventListener('change',async function(){
-      if(!inp.files.length)return;
-      var file=inp.files[0];
-      if(file.size>10*1024*1024){showToast('文件超过10MB');return}
-      showToast('正在替换图片...');
-      try{
-        await uploadImage(file,img.name);
-        showToast('图片替换成功！');
-        await loadImages();
-        await loadAdminImages();
-      }catch(e){showToast('替换失败: '+e.message)}
-    });
-    inp.click();
-  }
-
-  // ── 删除图片 ──
-  async function deleteImage(img){
-    if(!confirm('确定删除这张图片？'))return;
-    showToast('正在删除...');
-    var headers=getGHHeaders();
-    var token=localStorage.getItem('yxf_gh_token');
-
-    // 获取文件 sha 并删除
-    var fileSha=img.sha;
-    if(!fileSha){
-      try{var ri=await fetch(apiURL(IMAGES_DIR+'/'+img.name)+'?ref='+GH_BRANCH,{headers:{Authorization:'token '+token}});if(ri.ok){var id=await ri.json();fileSha=id.sha}}catch(e){}
+    // 管理员：最后加一个"+"按钮
+    if(isLoggedIn()){
+      var addBtn=document.createElement('div');
+      addBtn.className='gallery-add';
+      addBtn.innerHTML='<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>添加图片</span>';
+      addBtn.addEventListener('click',function(){galleryFileInput.click()});
+      galleryGrid.appendChild(addBtn);
     }
-    if(fileSha){
-      var rd=await fetch(apiURL(IMAGES_DIR+'/'+img.name),{
-        method:'DELETE',headers:headers,
-        body:JSON.stringify({message:'删除图片: '+img.name,sha:fileSha,branch:GH_BRANCH})
-      });
-      if(!rd.ok)showToast('删除文件失败('+rd.status+')');
-    }
+  }
 
-    // 更新 images.json
-    var images=[];
-    try{var r=await fetch(rawURL(IMAGES_JSON_PATH)+'?t='+Date.now());if(r.ok)images=await r.json()}catch(e){}
-    images=images.filter(function(i){return i.name!==img.name});
-
-    var curSha=null;
-    try{var rc=await fetch(apiURL(IMAGES_JSON_PATH)+'?ref='+GH_BRANCH,{headers:{Authorization:'token '+token}});if(rc.ok){var cd=await rc.json();curSha=cd.sha}}catch(e){}
-
-    await fetch(apiURL(IMAGES_JSON_PATH),{
-      method:'PUT',headers:headers,
-      body:JSON.stringify({message:'更新图片列表',content:btoa(unescape(encodeURIComponent(JSON.stringify(images,null,2)))),branch:GH_BRANCH,sha:curSha})
-    });
-
-    showToast('图片已删除');
+  // 添加新图片
+  galleryFileInput.addEventListener('change',async function(){
+    if(!galleryFileInput.files.length)return;
+    var file=galleryFileInput.files[0];
+    if(file.size>10*1024*1024){showToast('文件超过10MB');galleryFileInput.value='';return}
+    showToast('正在上传...');
+    try{await uploadImage(file);showToast('上传成功')}catch(e){showToast('上传失败: '+e.message)}
+    galleryFileInput.value='';
     await loadImages();
-    await loadAdminImages();
-  }
+  });
 
   // ── 灯箱 ──
   var lightbox=document.getElementById('lightbox');
@@ -1445,7 +1301,11 @@ ul{list-style:none}
   function closeLightboxFn(){lightbox.classList.remove('active');lightboxImg.src='';document.body.style.overflow=''}
   lightbox.addEventListener('click',function(e){if(e.target===lightbox||e.target===lightboxImg)closeLightboxFn()});
   lightboxClose.addEventListener('click',closeLightboxFn);
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&lightbox.classList.contains('active'))closeLightboxFn()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){
+    if(lightbox.classList.contains('active'))closeLightboxFn();
+    if(actionSheet.classList.contains('active'))hideAction();
+    if(loginModal.classList.contains('active'))hideLogin();
+  }});
 
   // ── 初始化 ──
   loadImages();
