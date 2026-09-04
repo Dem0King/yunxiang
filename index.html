@@ -349,7 +349,7 @@ body.admin-mode .product-overlay{display:none}
 .gallery{background:#fff}
 .gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-sm);margin-top:var(--space-2xl)}
 .gallery-item{position:relative;aspect-ratio:1;border-radius:var(--radius-md);overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.gallery-item img{width:100%;height:100%;object-fit:cover}
+.gallery-item img{width:100%;height:100%;object-fit:contain;background:#f5f0eb}
 .gallery-item.admin-edit::after{content:'点击编辑';position:absolute;inset:0;background:rgba(61,43,31,.45);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:500;opacity:0;transition:opacity .2s}
 .gallery-item.admin-edit:active::after{opacity:1}
 .gallery-insert{
@@ -427,7 +427,7 @@ body.admin-mode .product-overlay{display:none}
 .detail-content{background:var(--c-bg);width:100%;max-width:480px;max-height:90vh;border-radius:var(--radius-xl) var(--radius-xl) 0 0;overflow-y:auto;-webkit-overflow-scrolling:touch}
 @media(min-width:769px){.detail-content{border-radius:var(--radius-xl)}}
 .detail-close{position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.4);color:#fff;border:none;font-size:22px;cursor:pointer;z-index:2;display:flex;align-items:center;justify-content:center}
-.detail-img{width:100%;aspect-ratio:4/3;object-fit:cover;background:linear-gradient(135deg,#f0e6d8,#dcc9b3)}
+.detail-img{width:100%;aspect-ratio:4/3;object-fit:contain;background:linear-gradient(135deg,#f0e6d8,#dcc9b3)}
 .detail-body{padding:var(--space-xl)}
 .detail-brand{font-size:13px;color:var(--c-secondary);font-weight:600;margin-bottom:var(--space-xs)}
 .detail-name{font-family:var(--font-heading);font-size:22px;font-weight:700;color:var(--c-primary);margin-bottom:var(--space-sm)}
@@ -915,7 +915,7 @@ body.admin-mode .product-overlay{display:none}
 <div class="modal-overlay" id="actionSheet">
   <div class="modal" style="max-width:340px;text-align:center">
     <button class="modal-close" id="actionClose">&times;</button>
-    <div style="margin-bottom:16px"><img id="actionPreview" style="width:100%;max-height:200px;object-fit:cover;border-radius:12px" alt=""></div>
+    <div style="margin-bottom:16px"><img id="actionPreview" style="width:100%;max-height:300px;object-fit:contain;border-radius:12px;background:#f5f0eb" alt=""></div>
     <div style="display:flex;flex-direction:column;gap:10px">
       <div style="display:flex;gap:8px">
         <button class="modal-btn" id="actionMoveLeft" style="background:var(--c-primary);margin-top:0">← 左移</button>
@@ -1510,10 +1510,11 @@ body.admin-mode .product-overlay{display:none}
         if(p.image){
           var imgDiv=card.querySelector('.product-img');
           if(imgDiv){
-            imgDiv.style.background='none';
+            imgDiv.style.background='#f5f0eb';
             imgDiv.style.backgroundImage='url('+p.image+')';
-            imgDiv.style.backgroundSize='cover';
+            imgDiv.style.backgroundSize='contain';
             imgDiv.style.backgroundPosition='center';
+            imgDiv.style.backgroundRepeat='no-repeat';
             var svg=imgDiv.querySelector('svg');if(svg)svg.style.display='none';
           }
         }
@@ -1532,10 +1533,11 @@ body.admin-mode .product-overlay{display:none}
         if(b.image){
           var imgDiv=card.querySelector('.brand-card-img');
           if(imgDiv){
-            imgDiv.style.background='none';
+            imgDiv.style.background='#f5f0eb';
             imgDiv.style.backgroundImage='url('+b.image+')';
-            imgDiv.style.backgroundSize='cover';
+            imgDiv.style.backgroundSize='contain';
             imgDiv.style.backgroundPosition='center';
+            imgDiv.style.backgroundRepeat='no-repeat';
             var svg=imgDiv.querySelector('svg');if(svg)svg.style.display='none';
           }
         }
@@ -1547,10 +1549,10 @@ body.admin-mode .product-overlay{display:none}
 
   // 管理员：点击产品/品牌图片可替换
   function enableAdminImageEdit(){
-    // 产品图片
+    // 产品图片 - 点击直接选择替换
     document.querySelectorAll('.product-card .product-img').forEach(function(imgDiv,idx){
       imgDiv.style.cursor='pointer';
-      imgDiv.addEventListener('click',function(e){
+      function handleProductImgClick(e){
         if(!isLoggedIn())return;
         e.stopPropagation();
         var inp=document.createElement('input');inp.type='file';inp.accept='image/*';
@@ -1570,12 +1572,14 @@ body.admin-mode .product-overlay{display:none}
           }catch(e){showToast('失败: '+e.message)}
         });
         inp.click();
-      });
+      }
+      imgDiv.addEventListener('click',handleProductImgClick);
+      imgDiv.addEventListener('touchend',function(e){e.preventDefault();handleProductImgClick(e)});
     });
-    // 品牌图片
+    // 品牌图片 - 点击直接选择替换
     document.querySelectorAll('.brand-card .brand-card-img').forEach(function(imgDiv,idx){
       imgDiv.style.cursor='pointer';
-      imgDiv.addEventListener('click',function(e){
+      function handleBrandImgClick(e){
         if(!isLoggedIn())return;
         e.stopPropagation();
         var inp=document.createElement('input');inp.type='file';inp.accept='image/*';
@@ -1595,7 +1599,9 @@ body.admin-mode .product-overlay{display:none}
           }catch(e){showToast('失败: '+e.message)}
         });
         inp.click();
-      });
+      }
+      imgDiv.addEventListener('click',handleBrandImgClick);
+      imgDiv.addEventListener('touchend',function(e){e.preventDefault();handleBrandImgClick(e)});
     });
   }
 
@@ -1700,7 +1706,38 @@ body.admin-mode .product-overlay{display:none}
       d.className='gallery-item'+(isLoggedIn()?' admin-edit':'');
       d.innerHTML='<img src="'+img.url+'" alt="门店图片" loading="lazy">';
       if(isLoggedIn()){
-        d.addEventListener('click',function(){showAction(img,idx)});
+        // 管理员：点击直接替换，长按显示菜单
+        var pressTimer=null;
+        var didLongPress=false;
+        d.addEventListener('touchstart',function(e){
+          didLongPress=false;
+          pressTimer=setTimeout(function(){
+            didLongPress=true;
+            showAction(img,idx);
+          },500);
+        },{passive:true});
+        d.addEventListener('touchend',function(e){
+          clearTimeout(pressTimer);
+          if(!didLongPress){
+            e.preventDefault();
+            // 点击直接替换
+            var inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+            inp.addEventListener('change',async function(){
+              if(!inp.files.length)return;
+              var file=inp.files[0];
+              if(file.size>20*1024*2048){showToast('文件太大');return}
+              showToast('正在压缩并替换...');
+              try{file=await compressImage(file);await uploadImage(file,img.name);showToast('替换成功')}catch(e){showToast('替换失败: '+e.message)}
+              await loadImages();
+            });
+            inp.click();
+          }
+        });
+        d.addEventListener('touchmove',function(){clearTimeout(pressTimer)},{passive:true});
+        // 桌面端：点击显示菜单
+        d.addEventListener('click',function(e){
+          if(!('ontouchstart' in window))showAction(img,idx);
+        });
       }else{
         d.addEventListener('click',function(){openLightbox(img.url)});
       }
