@@ -371,7 +371,7 @@ body.admin-mode .product-overlay{display:none}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:500;display:none;align-items:flex-end;justify-content:center;padding:0}
 .modal-overlay.active{display:flex}
 @media(min-width:769px){.modal-overlay{align-items:center;padding:var(--space-xl)}}
-.modal{background:var(--c-bg);border-radius:var(--radius-xl) var(--radius-xl) 0 0;padding:var(--space-2xl) var(--space-xl) calc(var(--space-2xl) + env(safe-area-inset-bottom));max-width:100%;width:100%;position:relative;box-shadow:var(--shadow-lg)}
+.modal{background:var(--c-bg);border-radius:var(--radius-xl) var(--radius-xl) 0 0;padding:var(--space-2xl) var(--space-xl) calc(var(--space-2xl) + env(safe-area-inset-bottom));max-width:100%;width:100%;position:relative;box-shadow:var(--shadow-lg);max-height:90vh;overflow-y:auto}
 @media(min-width:769px){.modal{border-radius:var(--radius-xl);max-width:400px;padding:var(--space-3xl)}}
 .modal-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.05);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--c-text-muted);cursor:pointer;border:none}
 .modal h2{font-family:var(--font-heading);font-size:20px;font-weight:700;color:var(--c-primary);margin-bottom:var(--space-xs)}
@@ -383,6 +383,17 @@ body.admin-mode .product-overlay{display:none}
 .modal-btn{width:100%;height:48px;background:var(--c-primary);color:#fff;border:none;border-radius:var(--radius-md);font-size:15px;font-weight:600;font-family:var(--font-body);cursor:pointer;margin-top:var(--space-sm);transition:background .15s,transform .15s}
 .modal-btn:active{transform:scale(.97)}
 .modal-error{font-size:13px;color:var(--c-error);margin-top:var(--space-sm);display:none}
+
+/* ═══ 管理员登录入口优化（手机端） ═══ */
+#footerAdmin{display:inline-block;padding:8px 16px;margin:-8px -16px;border-radius:var(--radius-md);transition:background var(--tf),transform var(--tf);-webkit-tap-highlight-color:transparent}
+#footerAdmin:hover{background:rgba(200,155,111,.1)}
+#footerAdmin:active{transform:scale(.95);background:rgba(200,155,111,.2)}
+
+/* ═══ 令牌输入区域样式 ═══ */
+#tokenSection{background:rgba(200,155,111,.05);border:1px solid rgba(200,155,111,.15);border-radius:var(--radius-md);padding:var(--space-base);margin-top:var(--space-sm)}
+#tokenSection p{margin-bottom:var(--space-sm)}
+#tokenSection .modal-input{font-size:14px;height:44px}
+#tokenSection div{line-height:1.5}
 
 /* ═══ 管理员编辑模式提示 ═══ */
 .product-img[title],.brand-card-img[title]{position:relative}
@@ -889,6 +900,12 @@ body.admin-mode .product-overlay{display:none}
     <h2>管理员登录</h2>
     <p>输入管理密码后可直接点击图片进行替换或删除</p>
     <input type="password" class="modal-input" id="loginPassword" placeholder="请输入管理密码" autocomplete="off">
+    <div id="tokenSection" style="display:none">
+      <p style="font-size:12px;color:var(--c-text-muted);margin-bottom:8px">首次登录需要 GitHub 令牌（用于上传图片）</p>
+      <input type="text" class="modal-input" id="loginToken" placeholder="ghp_ 或 github_pat_ 开头的令牌" autocomplete="off" style="margin-bottom:8px">
+      <div style="font-size:11px;color:var(--c-text-muted);margin-bottom:12px">
+        获取令牌：GitHub → Settings → Developer settings → Personal access tokens → Generate new token </div>
+    </div>
     <button class="modal-btn" id="loginSubmit">登录</button>
     <div class="modal-error" id="loginError">密码错误</div>
   </div>
@@ -1188,8 +1205,23 @@ body.admin-mode .product-overlay{display:none}
   var loginClose=document.getElementById('loginClose');
   var footerAdmin=document.getElementById('footerAdmin');
   var adminFab=document.getElementById('adminFab');
+  var loginToken=document.getElementById('loginToken');
+  var tokenSection=document.getElementById('tokenSection');
 
-  function showLogin(){loginModal.classList.add('active');loginPassword.value='';loginError.style.display='none';loginPassword.classList.remove('error');setTimeout(function(){loginPassword.focus()},100)}
+  function showLogin(){
+    loginModal.classList.add('active');
+    loginPassword.value='';
+    loginError.style.display='none';
+    loginPassword.classList.remove('error');
+    // 显示/隐藏令牌输入区域
+    if(localStorage.getItem('yxf_gh_token')){
+      tokenSection.style.display='none';
+    }else{
+      tokenSection.style.display='block';
+      loginToken.value='';
+    }
+    setTimeout(function(){loginPassword.focus()},100);
+  }
   function hideLogin(){loginModal.classList.remove('active')}
 
   loginClose.addEventListener('click',hideLogin);
@@ -1201,10 +1233,19 @@ body.admin-mode .product-overlay{display:none}
     var hash=await sha256hex(pwd);
     if(hash===ADMIN_PWD_SHA){
       if(!localStorage.getItem('yxf_gh_token')){
-        var token=prompt('密码正确！\n\n请输入 GitHub 令牌（第一次需要输入，以后不用）：');
-        if(!token){loginError.textContent='需要输入令牌才能上传图片';loginError.style.display='block';return}
-        token=token.trim();
-        if(!token.startsWith('ghp_')){loginError.textContent='令牌格式不对，需要 ghp_ 开头的那串字符';loginError.style.display='block';return}
+        var token=loginToken.value.trim();
+        if(!token){
+          loginError.textContent='请输入 GitHub 令牌';
+          loginError.style.display='block';
+          loginToken.focus();
+          return;
+        }
+        if(!token.startsWith('ghp_') && !token.startsWith('github_pat_')){
+          loginError.textContent='令牌格式不对，需要 ghp_ 或 github_pat_ 开头的那串字符';
+          loginError.style.display='block';
+          loginToken.focus();
+          return;
+        }
         localStorage.setItem('yxf_gh_token',token);
       }
       hideLogin();onAdminLogin();
