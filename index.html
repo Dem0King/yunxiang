@@ -384,6 +384,21 @@ ul{list-style:none}
 .modal-btn:active{transform:scale(.97)}
 .modal-error{font-size:13px;color:var(--c-error);margin-top:var(--space-sm);display:none}
 
+/* ═══ 管理员编辑模式提示 ═══ */
+.product-img[title],.brand-card-img[title]{position:relative}
+.product-img[title]::after,.brand-card-img[title]::after{
+  content:'点击换图';position:absolute;inset:0;
+  background:rgba(61,43,31,.5);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:500;opacity:0;transition:opacity .2s;
+  border-radius:inherit;z-index:2;
+}
+.product-img[title]:active::after,.brand-card-img[title]:active::after{opacity:1}
+.product-name[contenteditable],.product-desc[contenteditable],.product-brand[contenteditable],
+.brand-name[contenteditable],.brand-desc[contenteditable]{
+  background:rgba(200,155,111,.08);border-radius:4px;
+}
+
 /* ═══ 管理员浮动按钮（手机端） ═══ */
 .admin-fab{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:89;display:none;padding:8px 20px;background:rgba(200,155,111,.9);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:100px;font-size:13px;font-weight:500;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 4px 16px rgba(200,155,111,.35);-webkit-tap-highlight-color:transparent}
 .admin-fab.active{display:block}
@@ -837,7 +852,7 @@ ul{list-style:none}
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span>品牌</span>
     </a>
-    <a href="tel:18177310007" class="tabbar-item">
+    <a href="#contact" class="tabbar-item" data-target="contact">
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span>联系</span>
     </a>
@@ -845,7 +860,7 @@ ul{list-style:none}
 </nav>
 
 <!-- 管理员浮动按钮 -->
-<button class="admin-fab" id="adminFab">已登录 · 点图片可编辑</button>
+<button class="admin-fab" id="adminFab">已登录 · 点图换图 / 双击改字</button>
 
 <!-- 复制提示 -->
 <div class="copy-toast" id="copyToast">已复制到剪贴板 ✓</div>
@@ -1092,6 +1107,29 @@ ul{list-style:none}
   }
   function readAsDataURL(f){return new Promise(function(r,j){var rd=new FileReader();rd.onload=function(){r(rd.result)};rd.onerror=j;rd.readAsDataURL(f)})}
 
+  // 图片压缩：最大1200px宽，质量0.8
+  function compressImage(file,maxW){
+    maxW=maxW||1200;
+    return new Promise(function(resolve){
+      if(file.size<300*1024){resolve(file);return} // 小于300KB不压缩
+      var img=new Image();
+      var url=URL.createObjectURL(file);
+      img.onload=function(){
+        var w=img.width,h=img.height;
+        if(w>maxW){h=Math.round(h*maxW/w);w=maxW}
+        var c=document.createElement('canvas');c.width=w;c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h);
+        c.toBlob(function(blob){
+          URL.revokeObjectURL(url);
+          if(blob)resolve(new File([blob],file.name,{type:'image/jpeg',lastModified:Date.now()}));
+          else resolve(file);
+        },'image/jpeg',0.8);
+      };
+      img.onerror=function(){URL.revokeObjectURL(url);resolve(file)};
+      img.src=url;
+    });
+  }
+
   // ── 登录 ──
   var loginModal=document.getElementById('loginModal');
   var loginPassword=document.getElementById('loginPassword');
@@ -1129,12 +1167,18 @@ ul{list-style:none}
   });
   loginPassword.addEventListener('keydown',function(e){if(e.key==='Enter')loginSubmit.click()});
   footerAdmin.addEventListener('click',function(){if(isLoggedIn()){showToast('已登录，点击图片可编辑')}else{showLogin()}});
-  adminFab.addEventListener('click',function(){showToast('已登录，直接点击图片即可替换或删除')});
+  adminFab.addEventListener('click',function(){showToast('点图片替换 · 双击文字编辑 · 底部+号加图')});
 
   function onAdminLogin(){
     adminFab.classList.add('active');
-    showToast('登录成功，点击图片可编辑');
+    showToast('登录成功，点击图片可编辑，双击文字可修改');
     renderGallery(lastImages);
+    enableAdminImageEdit();
+    enableAdminTextEdit();
+    // 给产品/品牌图片加编辑提示
+    document.querySelectorAll('.product-img,.brand-card-img').forEach(function(el){
+      el.setAttribute('title','点击替换图片');
+    });
   }
   function onAdminLogout(){
     localStorage.removeItem('yxf_gh_token');
@@ -1178,9 +1222,9 @@ ul{list-style:none}
     inp.addEventListener('change',async function(){
       if(!inp.files.length)return;
       var file=inp.files[0];
-      if(file.size>10*1024*1024){showToast('文件超过10MB');return}
-      showToast('正在替换...');
-      try{await uploadImage(file,currentActionImg.name);showToast('替换成功')}catch(e){showToast('替换失败: '+e.message)}
+      if(file.size>20*1024*1024){showToast('文件太大');return}
+      showToast('正在压缩并替换...');
+      try{file=await compressImage(file);await uploadImage(file,currentActionImg.name);showToast('替换成功')}catch(e){showToast('替换失败: '+e.message)}
       await loadImages();
     });
     inp.click();
@@ -1306,6 +1350,190 @@ ul{list-style:none}
     }catch(e){}
   }
 
+  // ═══════════════════════════════════════
+  // 产品/品牌数据管理
+  // ═══════════════════════════════════════
+  var PRODUCTS_JSON_PATH='images/products.json';
+  var siteData=null;
+
+  async function loadSiteData(){
+    try{
+      var r=await fetch(rawURL(PRODUCTS_JSON_PATH)+'?t='+Date.now());
+      if(r.ok)siteData=await r.json();
+    }catch(e){}
+    if(siteData)applySiteData();
+  }
+
+  function applySiteData(){
+    if(!siteData)return;
+    // 应用产品数据
+    var productCards=document.querySelectorAll('.product-card');
+    if(siteData.products){
+      siteData.products.forEach(function(p,i){
+        if(!productCards[i])return;
+        var card=productCards[i];
+        // 替换图片
+        if(p.image){
+          var imgDiv=card.querySelector('.product-img');
+          if(imgDiv){
+            imgDiv.style.background='none';
+            imgDiv.style.backgroundImage='url('+p.image+')';
+            imgDiv.style.backgroundSize='cover';
+            imgDiv.style.backgroundPosition='center';
+            var svg=imgDiv.querySelector('svg');if(svg)svg.style.display='none';
+          }
+        }
+        // 替换文字
+        var brandEl=card.querySelector('.product-brand');if(brandEl&&p.brand)brandEl.textContent=p.brand;
+        var nameEl=card.querySelector('.product-name');if(nameEl&&p.name)nameEl.textContent=p.name;
+        var descEl=card.querySelector('.product-desc');if(descEl&&p.desc)descEl.textContent=p.desc;
+      });
+    }
+    // 应用品牌数据
+    var brandCards=document.querySelectorAll('.brand-card');
+    if(siteData.brands){
+      siteData.brands.forEach(function(b,i){
+        if(!brandCards[i])return;
+        var card=brandCards[i];
+        if(b.image){
+          var imgDiv=card.querySelector('.brand-card-img');
+          if(imgDiv){
+            imgDiv.style.background='none';
+            imgDiv.style.backgroundImage='url('+b.image+')';
+            imgDiv.style.backgroundSize='cover';
+            imgDiv.style.backgroundPosition='center';
+            var svg=imgDiv.querySelector('svg');if(svg)svg.style.display='none';
+          }
+        }
+        var nameEl=card.querySelector('.brand-name');if(nameEl&&b.name)nameEl.textContent=b.name;
+        var descEl=card.querySelector('.brand-desc');if(descEl&&b.desc)descEl.textContent=b.desc;
+      });
+    }
+  }
+
+  // 管理员：点击产品/品牌图片可替换
+  function enableAdminImageEdit(){
+    // 产品图片
+    document.querySelectorAll('.product-card .product-img').forEach(function(imgDiv,idx){
+      imgDiv.style.cursor='pointer';
+      imgDiv.addEventListener('click',function(e){
+        if(!isLoggedIn())return;
+        e.stopPropagation();
+        var inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+        inp.addEventListener('change',async function(){
+          if(!inp.files.length)return;
+          var file=inp.files[0];
+          showToast('正在压缩并上传...');
+          try{
+            file=await compressImage(file);
+            var url=await uploadAndGetURL(file,'product_'+(idx+1));
+            if(!siteData)siteData={products:[],brands:[]};
+            if(!siteData.products[idx])siteData.products[idx]={};
+            siteData.products[idx].image=url;
+            await saveSiteData();
+            applySiteData();
+            showToast('产品图片已更新');
+          }catch(e){showToast('失败: '+e.message)}
+        });
+        inp.click();
+      });
+    });
+    // 品牌图片
+    document.querySelectorAll('.brand-card .brand-card-img').forEach(function(imgDiv,idx){
+      imgDiv.style.cursor='pointer';
+      imgDiv.addEventListener('click',function(e){
+        if(!isLoggedIn())return;
+        e.stopPropagation();
+        var inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+        inp.addEventListener('change',async function(){
+          if(!inp.files.length)return;
+          var file=inp.files[0];
+          showToast('正在压缩并上传...');
+          try{
+            file=await compressImage(file);
+            var url=await uploadAndGetURL(file,'brand_'+(idx+1));
+            if(!siteData)siteData={products:[],brands:[]};
+            if(!siteData.brands[idx])siteData.brands[idx]={};
+            siteData.brands[idx].image=url;
+            await saveSiteData();
+            applySiteData();
+            showToast('品牌图片已更新');
+          }catch(e){showToast('失败: '+e.message)}
+        });
+        inp.click();
+      });
+    });
+  }
+
+  // 管理员：双击产品/品牌文字可编辑
+  function enableAdminTextEdit(){
+    document.querySelectorAll('.product-name,.product-desc,.product-brand,.brand-name,.brand-desc').forEach(function(el){
+      el.addEventListener('dblclick',function(e){
+        if(!isLoggedIn())return;
+        e.stopPropagation();
+        var original=el.textContent;
+        el.contentEditable=true;
+        el.style.outline='2px solid var(--c-secondary)';
+        el.style.outlineOffset='2px';
+        el.focus();
+        function save(){
+          el.contentEditable=false;
+          el.style.outline='none';
+          if(el.textContent===original)return;
+          // 找到对应的数据索引
+          var card=el.closest('.product-card,.brand-card');
+          var isProduct=card.classList.contains('product-card');
+          var cards=Array.from(document.querySelectorAll(isProduct?'.product-card':'.brand-card'));
+          var idx=cards.indexOf(card);
+          if(idx<0)return;
+          if(!siteData)siteData={products:[],brands:[]};
+          var arr=isProduct?siteData.products:siteData.brands;
+          if(!arr[idx])arr[idx]={};
+          var field=el.classList.contains('product-brand')||el.classList.contains('brand-name')?'name':
+                    el.classList.contains('product-name')?'name':'desc';
+          // 品牌名用 brand 字段
+          if(el.classList.contains('product-brand'))field='brand';
+          arr[idx][field]=el.textContent.trim();
+          saveSiteData().then(function(){showToast('已保存')});
+        }
+        el.addEventListener('blur',save,{once:true});
+        el.addEventListener('keydown',function(ev){if(ev.key==='Enter'){ev.preventDefault();el.blur()}});
+      });
+    });
+  }
+
+  // 上传图片并返回 URL
+  async function uploadAndGetURL(file,prefix){
+    var fname=prefix+'_'+Date.now()+'.jpg';
+    var dataURL=await readAsDataURL(file);
+    var base64=dataURL.split(',')[1];
+    var token=localStorage.getItem('yxf_gh_token');
+    var headers={Authorization:'token '+token,'Content-Type':'application/json'};
+
+    // 检查旧文件
+    var oldSha=null;
+    try{var ro=await fetch(apiURL(IMAGES_DIR+'/'+fname)+'?ref='+GH_BRANCH,{headers:headers});if(ro.ok){var od=await ro.json();oldSha=od.sha}}catch(e){}
+
+    var body={message:'上传产品图片: '+fname,content:base64,branch:GH_BRANCH};
+    if(oldSha)body.sha=oldSha;
+    var r=await fetch(apiURL(IMAGES_DIR+'/'+fname),{method:'PUT',headers:headers,body:JSON.stringify(body)});
+    if(!r.ok)throw new Error('上传失败('+r.status+')');
+    return rawURL(IMAGES_DIR+'/'+fname)+'?t='+Date.now();
+  }
+
+  // 保存产品/品牌数据
+  async function saveSiteData(){
+    var token=localStorage.getItem('yxf_gh_token');
+    var headers={Authorization:'token '+token,'Content-Type':'application/json'};
+    var curSha=null;
+    try{var rc=await fetch(apiURL(PRODUCTS_JSON_PATH)+'?ref='+GH_BRANCH,{headers:headers});if(rc.ok){var cd=await rc.json();curSha=cd.sha}}catch(e){}
+    var r=await fetch(apiURL(PRODUCTS_JSON_PATH),{
+      method:'PUT',headers:headers,
+      body:JSON.stringify({message:'更新产品数据',content:btoa(unescape(encodeURIComponent(JSON.stringify(siteData,null,2)))),branch:GH_BRANCH,sha:curSha})
+    });
+    if(!r.ok)throw new Error('保存失败('+r.status+')');
+  }
+
   var insertAtIdx=-1; // -1 表示加在最前面
 
   function renderGallery(images){
@@ -1357,10 +1585,11 @@ ul{list-style:none}
   galleryFileInput.addEventListener('change',async function(){
     if(!galleryFileInput.files.length)return;
     var file=galleryFileInput.files[0];
-    if(file.size>10*1024*1024){showToast('文件超过10MB');galleryFileInput.value='';return}
-    showToast('正在上传...');
+    if(file.size>20*1024*1024){showToast('文件太大（超过20MB）');galleryFileInput.value='';return}
+    showToast('正在压缩并上传...');
     try{
-      var ext=file.name.split('.').pop().toLowerCase()||'jpg';
+      file=await compressImage(file);
+      var ext='jpg';
       var fname='img_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)+'.'+ext;
       var dataURL=await readAsDataURL(file);
       var base64=dataURL.split(',')[1];
@@ -1415,8 +1644,26 @@ ul{list-style:none}
     if(loginModal.classList.contains('active'))hideLogin();
   }});
 
+  // ── 品类卡点击跳转图片展厅 ──
+  document.querySelectorAll('.category-card').forEach(function(card){
+    card.style.cursor='pointer';
+    card.addEventListener('click',function(){
+      var target=document.getElementById('gallery');
+      if(target)target.scrollIntoView({behavior:'smooth'});
+    });
+  });
+
+  // ── 字体加载优化：页面加载完成后才加载字体 ──
+  if('fonts'in document){
+    document.fonts.ready.then(function(){document.body.classList.add('fonts-loaded')});
+  }
+
   // ── 初始化 ──
   loadImages();
+  loadSiteData().then(function(){
+    enableAdminImageEdit();
+    enableAdminTextEdit();
+  });
   if(isLoggedIn())onAdminLogin();
 
 })();
