@@ -864,6 +864,10 @@ ul{list-style:none}
     <button class="modal-close" id="actionClose">&times;</button>
     <div style="margin-bottom:16px"><img id="actionPreview" style="width:100%;max-height:200px;object-fit:cover;border-radius:12px" alt=""></div>
     <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;gap:8px">
+        <button class="modal-btn" id="actionMoveLeft" style="background:var(--c-primary);margin-top:0">← 左移</button>
+        <button class="modal-btn" id="actionMoveRight" style="background:var(--c-primary);margin-top:0">右移 →</button>
+      </div>
       <button class="modal-btn" id="actionReplace" style="background:var(--c-secondary)">替换这张图片</button>
       <button class="modal-btn" id="actionDelete" style="background:#dc2626">删除这张图片</button>
       <button class="modal-btn" id="actionView" style="background:transparent;color:var(--c-primary);border:1.5px solid var(--c-border)">查看大图</button>
@@ -1142,14 +1146,22 @@ ul{list-style:none}
   var actionReplace=document.getElementById('actionReplace');
   var actionDelete=document.getElementById('actionDelete');
   var actionView=document.getElementById('actionView');
+  var actionMoveLeft=document.getElementById('actionMoveLeft');
+  var actionMoveRight=document.getElementById('actionMoveRight');
   var currentActionImg=null;
+  var currentActionIdx=-1;
 
-  function showAction(img){
+  function showAction(img,idx){
     currentActionImg=img;
+    currentActionIdx=idx;
     actionPreview.src=img.url;
+    actionMoveLeft.style.opacity=idx<=0?.4:1;
+    actionMoveLeft.style.pointerEvents=idx<=0?'none':'auto';
+    actionMoveRight.style.opacity=idx>=lastImages.length-1?.4:1;
+    actionMoveRight.style.pointerEvents=idx>=lastImages.length-1?'none':'auto';
     actionSheet.classList.add('active');
   }
-  function hideAction(){actionSheet.classList.remove('active');currentActionImg=null}
+  function hideAction(){actionSheet.classList.remove('active');currentActionImg=null;currentActionIdx=-1}
 
   actionClose.addEventListener('click',hideAction);
   actionSheet.addEventListener('click',function(e){if(e.target===actionSheet)hideAction()});
@@ -1182,6 +1194,41 @@ ul{list-style:none}
 
   // 查看大图
   actionView.addEventListener('click',function(){if(currentActionImg){hideAction();openLightbox(currentActionImg.url)}});
+
+  // 左移
+  actionMoveLeft.addEventListener('click',async function(){
+    if(currentActionIdx<=0)return;
+    hideAction();
+    var temp=lastImages[currentActionIdx];
+    lastImages[currentActionIdx]=lastImages[currentActionIdx-1];
+    lastImages[currentActionIdx-1]=temp;
+    try{await saveImagesOrder();showToast('已左移')}catch(e){showToast('移动失败: '+e.message)}
+    renderGallery(lastImages);
+  });
+
+  // 右移
+  actionMoveRight.addEventListener('click',async function(){
+    if(currentActionIdx>=lastImages.length-1)return;
+    hideAction();
+    var temp=lastImages[currentActionIdx];
+    lastImages[currentActionIdx]=lastImages[currentActionIdx+1];
+    lastImages[currentActionIdx+1]=temp;
+    try{await saveImagesOrder();showToast('已右移')}catch(e){showToast('移动失败: '+e.message)}
+    renderGallery(lastImages);
+  });
+
+  // 保存排序到 GitHub
+  async function saveImagesOrder(){
+    var token=localStorage.getItem('yxf_gh_token');
+    var headers={Authorization:'token '+token,'Content-Type':'application/json'};
+    var curSha=null;
+    try{var rc=await fetch(apiURL(IMAGES_JSON_PATH)+'?ref='+GH_BRANCH,{headers:headers});if(rc.ok){var cd=await rc.json();curSha=cd.sha}}catch(e){}
+    var r=await fetch(apiURL(IMAGES_JSON_PATH),{
+      method:'PUT',headers:headers,
+      body:JSON.stringify({message:'调整图片顺序',content:btoa(unescape(encodeURIComponent(JSON.stringify(lastImages,null,2)))),branch:GH_BRANCH,sha:curSha})
+    });
+    if(!r.ok)throw new Error('保存失败('+r.status+')');
+  }
 
   // ── 图片上传/替换/删除 ──
   async function uploadImage(file,replaceName){
@@ -1266,12 +1313,12 @@ ul{list-style:none}
       }
       return;
     }
-    images.forEach(function(img){
+    images.forEach(function(img,idx){
       var d=document.createElement('div');
       d.className='gallery-item'+(isLoggedIn()?' admin-edit':'');
       d.innerHTML='<img src="'+img.url+'" alt="门店图片" loading="lazy">';
       if(isLoggedIn()){
-        d.addEventListener('click',function(){showAction(img)});
+        d.addEventListener('click',function(){showAction(img,idx)});
       }else{
         d.addEventListener('click',function(){openLightbox(img.url)});
       }
