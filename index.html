@@ -1151,6 +1151,26 @@ body.admin-mode .product-overlay{display:none}
   function rawURL(p){return 'https://raw.githubusercontent.com/'+GH_OWNER+'/'+GH_REPO+'/'+GH_BRANCH+'/'+p}
   function isLoggedIn(){return!!localStorage.getItem('yxf_gh_token')}
 
+  // 通过 API 获取仓库文件（永远是最新，不受CDN缓存影响）
+  async function fetchRepoJSON(path){
+    try{
+      var headers={};
+      var token=localStorage.getItem('yxf_gh_token');
+      if(token)headers.Authorization='token '+token;
+      var r=await fetch(apiURL(path)+'?ref='+GH_BRANCH+'&t='+Date.now(),{headers:headers});
+      if(r.ok){
+        var d=await r.json();
+        return JSON.parse(decodeURIComponent(escape(atob(d.content.replace(/\s/g,'')))));
+      }
+    }catch(e){}
+    // API失败则降级到raw URL
+    try{
+      var r2=await fetch(rawURL(path)+'?t='+Date.now()+'&r='+Math.random().toString(36).slice(2));
+      if(r2.ok)return await r2.json();
+    }catch(e2){}
+    return null;
+  }
+
   async function sha256hex(s){
     var buf=new TextEncoder().encode(s);
     var h=await crypto.subtle.digest('SHA-256',buf);
@@ -1368,6 +1388,7 @@ body.admin-mode .product-overlay{display:none}
       body:JSON.stringify({message:'调整图片顺序',content:btoa(unescape(encodeURIComponent(JSON.stringify(lastImages,null,2)))),branch:GH_BRANCH,sha:curSha})
     });
     if(!r||!r.ok)throw new Error('保存失败('+(r?r.status:'网络错误')+')');
+    try{localStorage.setItem('yxf_local_images',JSON.stringify(lastImages))}catch(e){}
   }
 
   // ── 图片上传/替换/删除 ──
@@ -1390,8 +1411,7 @@ body.admin-mode .product-overlay{display:none}
     if(!r1||!r1.ok)throw new Error('上传失败('+(r1?r1.status:'网络错误')+')');
     var d1=await r1.json();
 
-    var images=[];
-    try{var r0=await fetch(rawURL(IMAGES_JSON_PATH)+'?t='+Date.now());if(r0.ok)images=await r0.json()}catch(e){}
+    var images=await fetchRepoJSON(IMAGES_JSON_PATH)||[];
 
     if(replaceName){
       var found=false;
@@ -1406,8 +1426,17 @@ body.admin-mode .product-overlay{display:none}
     var curSha=null;
     try{var rc=await fetch(apiURL(IMAGES_JSON_PATH)+'?ref='+GH_BRANCH,{headers:headers});if(rc.ok){var cd=await rc.json();curSha=cd.sha}}catch(e){}
 
-    var r2=await fetchRetry(apiURL(IMAGES_JSON_PATH),{method:'PUT',headers:headers,body:JSON.stringify({message:'更新图片列表',content:btoa(unescape(encodeURIComponent(JSON.stringify(images,null,2)))),branch:GH_BRANCH,sha:curSha})});
-    if(!r2||!r2.ok)throw new Error('更新列表失败('+(r2?r2.status:'网络错误')+')');
+    try{
+      var r2=await fetchRetry(apiURL(IMAGES_JSON_PATH),{method:'PUT',headers:headers,body:JSON.stringify({message:'更新图片列表',content:btoa(unescape(encodeURIComponent(JSON.stringify(images,null,2)))),branch:GH_BRANCH,sha:curSha})});
+      if(!r2||!r2.ok)throw new Error('更新列表失败('+(r2?r2.status:'网络错误')+')');
+      // 成功后同步保存到本地备份
+      try{localStorage.setItem('yxf_local_images',JSON.stringify(images))}catch(e){}
+    }catch(e){
+      // 如果远程更新失败，保存到本地localStorage
+      console.warn('远程更新失败，保存到本地:',e.message);
+      try{localStorage.setItem('yxf_local_images',JSON.stringify(images))}catch(e2){}
+      throw e; // 继续抛出错误，让调用者知道失败了
+    }
   }
 
   async function deleteImage(img){
@@ -1420,12 +1449,12 @@ body.admin-mode .product-overlay{display:none}
     if(fileSha){
       await fetch(apiURL(IMAGES_DIR+'/'+img.name),{method:'DELETE',headers:headers,body:JSON.stringify({message:'删除图片: '+img.name,sha:fileSha,branch:GH_BRANCH})});
     }
-    var images=[];
-    try{var r=await fetch(rawURL(IMAGES_JSON_PATH)+'?t='+Date.now());if(r.ok)images=await r.json()}catch(e){}
+    var images=await fetchRepoJSON(IMAGES_JSON_PATH)||[];
     images=images.filter(function(i){return i.name!==img.name});
     var curSha=null;
     try{var rc=await fetch(apiURL(IMAGES_JSON_PATH)+'?ref='+GH_BRANCH,{headers:headers});if(rc.ok){var cd=await rc.json();curSha=cd.sha}}catch(e){}
     await fetch(apiURL(IMAGES_JSON_PATH),{method:'PUT',headers:headers,body:JSON.stringify({message:'更新图片列表',content:btoa(unescape(encodeURIComponent(JSON.stringify(images,null,2)))),branch:GH_BRANCH,sha:curSha})});
+    try{localStorage.setItem('yxf_local_images',JSON.stringify(images))}catch(e){}
   }
 
   // ── 展示图片（核心渲染）──
@@ -1434,12 +1463,22 @@ body.admin-mode .product-overlay{display:none}
   var lastImages=[];
 
   async function loadImages(){
-    try{
-      var r=await fetch(rawURL(IMAGES_JSON_PATH)+'?t='+Date.now());
-      if(!r.ok)return;
-      lastImages=await r.json();
+    var data=await fetchRepoJSON(IMAGES_JSON_PATH);
+    if(data && Array.isArray(data)){
+      lastImages=data;
+      try{localStorage.setItem('yxf_local_images',JSON.stringify(lastImages))}catch(e){}
       renderGallery(lastImages);
-    }catch(e){}
+    }else{
+      // 远程加载失败，尝试本地备份
+      console.warn('远程图片列表加载失败，尝试本地备份');
+      try{
+        var localData=localStorage.getItem('yxf_local_images');
+        if(localData){
+          lastImages=JSON.parse(localData);
+          renderGallery(lastImages);
+        }
+      }catch(e2){}
+    }
   }
 
   // ═══════════════════════════════════════
@@ -1449,10 +1488,13 @@ body.admin-mode .product-overlay{display:none}
   var siteData=null;
 
   async function loadSiteData(){
-    try{
-      var r=await fetch(rawURL(PRODUCTS_JSON_PATH)+'?t='+Date.now());
-      if(r.ok)siteData=await r.json();
-    }catch(e){}
+    var data=await fetchRepoJSON(PRODUCTS_JSON_PATH);
+    if(data){
+      siteData=data;
+      try{localStorage.setItem('yxf_local_site',JSON.stringify(siteData))}catch(e){}
+    }else{
+      try{var d=localStorage.getItem('yxf_local_site');if(d)siteData=JSON.parse(d)}catch(e){}
+    }
     if(siteData)applySiteData();
   }
 
@@ -1624,6 +1666,7 @@ body.admin-mode .product-overlay{display:none}
       body:JSON.stringify({message:'更新产品数据',content:btoa(unescape(encodeURIComponent(JSON.stringify(siteData,null,2)))),branch:GH_BRANCH,sha:curSha})
     });
     if(!r||!r.ok)throw new Error('保存失败('+(r?r.status:'网络错误')+')');
+    try{localStorage.setItem('yxf_local_site',JSON.stringify(siteData))}catch(e){}
   }
 
   var insertAtIdx=-1; // -1 表示加在最前面
@@ -1696,9 +1739,8 @@ body.admin-mode .product-overlay{display:none}
       if(!r1.ok)throw new Error('上传失败('+r1.status+')');
       var d1=await r1.json();
 
-      // 加载当前图片列表
-      var images=[];
-      try{var r0=await fetch(rawURL(IMAGES_JSON_PATH)+'?t='+Date.now());if(r0.ok)images=await r0.json()}catch(e){}
+      // 加载当前图片列表（API优先，避免CDN缓存）
+      var images=await fetchRepoJSON(IMAGES_JSON_PATH)||[];
 
       // 插入到指定位置
       var newImg={name:fname,url:rawURL(IMAGES_DIR+'/'+fname),sha:d1.content.sha,time:new Date().toISOString()};
@@ -1715,6 +1757,7 @@ body.admin-mode .product-overlay{display:none}
       if(!r2.ok)throw new Error('保存失败('+r2.status+')');
 
       lastImages=images;
+      try{localStorage.setItem('yxf_local_images',JSON.stringify(lastImages))}catch(e){}
       showToast('上传成功');
     }catch(e){showToast('上传失败: '+e.message)}
     galleryFileInput.value='';
