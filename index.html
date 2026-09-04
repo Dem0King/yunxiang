@@ -352,10 +352,14 @@ ul{list-style:none}
 .gallery-item img{width:100%;height:100%;object-fit:cover}
 .gallery-item.admin-edit::after{content:'点击编辑';position:absolute;inset:0;background:rgba(61,43,31,.45);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:500;opacity:0;transition:opacity .2s}
 .gallery-item.admin-edit:active::after{opacity:1}
-.gallery-add{aspect-ratio:1;border:2px dashed var(--c-border);border-radius:var(--radius-md);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--c-text-muted);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:border-color .2s,background .2s}
-.gallery-add:active{border-color:var(--c-secondary);background:rgba(200,155,111,.05)}
-.gallery-add svg{width:28px;height:28px;opacity:.5}
-.gallery-add span{font-size:12px}
+.gallery-insert{
+  aspect-ratio:1;border:2px dashed rgba(200,155,111,.4);border-radius:var(--radius-md);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;color:var(--c-secondary);cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  background:rgba(200,155,111,.03);transition:background .15s,border-color .15s;
+}
+.gallery-insert:active{background:rgba(200,155,111,.12);border-color:var(--c-secondary)}
 .gallery-empty{grid-column:1/-1;text-align:center;padding:var(--space-4xl) var(--space-xl);color:var(--c-text-muted)}
 .gallery-empty svg{width:40px;height:40px;margin-bottom:var(--space-sm);opacity:.25}
 .gallery-empty p{font-size:13px}
@@ -1302,18 +1306,33 @@ ul{list-style:none}
     }catch(e){}
   }
 
+  var insertAtIdx=-1; // -1 表示加在最前面
+
   function renderGallery(images){
     galleryGrid.innerHTML='';
     if(!images||!images.length){
       if(isLoggedIn()){
         galleryGrid.innerHTML='<div class="gallery-add" id="galleryAddFirst"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>添加第一张图片</span></div>';
-        document.getElementById('galleryAddFirst').addEventListener('click',function(){galleryFileInput.click()});
+        document.getElementById('galleryAddFirst').addEventListener('click',function(){insertAtIdx=0;galleryFileInput.click()});
       }else{
         galleryGrid.innerHTML='<div class="gallery-empty"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="6" y="10" width="36" height="28" rx="3" stroke="currentColor" stroke-width="2.5"/><circle cx="18" cy="22" r="4" stroke="currentColor" stroke-width="2"/><path d="M6 34l10-10 8 8 6-6 12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><p>暂无图片，敬请期待</p></div>';
       }
       return;
     }
     images.forEach(function(img,idx){
+      // 管理员：图片前面加「+」插入按钮
+      if(isLoggedIn()){
+        var insertBtn=document.createElement('div');
+        insertBtn.className='gallery-insert';
+        insertBtn.innerHTML='+';
+        insertBtn.addEventListener('click',function(e){
+          e.stopPropagation();
+          insertAtIdx=idx;
+          galleryFileInput.click();
+        });
+        galleryGrid.appendChild(insertBtn);
+      }
+      // 图片本身
       var d=document.createElement('div');
       d.className='gallery-item'+(isLoggedIn()?' admin-edit':'');
       d.innerHTML='<img src="'+img.url+'" alt="门店图片" loading="lazy">';
@@ -1324,25 +1343,61 @@ ul{list-style:none}
       }
       galleryGrid.appendChild(d);
     });
-    // 管理员：最后加一个"+"按钮
+    // 管理员：最后加一个「+」按钮
     if(isLoggedIn()){
       var addBtn=document.createElement('div');
-      addBtn.className='gallery-add';
-      addBtn.innerHTML='<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>添加图片</span>';
-      addBtn.addEventListener('click',function(){galleryFileInput.click()});
+      addBtn.className='gallery-insert';
+      addBtn.innerHTML='+';
+      addBtn.addEventListener('click',function(){insertAtIdx=lastImages.length;galleryFileInput.click()});
       galleryGrid.appendChild(addBtn);
     }
   }
 
-  // 添加新图片
+  // 添加新图片到指定位置
   galleryFileInput.addEventListener('change',async function(){
     if(!galleryFileInput.files.length)return;
     var file=galleryFileInput.files[0];
     if(file.size>10*1024*1024){showToast('文件超过10MB');galleryFileInput.value='';return}
     showToast('正在上传...');
-    try{await uploadImage(file);showToast('上传成功')}catch(e){showToast('上传失败: '+e.message)}
+    try{
+      var ext=file.name.split('.').pop().toLowerCase()||'jpg';
+      var fname='img_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)+'.'+ext;
+      var dataURL=await readAsDataURL(file);
+      var base64=dataURL.split(',')[1];
+      var token=localStorage.getItem('yxf_gh_token');
+      var headers={Authorization:'token '+token,'Content-Type':'application/json'};
+
+      // 上传图片文件到 GitHub
+      var r1=await fetch(apiURL(IMAGES_DIR+'/'+fname),{
+        method:'PUT',headers:headers,
+        body:JSON.stringify({message:'添加图片: '+fname,content:base64,branch:GH_BRANCH})
+      });
+      if(!r1.ok)throw new Error('上传失败('+r1.status+')');
+      var d1=await r1.json();
+
+      // 加载当前图片列表
+      var images=[];
+      try{var r0=await fetch(rawURL(IMAGES_JSON_PATH)+'?t='+Date.now());if(r0.ok)images=await r0.json()}catch(e){}
+
+      // 插入到指定位置
+      var newImg={name:fname,url:rawURL(IMAGES_DIR+'/'+fname),sha:d1.content.sha,time:new Date().toISOString()};
+      var pos=Math.max(0,Math.min(insertAtIdx,images.length));
+      images.splice(pos,0,newImg);
+
+      // 保存列表
+      var curSha=null;
+      try{var rc=await fetch(apiURL(IMAGES_JSON_PATH)+'?ref='+GH_BRANCH,{headers:headers});if(rc.ok){var cd=await rc.json();curSha=cd.sha}}catch(e){}
+      var r2=await fetch(apiURL(IMAGES_JSON_PATH),{
+        method:'PUT',headers:headers,
+        body:JSON.stringify({message:'添加图片到位置'+pos,content:btoa(unescape(encodeURIComponent(JSON.stringify(images,null,2)))),branch:GH_BRANCH,sha:curSha})
+      });
+      if(!r2.ok)throw new Error('保存失败('+r2.status+')');
+
+      lastImages=images;
+      showToast('上传成功');
+    }catch(e){showToast('上传失败: '+e.message)}
     galleryFileInput.value='';
-    await loadImages();
+    renderGallery(lastImages);
   });
 
   // ── 灯箱 ──
