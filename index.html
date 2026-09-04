@@ -1105,13 +1105,19 @@ ul{list-style:none}
     var hash=await sha256hex(pwd);
     if(hash===ADMIN_PWD_SHA){
       if(!localStorage.getItem('yxf_gh_token')){
-        var token=prompt('首次登录，请粘贴 GitHub 令牌（ghp_ 开头）：');
-        if(!token||!token.startsWith('ghp_')){loginError.textContent='令牌格式错误';loginError.style.display='block';return}
-        localStorage.setItem('yxf_gh_token',token.trim());
+        var token=prompt('密码正确！\n\n请输入 GitHub 令牌（第一次需要输入，以后不用）：');
+        if(!token){loginError.textContent='需要输入令牌才能上传图片';loginError.style.display='block';return}
+        token=token.trim();
+        if(!token.startsWith('ghp_')){loginError.textContent='令牌格式不对，需要 ghp_ 开头的那串字符';loginError.style.display='block';return}
+        localStorage.setItem('yxf_gh_token',token);
       }
-      try{var tr=await fetch('https://api.github.com/user',{headers:{Authorization:'token '+localStorage.getItem('yxf_gh_token')}});if(!tr.ok)throw 0}catch(e){localStorage.removeItem('yxf_gh_token');loginError.textContent='令牌无效';loginError.style.display='block';return}
       hideLogin();onAdminLogin();
-    }else{loginError.textContent='密码错误';loginError.style.display='block';loginPassword.classList.add('error');setTimeout(function(){loginPassword.classList.remove('error')},500)}
+    }else{
+      loginError.textContent='密码错误，请重试';
+      loginError.style.display='block';
+      loginPassword.classList.add('error');
+      setTimeout(function(){loginPassword.classList.remove('error')},500);
+    }
   });
   loginPassword.addEventListener('keydown',function(e){if(e.key==='Enter')loginSubmit.click()});
   footerAdmin.addEventListener('click',function(){if(isLoggedIn()){showToast('已登录，点击图片可编辑')}else{showLogin()}});
