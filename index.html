@@ -23,9 +23,7 @@
 <title>云祥家具城 — 温暖每一个家 | 恭城燕新路</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' fill='%233d2b1f' rx='8'/%3E%3Cpath d='M12 34 C8 34 5 31 5 27 C5 23 8 21 12 21 C12 15 17 11 24 11 C31 11 36 15 36 21 C40 21 43 23 43 27 C43 31 40 34 36 34' stroke='%23c89b6f' stroke-width='2.5' stroke-linecap='round' fill='none'/%3E%3Cline x1='10' y1='38' x2='38' y2='38' stroke='%23c89b6f' stroke-width='2.5' stroke-linecap='round'/%3E%3Cline x1='14' y1='38' x2='14' y2='42' stroke='%23c89b6f' stroke-width='2.5' stroke-linecap='round'/%3E%3Cline x1='34' y1='38' x2='34' y2='42' stroke='%23c89b6f' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%233d2b1f' rx='32'/%3E%3Cpath d='M48 136 C32 136 20 124 20 108 C20 92 32 84 48 84 C48 60 68 44 96 44 C124 44 144 60 144 84 C160 84 172 92 172 108 C172 124 160 136 144 136' stroke='%23c89b6f' stroke-width='10' stroke-linecap='round' fill='none'/%3E%3Cline x1='40' y1='152' x2='152' y2='152' stroke='%23c89b6f' stroke-width='10' stroke-linecap='round'/%3E%3Cline x1='56' y1='152' x2='56' y2='168' stroke='%23c89b6f' stroke-width='10' stroke-linecap='round'/%3E%3Cline x1='136' y1='152' x2='136' y2='168' stroke='%23c89b6f' stroke-width='10' stroke-linecap='round'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<!-- 字体已改为系统字体，无需加载 Google Fonts -->
 <link rel="manifest" href="manifest.json">
 <style>
 /* ═══════════════════════════════════════════════════════
@@ -39,8 +37,8 @@
   --c-primary:#3d2b1f; --c-secondary:#c89b6f; --c-accent:#d4a574;
   --c-border:#e8e0d5; --c-card-bg:#fff; --c-heading:#6b4423;
   --c-success:#16a34a; --c-warning:#f59e0b; --c-error:#dc2626; --c-info:#3b82f6;
-  --font-heading:"Noto Serif SC","Songti SC",serif;
-  --font-body:"Noto Sans SC","PingFang SC","Microsoft YaHei UI",system-ui,sans-serif;
+  --font-heading:"Songti SC","Noto Serif SC","SimSun",serif;
+  --font-body:"PingFang SC","Microsoft YaHei UI","Noto Sans SC",system-ui,sans-serif;
   --radius-sm:6px; --radius-md:10px; --radius-lg:16px; --radius-xl:24px;
   --shadow-sm:0 1px 3px rgba(61,43,31,.08);
   --shadow-md:0 4px 12px rgba(61,43,31,.1);
@@ -212,10 +210,12 @@ ul{list-style:none}
 .product-tag{position:absolute;top:var(--space-sm);left:var(--space-sm);font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px;background:rgba(200,155,111,.9);color:#fff;z-index:1;backdrop-filter:blur(4px)}
 .product-tag.new{background:rgba(22,163,74,.85)}
 /* hover 浮层 — 玻璃质感 */
-.product-overlay{position:absolute;inset:0;background:rgba(61,43,31,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity var(--td);pointer-events:none}
+.product-overlay{position:absolute;inset:0;background:rgba(61,43,31,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity var(--td);cursor:pointer;z-index:1}
 .product-card:hover .product-overlay{opacity:1}
 .product-overlay span{color:#fff;font-size:14px;font-weight:600;padding:10px 24px;border:1.5px solid rgba(250,248,245,.4);border-radius:100px;transform:translateY(10px);transition:transform var(--td);background:rgba(255,255,255,.1)}
 .product-card:hover .product-overlay span{transform:translateY(0)}
+/* 管理员模式下隐藏覆盖层，让图片可点击替换 */
+body.admin-mode .product-overlay{display:none}
 .product-body{padding:var(--space-lg);flex:1;display:flex;flex-direction:column}
 .product-brand{font-size:12px;color:var(--c-secondary);font-weight:600;letter-spacing:.05em;margin-bottom:var(--space-xs)}
 .product-name{font-family:var(--font-heading);font-size:16px;font-weight:600;color:var(--c-primary);margin-bottom:var(--space-sm);line-height:1.4}
@@ -408,6 +408,23 @@ ul{list-style:none}
 .lightbox.active{display:flex}
 .lightbox img{max-width:95vw;max-height:90vh;object-fit:contain}
 .lightbox-close{position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;border:none;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+/* ═══ 产品详情弹窗 ═══ */
+.detail-modal{position:fixed;inset:0;z-index:550;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.detail-modal.active{display:flex}
+@media(min-width:769px){.detail-modal{align-items:center}}
+.detail-content{background:var(--c-bg);width:100%;max-width:480px;max-height:90vh;border-radius:var(--radius-xl) var(--radius-xl) 0 0;overflow-y:auto;-webkit-overflow-scrolling:touch}
+@media(min-width:769px){.detail-content{border-radius:var(--radius-xl)}}
+.detail-close{position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.4);color:#fff;border:none;font-size:22px;cursor:pointer;z-index:2;display:flex;align-items:center;justify-content:center}
+.detail-img{width:100%;aspect-ratio:4/3;object-fit:cover;background:linear-gradient(135deg,#f0e6d8,#dcc9b3)}
+.detail-body{padding:var(--space-xl)}
+.detail-brand{font-size:13px;color:var(--c-secondary);font-weight:600;margin-bottom:var(--space-xs)}
+.detail-name{font-family:var(--font-heading);font-size:22px;font-weight:700;color:var(--c-primary);margin-bottom:var(--space-sm)}
+.detail-desc{font-size:15px;color:var(--c-text-muted);line-height:1.7;margin-bottom:var(--space-xl)}
+.detail-actions{display:flex;gap:var(--space-sm)}
+.detail-actions a{flex:1;display:flex;align-items:center;justify-content:center;gap:var(--space-sm);height:48px;border-radius:var(--radius-md);font-size:15px;font-weight:600;text-decoration:none}
+.detail-actions .detail-call{background:var(--c-secondary);color:#fff}
+.detail-actions .detail-wechat{background:transparent;color:var(--c-primary);border:1.5px solid var(--c-border)}
 </style>
 </head>
 <body>
@@ -759,7 +776,7 @@ ul{list-style:none}
           <circle cx="24" cy="20" r="5" stroke="currentColor" stroke-width="2"/>
         </svg>
         <span style="font-size:14px;font-weight:500">恭城燕新路 · 云祥家具城</span>
-        <a href="https://uri.amap.com/search?keyword=云祥家具城&city=恭城" target="_blank" rel="noopener" style="margin-top:8px;padding:8px 20px;background:rgba(200,155,111,.2);border:1px solid rgba(200,155,111,.3);border-radius:100px;font-size:13px;font-weight:500;color:var(--c-accent);transition:background .2s" onmouseover="this.style.background='rgba(200,155,111,.35)'" onmouseout="this.style.background='rgba(200,155,111,.2)'">打开地图导航</a>
+        <a href="https://www.amap.com/search?query=云祥家具城" target="_blank" rel="noopener" style="margin-top:8px;padding:8px 20px;background:rgba(200,155,111,.2);border:1px solid rgba(200,155,111,.3);border-radius:100px;font-size:13px;font-weight:500;color:var(--c-accent);transition:background .2s" onmouseover="this.style.background='rgba(200,155,111,.35)'" onmouseout="this.style.background='rgba(200,155,111,.2)'">打开地图导航</a>
       </div>
     </div>
   </div>
@@ -890,6 +907,23 @@ ul{list-style:none}
       <button class="modal-btn" id="actionReplace" style="background:var(--c-secondary)">替换这张图片</button>
       <button class="modal-btn" id="actionDelete" style="background:#dc2626">删除这张图片</button>
       <button class="modal-btn" id="actionView" style="background:transparent;color:var(--c-primary);border:1.5px solid var(--c-border)">查看大图</button>
+    </div>
+  </div>
+</div>
+
+<!-- 产品详情弹窗 -->
+<div class="detail-modal" id="detailModal">
+  <div class="detail-content">
+    <button class="detail-close" id="detailClose">&times;</button>
+    <img class="detail-img" id="detailImg" src="" alt="">
+    <div class="detail-body">
+      <div class="detail-brand" id="detailBrand"></div>
+      <h2 class="detail-name" id="detailName"></h2>
+      <p class="detail-desc" id="detailDesc"></p>
+      <div class="detail-actions">
+        <a href="tel:18177310007" class="detail-call">电话咨询</a>
+        <a href="#contact" class="detail-wechat" onclick="document.getElementById('detailModal').classList.remove('active')">微信咨询</a>
+      </div>
     </div>
   </div>
 </div>
@@ -1107,6 +1141,22 @@ ul{list-style:none}
   }
   function readAsDataURL(f){return new Promise(function(r,j){var rd=new FileReader();rd.onload=function(){r(rd.result)};rd.onerror=j;rd.readAsDataURL(f)})}
 
+  // 带重试的 fetch（最多3次）
+  async function fetchRetry(url,opts,maxRetries){
+    maxRetries=maxRetries||3;
+    for(var i=0;i<maxRetries;i++){
+      try{
+        var r=await fetch(url,opts);
+        if(r.ok)return r;
+        if(r.status>=500&&i<maxRetries-1){await new Promise(function(r){setTimeout(r,1000*(i+1))});continue}
+        return r;
+      }catch(e){
+        if(i<maxRetries-1){await new Promise(function(r){setTimeout(r,1000*(i+1))});continue}
+        throw e;
+      }
+    }
+  }
+
   // 图片压缩：最大1200px宽，质量0.8
   function compressImage(file,maxW){
     maxW=maxW||1200;
@@ -1171,11 +1221,11 @@ ul{list-style:none}
 
   function onAdminLogin(){
     adminFab.classList.add('active');
+    document.body.classList.add('admin-mode');
     showToast('登录成功，点击图片可编辑，双击文字可修改');
     renderGallery(lastImages);
     enableAdminImageEdit();
     enableAdminTextEdit();
-    // 给产品/品牌图片加编辑提示
     document.querySelectorAll('.product-img,.brand-card-img').forEach(function(el){
       el.setAttribute('title','点击替换图片');
     });
@@ -1183,6 +1233,7 @@ ul{list-style:none}
   function onAdminLogout(){
     localStorage.removeItem('yxf_gh_token');
     adminFab.classList.remove('active');
+    document.body.classList.remove('admin-mode');
     renderGallery(lastImages);
     showToast('已退出登录');
   }
@@ -1271,11 +1322,11 @@ ul{list-style:none}
     var headers={Authorization:'token '+token,'Content-Type':'application/json'};
     var curSha=null;
     try{var rc=await fetch(apiURL(IMAGES_JSON_PATH)+'?ref='+GH_BRANCH,{headers:headers});if(rc.ok){var cd=await rc.json();curSha=cd.sha}}catch(e){}
-    var r=await fetch(apiURL(IMAGES_JSON_PATH),{
+    var r=await fetchRetry(apiURL(IMAGES_JSON_PATH),{
       method:'PUT',headers:headers,
       body:JSON.stringify({message:'调整图片顺序',content:btoa(unescape(encodeURIComponent(JSON.stringify(lastImages,null,2)))),branch:GH_BRANCH,sha:curSha})
     });
-    if(!r.ok)throw new Error('保存失败('+r.status+')');
+    if(!r||!r.ok)throw new Error('保存失败('+(r?r.status:'网络错误')+')');
   }
 
   // ── 图片上传/替换/删除 ──
@@ -1294,8 +1345,8 @@ ul{list-style:none}
 
     var body={message:(replaceName?'替换':'添加')+'图片: '+fname,content:base64,branch:GH_BRANCH};
     if(oldSha)body.sha=oldSha;
-    var r1=await fetch(apiURL(IMAGES_DIR+'/'+fname),{method:'PUT',headers:headers,body:JSON.stringify(body)});
-    if(!r1.ok)throw new Error('上传失败('+r1.status+')');
+    var r1=await fetchRetry(apiURL(IMAGES_DIR+'/'+fname),{method:'PUT',headers:headers,body:JSON.stringify(body)});
+    if(!r1||!r1.ok)throw new Error('上传失败('+(r1?r1.status:'网络错误')+')');
     var d1=await r1.json();
 
     var images=[];
@@ -1314,8 +1365,8 @@ ul{list-style:none}
     var curSha=null;
     try{var rc=await fetch(apiURL(IMAGES_JSON_PATH)+'?ref='+GH_BRANCH,{headers:headers});if(rc.ok){var cd=await rc.json();curSha=cd.sha}}catch(e){}
 
-    var r2=await fetch(apiURL(IMAGES_JSON_PATH),{method:'PUT',headers:headers,body:JSON.stringify({message:'更新图片列表',content:btoa(unescape(encodeURIComponent(JSON.stringify(images,null,2)))),branch:GH_BRANCH,sha:curSha})});
-    if(!r2.ok)throw new Error('更新列表失败('+r2.status+')');
+    var r2=await fetchRetry(apiURL(IMAGES_JSON_PATH),{method:'PUT',headers:headers,body:JSON.stringify({message:'更新图片列表',content:btoa(unescape(encodeURIComponent(JSON.stringify(images,null,2)))),branch:GH_BRANCH,sha:curSha})});
+    if(!r2||!r2.ok)throw new Error('更新列表失败('+(r2?r2.status:'网络错误')+')');
   }
 
   async function deleteImage(img){
@@ -1527,11 +1578,11 @@ ul{list-style:none}
     var headers={Authorization:'token '+token,'Content-Type':'application/json'};
     var curSha=null;
     try{var rc=await fetch(apiURL(PRODUCTS_JSON_PATH)+'?ref='+GH_BRANCH,{headers:headers});if(rc.ok){var cd=await rc.json();curSha=cd.sha}}catch(e){}
-    var r=await fetch(apiURL(PRODUCTS_JSON_PATH),{
+    var r=await fetchRetry(apiURL(PRODUCTS_JSON_PATH),{
       method:'PUT',headers:headers,
       body:JSON.stringify({message:'更新产品数据',content:btoa(unescape(encodeURIComponent(JSON.stringify(siteData,null,2)))),branch:GH_BRANCH,sha:curSha})
     });
-    if(!r.ok)throw new Error('保存失败('+r.status+')');
+    if(!r||!r.ok)throw new Error('保存失败('+(r?r.status:'网络错误')+')');
   }
 
   var insertAtIdx=-1; // -1 表示加在最前面
@@ -1643,6 +1694,53 @@ ul{list-style:none}
     if(actionSheet.classList.contains('active'))hideAction();
     if(loginModal.classList.contains('active'))hideLogin();
   }});
+
+  // ── 产品详情弹窗 ──
+  var detailModal=document.getElementById('detailModal');
+  var detailClose=document.getElementById('detailClose');
+  var detailImg=document.getElementById('detailImg');
+  var detailBrand=document.getElementById('detailBrand');
+  var detailName=document.getElementById('detailName');
+  var detailDesc=document.getElementById('detailDesc');
+
+  function showDetail(idx){
+    // 从 siteData 或 HTML 获取产品信息
+    var data=siteData&&siteData.products&&siteData.products[idx]?siteData.products[idx]:null;
+    var card=document.querySelectorAll('.product-card')[idx];
+    if(!card)return;
+    var brand=data&&data.brand?data.brand:(card.querySelector('.product-brand')?card.querySelector('.product-brand').textContent:'');
+    var name=data&&data.name?data.name:(card.querySelector('.product-name')?card.querySelector('.product-name').textContent:'');
+    var desc=data&&data.desc?data.desc:(card.querySelector('.product-desc')?card.querySelector('.product-desc').textContent:'');
+    var img=data&&data.image?data.image:'';
+
+    detailBrand.textContent=brand;
+    detailName.textContent=name;
+    detailDesc.textContent=desc;
+    if(img){detailImg.src=img;detailImg.style.background='none'}
+    else{detailImg.src='';detailImg.style.background='linear-gradient(135deg,#f0e6d8,#dcc9b3)'}
+    detailModal.classList.add('active');
+    document.body.style.overflow='hidden';
+  }
+  function hideDetail(){detailModal.classList.remove('active');document.body.style.overflow=''}
+  detailClose.addEventListener('click',hideDetail);
+  detailModal.addEventListener('click',function(e){if(e.target===detailModal)hideDetail()});
+
+  // 给产品卡覆盖层绑定点击事件
+  document.querySelectorAll('.product-card').forEach(function(card,idx){
+    var overlay=card.querySelector('.product-overlay');
+    if(overlay){
+      overlay.addEventListener('click',function(e){
+        if(isLoggedIn())return; // 管理员不打开详情
+        e.stopPropagation();
+        showDetail(idx);
+      });
+    }
+    // 整卡点击也打开详情（移动端）
+    card.addEventListener('click',function(){
+      if(isLoggedIn())return;
+      showDetail(idx);
+    });
+  });
 
   // ── 品类卡点击跳转图片展厅 ──
   document.querySelectorAll('.category-card').forEach(function(card){
