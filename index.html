@@ -175,7 +175,9 @@ ul{list-style:none}
 .brand-card.feature .brand-name{font-size:32px}
 .brand-desc{font-size:15px;line-height:1.7;color:var(--c-text-muted);margin-bottom:var(--space-xl)}
 .brand-card.feature{grid-row:span 1}
-.brand-card-img{width:100%;aspect-ratio:9/16;background:linear-gradient(135deg,rgba(240,235,227,.6),rgba(232,224,213,.4));display:flex;align-items:center;justify-content:center;color:var(--c-text-muted);font-size:14px;font-weight:500;position:relative;overflow:hidden}
+.brand-card-img{width:100%;height:180px;background:linear-gradient(135deg,rgba(240,235,227,.6),rgba(232,224,213,.4));display:flex;align-items:center;justify-content:center;color:var(--c-text-muted);font-size:14px;font-weight:500;position:relative;overflow:hidden}
+/* 喜临门品牌图片竖版比例 */
+.brand-card.xilinmen .brand-card-img{height:auto;aspect-ratio:9/16}
 .brand-card-img::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);background-size:200% 100%;animation:shimmer 2.5s infinite}
 @media(max-width:1024px){.brand-grid{grid-template-columns:1fr 1fr}.brand-card.feature{grid-column:span 2}}
 @media(max-width:640px){.brand-grid{grid-template-columns:1fr}.brand-card.feature{grid-column:span 1}}
@@ -196,16 +198,18 @@ ul{list-style:none}
 
 /* ═══ 精选产品 — Bento Grid + 玻璃卡片 ═══ */
 .products{background:var(--c-bg)}
-.product-bento{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-xl);margin-top:var(--space-3xl)}
+.product-bento{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-xl);margin-top:var(--space-3xl)}
 .product-card{background:var(--glass-bg);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:var(--radius-xl);overflow:hidden;transition:transform var(--td),box-shadow var(--td);display:flex;flex-direction:column;position:relative;box-shadow:var(--glass-shadow)}
 .product-card:hover{transform:translateY(-6px);box-shadow:var(--glass-shadow-hover)}
 .product-card:focus-visible{outline:2px solid var(--c-secondary);outline-offset:2px}
 /* Bento: 第1张占2列2行 */
 .product-card.feature{grid-column:span 2;grid-row:span 2}
-.product-card.feature .product-img{aspect-ratio:9/16}
+.product-card.feature .product-img{aspect-ratio:16/10}
+/* 喜临门产品图片竖版比例 */
+.product-card.xilinmen .product-img{aspect-ratio:9/16}
 /* 3D 倾斜容器 */
 .product-tilt{transition:transform .2s var(--ease);transform-style:preserve-3d}
-.product-img{width:100%;aspect-ratio:9/16;background:linear-gradient(135deg,rgba(240,235,227,.6),rgba(232,224,213,.4));display:flex;align-items:center;justify-content:center;color:var(--c-text-muted);font-size:13px;position:relative;overflow:hidden}
+.product-img{width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,rgba(240,235,227,.6),rgba(232,224,213,.4));display:flex;align-items:center;justify-content:center;color:var(--c-text-muted);font-size:13px;position:relative;overflow:hidden}
 .product-img::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);background-size:200% 100%;animation:shimmer 3s infinite}
 .product-tag{position:absolute;top:var(--space-sm);left:var(--space-sm);font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px;background:rgba(200,155,111,.9);color:#fff;z-index:1;backdrop-filter:blur(4px)}
 .product-tag.new{background:rgba(22,163,74,.85)}
@@ -226,8 +230,8 @@ body.admin-mode .product-overlay{display:none}
 .product-action:hover{gap:var(--space-sm)}
 @media(max-width:1024px){
   .product-bento{grid-template-columns:repeat(2,1fr)}
-  .product-card.feature{grid-column:span 2}
-  .product-card.feature .product-img{aspect-ratio:9/16}
+  .product-card.feature{grid-column:span 2;grid-row:span 1}
+  .product-card.feature .product-img{aspect-ratio:16/9}
 }
 @media(max-width:480px){
   .product-bento{grid-template-columns:1fr}
@@ -546,7 +550,7 @@ body.admin-mode .product-overlay{display:none}
     </div>
     <div class="brand-grid">
       <!-- 核心品牌：喜临门（大卡） -->
-      <div class="brand-card feature scroll-reveal">
+      <div class="brand-card feature xilinmen scroll-reveal">
         <div class="brand-card-img placeholder-img" style="background:linear-gradient(135deg,#f5ebe0,#dcc9b3)">
           <svg viewBox="0 0 64 64" fill="none" aria-hidden="true" style="width:48px;height:48px;opacity:.45"><rect x="10" y="20" width="44" height="18" rx="4" stroke="currentColor" stroke-width="2.5"/><path d="M8 38h48v6a3 3 0 0 1-3 3H11a3 3 0 0 1-3-3v-6z" stroke="currentColor" stroke-width="2.5"/><path d="M16 38v-8M48 38v-8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M22 14l10-6 10 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
@@ -684,8 +688,8 @@ body.admin-mode .product-overlay{display:none}
       <p class="section-desc">以下为部分代表性产品，更多产品请到店咨询。</p>
     </div>
     <div class="product-bento">
-      <!-- 大卡 -->
-      <div class="product-card feature scroll-reveal" tabindex="0">
+      <!-- 大卡：喜临门床垫 -->
+      <div class="product-card feature xilinmen scroll-reveal" tabindex="0">
         <div class="product-img placeholder-img" style="background:linear-gradient(135deg,#f0e6d8,#dcc9b3)">
           <span class="product-tag">主推</span>
           <svg viewBox="0 0 64 64" fill="none" aria-hidden="true" style="width:56px;height:56px;opacity:.35"><rect x="8" y="22" width="48" height="16" rx="4" stroke="currentColor" stroke-width="2.5"/><path d="M8 32h48" stroke="currentColor" stroke-width="2" stroke-dasharray="4 3"/><path d="M16 27h6M42 27h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M14 38v5M50 38v5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
@@ -719,7 +723,7 @@ body.admin-mode .product-overlay{display:none}
         </div>
       </div>
       <!-- 喜临门沙发 -->
-      <div class="product-card scroll-reveal delay-2" tabindex="0">
+      <div class="product-card xilinmen scroll-reveal delay-2" tabindex="0">
         <div class="product-img placeholder-img" style="background:linear-gradient(135deg,#f5ebe0,#dcc9b3)">
           <svg viewBox="0 0 64 64" fill="none" aria-hidden="true" style="width:44px;height:44px;opacity:.35"><path d="M8 28V18a4 4 0 0 1 4-4h40a4 4 0 0 1 4 4v10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M6 28h52v10a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3V28z" stroke="currentColor" stroke-width="2.5"/><path d="M14 28v-6M50 28v-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
           <div class="product-overlay"><span>查看详情</span></div>
