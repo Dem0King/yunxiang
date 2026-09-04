@@ -158,7 +158,7 @@ ul{list-style:none}
 
 /* ═══ 品牌馆 (3 品牌 + 玻璃卡片) ═══ */
 .brands{background:var(--c-bg)}
-.brand-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:var(--space-xl);margin-top:var(--space-3xl)}
+.brand-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-xl);margin-top:var(--space-3xl)}
 .brand-card{background:var(--glass-bg);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:var(--radius-xl);overflow:hidden;transition:transform var(--td),box-shadow var(--td);box-shadow:var(--glass-shadow),var(--glass-inset);position:relative}
 .brand-card:hover{transform:translateY(-8px);box-shadow:var(--glass-shadow-hover),var(--glass-inset)}
 /* 玻璃光斑效果 */
@@ -175,7 +175,7 @@ ul{list-style:none}
 .brand-card.feature .brand-name{font-size:32px}
 .brand-desc{font-size:15px;line-height:1.7;color:var(--c-text-muted);margin-bottom:var(--space-xl)}
 .brand-card.feature{grid-row:span 1}
-.brand-card-img{width:100%;height:180px;background:linear-gradient(135deg,rgba(240,235,227,.6),rgba(232,224,213,.4));display:flex;align-items:center;justify-content:center;color:var(--c-text-muted);font-size:14px;font-weight:500;position:relative;overflow:hidden}
+.brand-card-img{width:100%;aspect-ratio:9/16;background:linear-gradient(135deg,rgba(240,235,227,.6),rgba(232,224,213,.4));display:flex;align-items:center;justify-content:center;color:var(--c-text-muted);font-size:14px;font-weight:500;position:relative;overflow:hidden}
 .brand-card-img::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);background-size:200% 100%;animation:shimmer 2.5s infinite}
 @media(max-width:1024px){.brand-grid{grid-template-columns:1fr 1fr}.brand-card.feature{grid-column:span 2}}
 @media(max-width:640px){.brand-grid{grid-template-columns:1fr}.brand-card.feature{grid-column:span 1}}
@@ -196,16 +196,16 @@ ul{list-style:none}
 
 /* ═══ 精选产品 — Bento Grid + 玻璃卡片 ═══ */
 .products{background:var(--c-bg)}
-.product-bento{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:auto auto;gap:var(--space-xl);margin-top:var(--space-3xl)}
+.product-bento{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-xl);margin-top:var(--space-3xl)}
 .product-card{background:var(--glass-bg);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:var(--radius-xl);overflow:hidden;transition:transform var(--td),box-shadow var(--td);display:flex;flex-direction:column;position:relative;box-shadow:var(--glass-shadow)}
 .product-card:hover{transform:translateY(-6px);box-shadow:var(--glass-shadow-hover)}
 .product-card:focus-visible{outline:2px solid var(--c-secondary);outline-offset:2px}
 /* Bento: 第1张占2列2行 */
 .product-card.feature{grid-column:span 2;grid-row:span 2}
-.product-card.feature .product-img{aspect-ratio:16/10}
+.product-card.feature .product-img{aspect-ratio:9/16}
 /* 3D 倾斜容器 */
 .product-tilt{transition:transform .2s var(--ease);transform-style:preserve-3d}
-.product-img{width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,rgba(240,235,227,.6),rgba(232,224,213,.4));display:flex;align-items:center;justify-content:center;color:var(--c-text-muted);font-size:13px;position:relative;overflow:hidden}
+.product-img{width:100%;aspect-ratio:9/16;background:linear-gradient(135deg,rgba(240,235,227,.6),rgba(232,224,213,.4));display:flex;align-items:center;justify-content:center;color:var(--c-text-muted);font-size:13px;position:relative;overflow:hidden}
 .product-img::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);background-size:200% 100%;animation:shimmer 3s infinite}
 .product-tag{position:absolute;top:var(--space-sm);left:var(--space-sm);font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px;background:rgba(200,155,111,.9);color:#fff;z-index:1;backdrop-filter:blur(4px)}
 .product-tag.new{background:rgba(22,163,74,.85)}
@@ -226,8 +226,8 @@ body.admin-mode .product-overlay{display:none}
 .product-action:hover{gap:var(--space-sm)}
 @media(max-width:1024px){
   .product-bento{grid-template-columns:repeat(2,1fr)}
-  .product-card.feature{grid-column:span 2;grid-row:span 1}
-  .product-card.feature .product-img{aspect-ratio:16/9}
+  .product-card.feature{grid-column:span 2}
+  .product-card.feature .product-img{aspect-ratio:9/16}
 }
 @media(max-width:480px){
   .product-bento{grid-template-columns:1fr}
@@ -347,13 +347,13 @@ body.admin-mode .product-overlay{display:none}
 
 /* ═══ 图片展厅（手机优先） ═══ */
 .gallery{background:#fff}
-.gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-sm);margin-top:var(--space-2xl)}
-.gallery-item{position:relative;aspect-ratio:1;border-radius:var(--radius-md);overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-sm);margin-top:var(--space-2xl)}
+.gallery-item{position:relative;aspect-ratio:9/16;border-radius:var(--radius-md);overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .gallery-item img{width:100%;height:100%;object-fit:contain;background:#f5f0eb}
 .gallery-item.admin-edit::after{content:'点击编辑';position:absolute;inset:0;background:rgba(61,43,31,.45);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:500;opacity:0;transition:opacity .2s}
 .gallery-item.admin-edit:active::after{opacity:1}
 .gallery-insert{
-  aspect-ratio:1;border:2px dashed rgba(200,155,111,.4);border-radius:var(--radius-md);
+  aspect-ratio:9/16;border:2px dashed rgba(200,155,111,.4);border-radius:var(--radius-md);
   display:flex;align-items:center;justify-content:center;
   font-size:24px;color:var(--c-secondary);cursor:pointer;
   -webkit-tap-highlight-color:transparent;
@@ -363,6 +363,9 @@ body.admin-mode .product-overlay{display:none}
 .gallery-empty{grid-column:1/-1;text-align:center;padding:var(--space-4xl) var(--space-xl);color:var(--c-text-muted)}
 .gallery-empty svg{width:40px;height:40px;margin-bottom:var(--space-sm);opacity:.25}
 .gallery-empty p{font-size:13px}
+@media(max-width:640px){
+  .gallery-grid{grid-template-columns:1fr 1fr}
+}
 @media(min-width:769px){
   .gallery-grid{grid-template-columns:repeat(3,1fr);gap:var(--space-base);margin-top:var(--space-3xl)}
 }
@@ -427,7 +430,7 @@ body.admin-mode .product-overlay{display:none}
 .detail-content{background:var(--c-bg);width:100%;max-width:480px;max-height:90vh;border-radius:var(--radius-xl) var(--radius-xl) 0 0;overflow-y:auto;-webkit-overflow-scrolling:touch}
 @media(min-width:769px){.detail-content{border-radius:var(--radius-xl)}}
 .detail-close{position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.4);color:#fff;border:none;font-size:22px;cursor:pointer;z-index:2;display:flex;align-items:center;justify-content:center}
-.detail-img{width:100%;aspect-ratio:4/3;object-fit:contain;background:linear-gradient(135deg,#f0e6d8,#dcc9b3)}
+.detail-img{width:100%;aspect-ratio:9/16;object-fit:contain;background:linear-gradient(135deg,#f0e6d8,#dcc9b3)}
 .detail-body{padding:var(--space-xl)}
 .detail-brand{font-size:13px;color:var(--c-secondary);font-weight:600;margin-bottom:var(--space-xs)}
 .detail-name{font-family:var(--font-heading);font-size:22px;font-weight:700;color:var(--c-primary);margin-bottom:var(--space-sm)}
@@ -915,7 +918,7 @@ body.admin-mode .product-overlay{display:none}
 <div class="modal-overlay" id="actionSheet">
   <div class="modal" style="max-width:340px;text-align:center">
     <button class="modal-close" id="actionClose">&times;</button>
-    <div style="margin-bottom:16px"><img id="actionPreview" style="width:100%;max-height:300px;object-fit:contain;border-radius:12px;background:#f5f0eb" alt=""></div>
+    <div style="margin-bottom:16px"><img id="actionPreview" style="width:100%;max-height:50vh;aspect-ratio:9/16;object-fit:contain;border-radius:12px;background:#f5f0eb" alt=""></div>
     <div style="display:flex;flex-direction:column;gap:10px">
       <div style="display:flex;gap:8px">
         <button class="modal-btn" id="actionMoveLeft" style="background:var(--c-primary);margin-top:0">← 左移</button>
