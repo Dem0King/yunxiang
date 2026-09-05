@@ -83,6 +83,11 @@ tr.dragging{opacity:.5;background:#f0e6d8}
 .badge-wardrobe{background:#e0e7ff;color:#4f46e5}
 .badge-new{background:#d1fae5;color:#059669}
 .badge-hot{background:#fee2e2;color:#dc2626}
+.status-on{background:#d1fae5;color:#059669}
+.status-off{background:#f3f4f6;color:#6b7280}
+.row-off{opacity:0.6}
+.btn-warning{background:#f59e0b;color:#fff}
+.btn-success{background:#10b981;color:#fff}
 .actions{display:flex;gap:8px}
 .drag-handle{cursor:grab;color:var(--c-text-muted);padding:4px}
 .drag-handle:active{cursor:grabbing}
@@ -213,6 +218,7 @@ tr.dragging{opacity:.5;background:#f0e6d8}
               <th>产品</th>
               <th>品类</th>
               <th>标签</th>
+              <th>状态</th>
               <th>操作</th>
             </tr>
           </thead>
@@ -431,8 +437,11 @@ function renderProducts(){
   tbody.innerHTML = products.map(function(p, i){
     var categoryBadge = getCategoryBadge(p.category);
     var tagBadge = p.tag ? '<span class="badge badge-'+(p.tagType||'hot')+'">'+p.tag+'</span>' : '';
+    var isActive = p.status !== 'off'; // 默认上架
+    var statusClass = isActive ? 'status-on' : 'status-off';
+    var statusText = isActive ? '上架' : '下架';
     
-    return '<tr draggable="true" data-index="'+i+'">' +
+    return '<tr draggable="true" data-index="'+i+'" class="'+(isActive?'':'row-off')+'">' +
       '<td><div class="drag-handle">⠿</div></td>' +
       '<td>' +
         '<div class="product-cell">' +
@@ -445,9 +454,11 @@ function renderProducts(){
       '</td>' +
       '<td>'+categoryBadge+'</td>' +
       '<td>'+tagBadge+'</td>' +
+      '<td><span class="badge '+statusClass+'">'+statusText+'</span></td>' +
       '<td>' +
         '<div class="actions">' +
           '<button class="btn btn-outline btn-sm" onclick="editProduct('+i+')">编辑</button>' +
+          '<button class="btn '+(isActive?'btn-warning':'btn-success')+' btn-sm" onclick="toggleProduct('+i+')">'+(isActive?'下架':'上架')+'</button>' +
           '<button class="btn btn-danger btn-sm" onclick="deleteProduct('+i+')">删除</button>' +
         '</div>' +
       '</td>' +
@@ -457,6 +468,19 @@ function renderProducts(){
   // 添加拖拽事件
   initDragDrop();
 }
+
+// 上架/下架切换
+window.toggleProduct = async function(index){
+  var p = siteData.products[index];
+  if(!p) return;
+  
+  var isActive = p.status !== 'off';
+  p.status = isActive ? 'off' : 'on';
+  
+  await saveSiteData();
+  showToast(isActive ? '已下架' : '已上架');
+  renderProducts();
+};
 
 function getCategoryBadge(category){
   var map = {
@@ -602,6 +626,7 @@ document.getElementById('addProductBtn').addEventListener('click', function(){
       tag: document.getElementById('editTag').value.trim(),
       tagType: '',
       action: '咨询价格',
+      status: 'on', // 默认上架
       image: ''
     };
     
