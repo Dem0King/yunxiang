@@ -61,6 +61,20 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{font-family:var(--font-body);font-size:16px;line-height:1.6;color:var(--c-text);background:var(--c-bg);overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+
+/* ═══ 加载动画 ═══ */
+.loading-screen{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#3d2b1f,#2a1e15);display:flex;align-items:center;justify-content:center;transition:opacity .5s,visibility .5s}
+.loading-screen.hide{opacity:0;visibility:hidden;pointer-events:none}
+.loading-content{text-align:center;color:#faf8f5}
+.loading-logo{width:80px;height:80px;margin:0 auto var(--space-xl);color:var(--c-accent);animation:pulse 2s ease-in-out infinite}
+.loading-logo svg{width:100%;height:100%}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:.8}}
+.loading-text{font-family:var(--font-heading);font-size:24px;font-weight:700;margin-bottom:var(--space-xl);letter-spacing:.1em}
+.loading-bar{width:200px;height:3px;background:rgba(255,255,255,.2);border-radius:10px;overflow:hidden;margin:0 auto var(--space-lg)}
+.loading-bar-inner{width:0;height:100%;background:linear-gradient(90deg,var(--c-accent),var(--c-secondary));border-radius:10px;animation:loadingProgress 1.5s ease-out forwards}
+@keyframes loadingProgress{0%{width:0}50%{width:70%}100%{width:100%}}
+.loading-tip{font-size:13px;opacity:.6;animation:fadeIn 1s ease .5s both}
+@keyframes fadeIn{from{opacity:0}to{opacity:.6}}
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 button{font-family:inherit;cursor:pointer;border:none;background:none}
@@ -446,6 +460,25 @@ body.admin-mode .product-overlay{display:none}
 </style>
 </head>
 <body>
+
+<!-- 加载动画 -->
+<div id="loadingScreen" class="loading-screen">
+  <div class="loading-content">
+    <div class="loading-logo">
+      <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <path d="M12 34 C8 34 5 31 5 27 C5 23 8 21 12 21 C12 15 17 11 24 11 C31 11 36 15 36 21 C40 21 43 23 43 27 C43 31 40 34 36 34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="10" y1="38" x2="38" y2="38" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="14" y1="38" x2="14" y2="42" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="34" y1="38" x2="34" y2="42" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="loading-text">云祥家具城</div>
+    <div class="loading-bar">
+      <div class="loading-bar-inner"></div>
+    </div>
+    <div class="loading-tip">温暖每一个家</div>
+  </div>
+</div>
 
 <!-- 滚动进度条 -->
 <div class="scroll-progress" id="scrollProgress"></div>
@@ -1572,7 +1605,12 @@ body.admin-mode .product-overlay{display:none}
             var url=await uploadAndGetURL(file,'product_'+(idx+1));
             if(!siteData)siteData={products:[],brands:[]};
             if(!siteData.products[idx])siteData.products[idx]={};
+            // 保留原有的分类字段
+            var existingCategory = siteData.products[idx].category || '';
+            var existingSub = siteData.products[idx].sub || '';
             siteData.products[idx].image=url;
+            siteData.products[idx].category=existingCategory;
+            siteData.products[idx].sub=existingSub;
             await saveSiteData();
             applySiteData();
             showToast('产品图片已更新');
@@ -1883,6 +1921,24 @@ body.admin-mode .product-overlay{display:none}
     enableAdminTextEdit();
   });
   if(isLoggedIn())onAdminLogin();
+
+  // 隐藏加载动画
+  function hideLoading(){
+    var loadingScreen = document.getElementById('loadingScreen');
+    if(loadingScreen){
+      loadingScreen.classList.add('hide');
+      setTimeout(function(){loadingScreen.remove()}, 500);
+    }
+  }
+  
+  // 页面加载完成后隐藏
+  if(document.readyState === 'complete'){
+    hideLoading();
+  } else {
+    window.addEventListener('load', hideLoading);
+  }
+  // 最多显示3秒
+  setTimeout(hideLoading, 3000);
 
 })();
 </script>

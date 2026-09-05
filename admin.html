@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#3d2b1f">
+<title>云祥家具城 — 管理后台</title>
+<style>
+:root {
+  --c-bg:#faf8f5; --c-text:#2c2218; --c-text-muted:#8b7d6b;
+  --c-primary:#3d2b1f; --c-secondary:#c89b6f; --c-accent:#d4a574;
+  --c-border:#e8e0d5; --c-card-bg:#fff; --c-heading:#6b4423;
+  --c-success:#16a34a; --c-error:#dc2626;
+  --font-heading:"Songti SC","Noto Serif SC","SimSun",serif;
+  --font-body:"PingFang SC","Microsoft YaHei UI","Noto Sans SC",system-ui,sans-serif;
+  --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  --shadow-sm:0 1px 3px rgba(61,43,31,.08);
+  --shadow-md:0 4px 12px rgba(61,43,31,.1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font-body);font-size:14px;line-height:1.5;color:var(--c-text);background:var(--c-bg);min-height:100vh}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+
+/* 登录页面 */
+.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-card{background:#fff;border-radius:var(--radius-lg);padding:32px;width:100%;max-width:400px;box-shadow:var(--shadow-md)}
+.login-logo{text-align:center;margin-bottom:24px}
+.login-logo svg{width:64px;height:64px;color:var(--c-primary)}
+.login-title{font-family:var(--font-heading);font-size:24px;font-weight:700;color:var(--c-primary);text-align:center;margin-bottom:8px}
+.login-desc{text-align:center;color:var(--c-text-muted);margin-bottom:24px;font-size:13px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:4px}
+.form-input{width:100%;height:44px;border:1.5px solid var(--c-border);border-radius:var(--radius-md);padding:0 12px;font-size:15px;font-family:var(--font-body)}
+.form-input:focus{outline:none;border-color:var(--c-secondary)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border-radius:var(--radius-md);font-size:14px;font-weight:600;border:none;transition:all .2s}
+.btn-primary{background:var(--c-primary);color:#fff;width:100%}
+.btn-primary:hover{background:#2a1e15}
+.btn-secondary{background:var(--c-secondary);color:#fff}
+.btn-danger{background:var(--c-error);color:#fff}
+.btn-outline{background:transparent;border:1.5px solid var(--c-border);color:var(--c-text)}
+.btn-sm{padding:8px 16px;font-size:12px}
+.error-msg{color:var(--c-error);font-size:12px;margin-top:8px;display:none}
+
+/* 主布局 */
+.app-layout{display:flex;min-height:100vh}
+.sidebar{width:240px;background:var(--c-primary);color:#fff;padding:20px;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{display:flex;align-items:center;gap:12px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:20px}
+.sidebar-logo svg{width:32px;height:32px;color:var(--c-accent)}
+.sidebar-logo span{font-family:var(--font-heading);font-size:18px;font-weight:700}
+.sidebar-nav{list-style:none}
+.sidebar-nav li{margin-bottom:4px}
+.sidebar-nav a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius-md);transition:background .2s;font-size:14px}
+.sidebar-nav a:hover,.sidebar-nav a.active{background:rgba(255,255,255,.1)}
+.sidebar-nav svg{width:20px;height:20px;flex-shrink:0}
+.sidebar-footer{margin-top:auto;padding-top:20px;border-top:1px solid rgba(255,255,255,.1)}
+.sidebar-footer a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius-md);color:rgba(255,255,255,.7);font-size:13px}
+.sidebar-footer a:hover{background:rgba(255,255,255,.1);color:#fff}
+
+.main-content{flex:1;padding:24px;overflow-x:auto}
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.page-title{font-family:var(--font-heading);font-size:24px;font-weight:700;color:var(--c-primary)}
+.page-desc{color:var(--c-text-muted);font-size:13px}
+
+/* 产品表格 */
+.table-container{background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:auto}
+table{width:100%;border-collapse:collapse}
+th,td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--c-border)}
+th{background:#f9f7f4;font-weight:600;font-size:12px;color:var(--c-text-muted);text-transform:uppercase;letter-spacing:.5px;position:sticky;top:0}
+td{font-size:13px}
+tr:hover{background:#fdfbf8}
+tr.dragging{opacity:.5;background:#f0e6d8}
+.product-cell{display:flex;align-items:center;gap:12px}
+.product-thumb{width:48px;height:48px;border-radius:var(--radius-sm);object-fit:cover;background:#f0e6d8;flex-shrink:0}
+.product-info{min-width:0}
+.product-name{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px}
+.product-brand{font-size:11px;color:var(--c-secondary)}
+.badge{display:inline-block;padding:2px 8px;border-radius:100px;font-size:11px;font-weight:600}
+.badge-mattress{background:#dbeafe;color:#2563eb}
+.badge-sofa{background:#fce7f3;color:#db2777}
+.badge-bed{background:#d1fae5;color:#059669}
+.badge-dining{background:#fef3c7;color:#d97706}
+.badge-wardrobe{background:#e0e7ff;color:#4f46e5}
+.badge-new{background:#d1fae5;color:#059669}
+.badge-hot{background:#fee2e2;color:#dc2626}
+.actions{display:flex;gap:8px}
+.drag-handle{cursor:grab;color:var(--c-text-muted);padding:4px}
+.drag-handle:active{cursor:grabbing}
+
+/* 空状态 */
+.empty-state{text-align:center;padding:48px;color:var(--c-text-muted)}
+.empty-state svg{width:48px;height:48px;margin-bottom:12px;opacity:.3}
+.empty-state p{font-size:14px}
+
+/* 弹窗 */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.active{display:flex}
+.modal{background:#fff;border-radius:var(--radius-lg);padding:24px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;position:relative}
+.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.05);border:none;font-size:18px;color:var(--c-text-muted);display:flex;align-items:center;justify-content:center}
+.modal h2{font-family:var(--font-heading);font-size:20px;font-weight:700;margin-bottom:16px}
+.modal-btn{width:100%;height:44px;background:var(--c-primary);color:#fff;border:none;border-radius:var(--radius-md);font-size:14px;font-weight:600;margin-top:16px}
+.modal-btn:active{transform:scale(.98)}
+
+/* 通知 */
+.toast{position:fixed;top:20px;right:20px;padding:12px 20px;border-radius:var(--radius-md);color:#fff;font-size:13px;font-weight:500;z-index:200;transform:translateX(120%);transition:transform .3s}
+.toast.show{transform:translateX(0)}
+.toast.success{background:var(--c-success)}
+.toast.error{background:var(--c-error)}
+
+/* 响应式 */
+@media(max-width:768px){
+  .sidebar{display:none}
+  .app-layout{flex-direction:column}
+  .mobile-nav{display:flex;background:var(--c-primary);padding:12px;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .mobile-nav a{flex-shrink:0;padding:8px 16px;border-radius:100px;font-size:12px;color:#fff;white-space:nowrap}
+  .mobile-nav a.active{background:var(--c-secondary)}
+  .page-header{flex-direction:column;align-items:flex-start}
+}
+@media(min-width:769px){
+  .mobile-nav{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- 登录页面 -->
+<div class="login-page" id="loginPage">
+  <div class="login-card">
+    <div class="login-logo">
+      <svg viewBox="0 0 48 48" fill="none">
+        <path d="M12 34 C8 34 5 31 5 27 C5 23 8 21 12 21 C12 15 17 11 24 11 C31 11 36 15 36 21 C40 21 43 23 43 27 C43 31 40 34 36 34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="10" y1="38" x2="38" y2="38" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="14" y1="38" x2="14" y2="42" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="34" y1="38" x2="34" y2="42" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1 class="login-title">管理后台</h1>
+    <p class="login-desc">云祥家具城产品管理系统</p>
+    <div class="form-group">
+      <label>管理密码</label>
+      <input type="password" class="form-input" id="loginPassword" placeholder="请输入管理密码">
+    </div>
+    <div class="form-group" id="tokenGroup" style="display:none">
+      <label>GitHub 令牌</label>
+      <input type="text" class="form-input" id="loginToken" placeholder="ghp_ 或 github_pat_ 开头">
+      <div style="font-size:11px;color:var(--c-text-muted);margin-top:4px">首次登录需要，用于上传图片</div>
+    </div>
+    <button class="btn btn-primary" id="loginBtn">登录</button>
+    <div class="error-msg" id="loginError"></div>
+  </div>
+</div>
+
+<!-- 管理后台 -->
+<div class="app-layout" id="appLayout" style="display:none">
+  <!-- 侧边栏 -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <svg viewBox="0 0 48 48" fill="none">
+        <path d="M12 34 C8 34 5 31 5 27 C5 23 8 21 12 21 C12 15 17 11 24 11 C31 11 36 15 36 21 C40 21 43 23 43 27 C43 31 40 34 36 34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="10" y1="38" x2="38" y2="38" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <span>云祥家具城</span>
+    </div>
+    <ul class="sidebar-nav">
+      <li><a href="#products" class="active" data-page="products">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M20 7l-8-4-8 4 8 4 8-4z" stroke="currentColor" stroke-width="2"/><path d="M4 7v10l8 4M20 7v10l-8 4" stroke="currentColor" stroke-width="2"/></svg>
+        <span>产品管理</span>
+      </a></li>
+      <li><a href="#gallery" data-page="gallery">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" stroke-width="2"/><path d="M21 15l-5-5L5 21" stroke="currentColor" stroke-width="2"/></svg>
+        <span>展厅图片</span>
+      </a></li>
+      <li><a href="index.html">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2"/></svg>
+        <span>查看网站</span>
+      </a></li>
+    </ul>
+    <div class="sidebar-footer">
+      <a href="#" id="logoutBtn">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>退出登录</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- 移动端导航 -->
+  <nav class="mobile-nav">
+    <a href="#products" class="active" data-page="products">产品管理</a>
+    <a href="#gallery" data-page="gallery">展厅图片</a>
+    <a href="index.html">查看网站</a>
+    <a href="#" id="mobileLogout">退出</a>
+  </nav>
+
+  <!-- 主内容区 -->
+  <main class="main-content">
+    <!-- 产品管理页面 -->
+    <div id="page-products">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">产品管理</h1>
+          <p class="page-desc">拖拽调整顺序，点击编辑信息</p>
+        </div>
+        <button class="btn btn-secondary" id="addProductBtn">
+          <svg viewBox="0 0 24 24" fill="none" style="width:16px;height:16px"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+          添加产品
+        </button>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:40px"></th>
+              <th>产品</th>
+              <th>品类</th>
+              <th>标签</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="productsTable"></tbody>
+        </table>
+        <div class="empty-state" id="productsEmpty" style="display:none">
+          <svg viewBox="0 0 48 48" fill="none"><rect x="8" y="8" width="32" height="32" rx="4" stroke="currentColor" stroke-width="2.5"/><path d="M16 24h16M24 16v16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <p>暂无产品，点击上方按钮添加</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 展厅图片页面 -->
+    <div id="page-gallery" style="display:none">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">展厅图片</h1>
+          <p class="page-desc">管理门店实拍图片</p>
+        </div>
+        <button class="btn btn-secondary" id="addImageBtn">
+          <svg viewBox="0 0 24 24" fill="none" style="width:16px;height:16px"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+          上传图片
+        </button>
+        <input type="file" id="imageFileInput" accept="image/*" style="display:none">
+      </div>
+      <div class="table-container" id="galleryGrid"></div>
+    </div>
+  </main>
+</div>
+
+<!-- 编辑产品弹窗 -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <button class="modal-close" id="editClose">&times;</button>
+    <h2 id="editTitle">编辑产品</h2>
+    <div class="form-group">
+      <label>产品名称</label>
+      <input type="text" class="form-input" id="editName">
+    </div>
+    <div class="form-group">
+      <label>品牌</label>
+      <input type="text" class="form-input" id="editBrand">
+    </div>
+    <div class="form-group">
+      <label>描述</label>
+      <textarea class="form-input" id="editDesc" rows="3" style="min-height:80px"></textarea>
+    </div>
+    <div class="form-group">
+      <label>品类</label>
+      <select class="form-input" id="editCategory">
+        <option value="sofa">沙发</option>
+        <option value="mattress">床垫</option>
+        <option value="bed">床</option>
+        <option value="dining">餐桌</option>
+        <option value="wardrobe">衣柜</option>
+      </select>
+    </div>
+    <div class="form-group" id="editSubGroup">
+      <label>沙发类型</label>
+      <select class="form-input" id="editSub">
+        <option value="">普通沙发</option>
+        <option value="wood">实木沙发</option>
+        <option value="leather">软皮沙发</option>
+        <option value="fabric">布艺沙发</option>
+        <option value="recliner">多功能沙发</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>标签（可选）</label>
+      <input type="text" class="form-input" id="editTag" placeholder="如：主推、新品">
+    </div>
+    <button class="modal-btn" id="editSave">保存修改</button>
+  </div>
+</div>
+
+<!-- 通知 -->
+<div class="toast" id="toast"></div>
+
+<script>
+var GH_OWNER='Dem0King';
+var GH_REPO='yunxiang';
+var GH_BRANCH='main';
+var PRODUCTS_JSON_PATH='images/products.json';
+var IMAGES_JSON_PATH='images/images.json';
+var IMAGES_DIR='images';
+
+var siteData = null;
+var allImages = [];
+var editingIndex = -1;
+
+function apiURL(p){return 'https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+p}
+function rawURL(p){return 'https://raw.githubusercontent.com/'+GH_OWNER+'/'+GH_REPO+'/'+GH_BRANCH+'/'+p}
+
+// 显示通知
+function showToast(msg, type){
+  var toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = 'toast ' + (type||'success') + ' show';
+  setTimeout(function(){toast.classList.remove('show')}, 3000);
+}
+
+// SHA256
+async function sha256hex(s){
+  var buf = new TextEncoder().encode(s);
+  var h = await crypto.subtle.digest('SHA-256', buf);
+  return Array.from(new Uint8Array(h)).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
+}
+
+var ADMIN_PWD_SHA = '5c3ef2eb5c7e527c99a859aafa16d1b77a8bc68ccde24e1e6cd24264688c4c8c';
+
+// 登录
+document.getElementById('loginBtn').addEventListener('click', async function(){
+  var pwd = document.getElementById('loginPassword').value.trim();
+  var errorEl = document.getElementById('loginError');
+  
+  if(!pwd){
+    errorEl.textContent = '请输入密码';
+    errorEl.style.display = 'block';
+    return;
+  }
+  
+  var hash = await sha256hex(pwd);
+  if(hash !== ADMIN_PWD_SHA){
+    errorEl.textContent = '密码错误';
+    errorEl.style.display = 'block';
+    return;
+  }
+  
+  // 检查token
+  if(!localStorage.getItem('yxf_gh_token')){
+    document.getElementById('tokenGroup').style.display = 'block';
+    var token = document.getElementById('loginToken').value.trim();
+    if(!token){
+      errorEl.textContent = '请输入GitHub令牌';
+      errorEl.style.display = 'block';
+      return;
+    }
+    if(!token.startsWith('ghp_') && !token.startsWith('github_pat_')){
+      errorEl.textContent = '令牌格式错误';
+      errorEl.style.display = 'block';
+      return;
+    }
+    localStorage.setItem('yxf_gh_token', token);
+  }
+  
+  errorEl.style.display = 'none';
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('appLayout').style.display = 'flex';
+  loadData();
+});
+
+// 退出登录
+document.getElementById('logoutBtn').addEventListener('click', function(e){
+  e.preventDefault();
+  localStorage.removeItem('yxf_gh_token');
+  location.reload();
+});
+document.getElementById('mobileLogout').addEventListener('click', function(e){
+  e.preventDefault();
+  localStorage.removeItem('yxf_gh_token');
+  location.reload();
+});
+
+// 页面切换
+document.querySelectorAll('[data-page]').forEach(function(link){
+  link.addEventListener('click', function(e){
+    e.preventDefault();
+    var page = this.dataset.page;
+    document.querySelectorAll('[data-page]').forEach(function(l){l.classList.remove('active')});
+    document.querySelectorAll('[data-page="'+page+'"]').forEach(function(l){l.classList.add('active')});
+    document.getElementById('page-products').style.display = page==='products'?'block':'none';
+    document.getElementById('page-gallery').style.display = page==='gallery'?'block':'none';
+  });
+});
+
+// 加载数据
+async function loadData(){
+  var token = localStorage.getItem('yxf_gh_token');
+  var headers = {'Authorization': 'token '+token};
+  
+  try {
+    // 加载产品数据
+    var r1 = await fetch(apiURL(PRODUCTS_JSON_PATH)+'?ref='+GH_BRANCH, {headers:headers});
+    if(r1.ok){
+      var d1 = await r1.json();
+      siteData = JSON.parse(decodeURIComponent(escape(atob(d1.content.replace(/\s/g,'')))));
+    }
+    
+    // 加载图片数据
+    var r2 = await fetch(apiURL(IMAGES_JSON_PATH)+'?ref='+GH_BRANCH, {headers:headers});
+    if(r2.ok){
+      var d2 = await r2.json();
+      allImages = JSON.parse(decodeURIComponent(escape(atob(d2.content.replace(/\s/g,'')))));
+    }
+  } catch(e) {
+    console.error('加载失败:', e);
+  }
+  
+  renderProducts();
+  renderGallery();
+}
+
+// 渲染产品表格
+function renderProducts(){
+  var tbody = document.getElementById('productsTable');
+  var empty = document.getElementById('productsEmpty');
+  var products = siteData ? siteData.products || [] : [];
+  
+  if(products.length === 0){
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  
+  empty.style.display = 'none';
+  tbody.innerHTML = products.map(function(p, i){
+    var categoryBadge = getCategoryBadge(p.category);
+    var tagBadge = p.tag ? '<span class="badge badge-'+(p.tagType||'hot')+'">'+p.tag+'</span>' : '';
+    
+    return '<tr draggable="true" data-index="'+i+'">' +
+      '<td><div class="drag-handle">⠿</div></td>' +
+      '<td>' +
+        '<div class="product-cell">' +
+          '<img class="product-thumb" src="'+(p.image||'')+'" alt="" onerror="this.style.display=\'none\'">' +
+          '<div class="product-info">' +
+            '<div class="product-name">'+p.name+'</div>' +
+            '<div class="product-brand">'+p.brand+'</div>' +
+          '</div>' +
+        '</div>' +
+      '</td>' +
+      '<td>'+categoryBadge+'</td>' +
+      '<td>'+tagBadge+'</td>' +
+      '<td>' +
+        '<div class="actions">' +
+          '<button class="btn btn-outline btn-sm" onclick="editProduct('+i+')">编辑</button>' +
+          '<button class="btn btn-danger btn-sm" onclick="deleteProduct('+i+')">删除</button>' +
+        '</div>' +
+      '</td>' +
+    '</tr>';
+  }).join('');
+  
+  // 添加拖拽事件
+  initDragDrop();
+}
+
+function getCategoryBadge(category){
+  var map = {
+    sofa: {text:'沙发', class:'sofa'},
+    mattress: {text:'床垫', class:'mattress'},
+    bed: {text:'床', class:'bed'},
+    dining: {text:'餐桌', class:'dining'},
+    wardrobe: {text:'衣柜', class:'wardrobe'}
+  };
+  var item = map[category] || {text:'未分类', class:''};
+  return '<span class="badge badge-'+item.class+'">'+item.text+'</span>';
+}
+
+// 拖拽排序
+function initDragDrop(){
+  var rows = document.querySelectorAll('#productsTable tr');
+  var dragRow = null;
+  
+  rows.forEach(function(row){
+    row.addEventListener('dragstart', function(e){
+      dragRow = this;
+      this.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    
+    row.addEventListener('dragend', function(){
+      this.classList.remove('dragging');
+      dragRow = null;
+    });
+    
+    row.addEventListener('dragover', function(e){
+      e.preventDefault();
+      if(dragRow && dragRow !== this){
+        var rect = this.getBoundingClientRect();
+        var midY = rect.top + rect.height/2;
+        if(e.clientY < midY){
+          this.parentNode.insertBefore(dragRow, this);
+        } else {
+          this.parentNode.insertBefore(dragRow, this.nextSibling);
+        }
+      }
+    });
+  });
+  
+  // 保存排序
+  document.getElementById('productsTable').addEventListener('drop', function(e){
+    e.preventDefault();
+    saveOrder();
+  });
+}
+
+// 保存排序
+async function saveOrder(){
+  var rows = document.querySelectorAll('#productsTable tr');
+  var newOrder = [];
+  rows.forEach(function(row){
+    var index = parseInt(row.dataset.index);
+    if(!isNaN(index) && siteData.products[index]){
+      newOrder.push(siteData.products[index]);
+    }
+  });
+  
+  siteData.products = newOrder;
+  await saveSiteData();
+  showToast('排序已保存');
+  renderProducts();
+}
+
+// 编辑产品
+window.editProduct = function(index){
+  editingIndex = index;
+  var p = siteData.products[index];
+  
+  document.getElementById('editTitle').textContent = '编辑产品';
+  document.getElementById('editName').value = p.name || '';
+  document.getElementById('editBrand').value = p.brand || '';
+  document.getElementById('editDesc').value = p.desc || '';
+  document.getElementById('editCategory').value = p.category || 'sofa';
+  document.getElementById('editSub').value = p.sub || '';
+  document.getElementById('editTag').value = p.tag || '';
+  
+  document.getElementById('editSubGroup').style.display = p.category==='sofa'?'block':'none';
+  document.getElementById('editModal').classList.add('active');
+};
+
+// 品类切换显示子分类
+document.getElementById('editCategory').addEventListener('change', function(){
+  document.getElementById('editSubGroup').style.display = this.value==='sofa'?'block':'none';
+});
+
+// 保存编辑
+document.getElementById('editSave').addEventListener('click', async function(){
+  if(editingIndex < 0) return;
+  
+  siteData.products[editingIndex] = {
+    ...siteData.products[editingIndex],
+    name: document.getElementById('editName').value.trim(),
+    brand: document.getElementById('editBrand').value.trim(),
+    desc: document.getElementById('editDesc').value.trim(),
+    category: document.getElementById('editCategory').value,
+    sub: document.getElementById('editSub').value,
+    tag: document.getElementById('editTag').value.trim()
+  };
+  
+  await saveSiteData();
+  document.getElementById('editModal').classList.remove('active');
+  showToast('保存成功');
+  renderProducts();
+});
+
+// 删除产品
+window.deleteProduct = async function(index){
+  if(!confirm('确定删除此产品？')) return;
+  
+  siteData.products.splice(index, 1);
+  await saveSiteData();
+  showToast('已删除');
+  renderProducts();
+};
+
+// 添加产品
+document.getElementById('addProductBtn').addEventListener('click', function(){
+  editingIndex = -1;
+  document.getElementById('editTitle').textContent = '添加产品';
+  document.getElementById('editName').value = '';
+  document.getElementById('editBrand').value = '';
+  document.getElementById('editDesc').value = '';
+  document.getElementById('editCategory').value = 'sofa';
+  document.getElementById('editSub').value = '';
+  document.getElementById('editTag').value = '';
+  document.getElementById('editSubGroup').style.display = 'block';
+  document.getElementById('editModal').classList.add('active');
+  
+  // 先保存再上传图片
+  document.getElementById('editSave').onclick = async function(){
+    var newProduct = {
+      id: 'p' + Date.now(),
+      name: document.getElementById('editName').value.trim(),
+      brand: document.getElementById('editBrand').value.trim(),
+      desc: document.getElementById('editDesc').value.trim(),
+      category: document.getElementById('editCategory').value,
+      sub: document.getElementById('editSub').value,
+      tag: document.getElementById('editTag').value.trim(),
+      tagType: '',
+      action: '咨询价格',
+      image: ''
+    };
+    
+    if(!newProduct.name){
+      showToast('请输入产品名称', 'error');
+      return;
+    }
+    
+    if(!siteData) siteData = {products:[], brands:[]};
+    if(!siteData.products) siteData.products = [];
+    siteData.products.push(newProduct);
+    
+    await saveSiteData();
+    document.getElementById('editModal').classList.remove('active');
+    showToast('产品已添加，请点击产品上传图片');
+    renderProducts();
+  };
+});
+
+document.getElementById('editClose').addEventListener('click', function(){
+  document.getElementById('editModal').classList.remove('active');
+});
+
+// 保存产品数据
+async function saveSiteData(){
+  var token = localStorage.getItem('yxf_gh_token');
+  var headers = {'Authorization': 'token '+token, 'Content-Type': 'application/json'};
+  
+  var curSha = null;
+  try {
+    var rc = await fetch(apiURL(PRODUCTS_JSON_PATH)+'?ref='+GH_BRANCH, {headers:headers});
+    if(rc.ok){var cd = await rc.json(); curSha = cd.sha;}
+  } catch(e){}
+  
+  var r = await fetch(apiURL(PRODUCTS_JSON_PATH), {
+    method: 'PUT',
+    headers: headers,
+    body: JSON.stringify({
+      message: '更新产品数据',
+      content: btoa(unescape(encodeURIComponent(JSON.stringify(siteData, null, 2)))),
+      branch: GH_BRANCH,
+      sha: curSha
+    })
+  });
+  
+  if(!r.ok) throw new Error('保存失败');
+}
+
+// 渲染展厅图片
+function renderGallery(){
+  var grid = document.getElementById('galleryGrid');
+  
+  if(!allImages || allImages.length === 0){
+    grid.innerHTML = '<div class="empty-state"><p>暂无图片</p></div>';
+    return;
+  }
+  
+  grid.innerHTML = '<table><thead><tr><th>预览</th><th>文件名</th><th>操作</th></tr></thead><tbody>' +
+    allImages.map(function(img, i){
+      return '<tr>' +
+        '<td><img src="'+img.url+'" style="width:60px;height:60px;object-fit:cover;border-radius:6px"></td>' +
+        '<td>'+img.name+'</td>' +
+        '<td><button class="btn btn-danger btn-sm" onclick="deleteImage('+i+')">删除</button></td>' +
+      '</tr>';
+    }).join('') +
+  '</tbody></table>';
+}
+
+// 上传展厅图片
+document.getElementById('addImageBtn').addEventListener('click', function(){
+  document.getElementById('imageFileInput').click();
+});
+
+document.getElementById('imageFileInput').addEventListener('change', async function(){
+  if(!this.files.length) return;
+  
+  var file = this.files[0];
+  showToast('正在上传...');
+  
+  try {
+    var token = localStorage.getItem('yxf_gh_token');
+    var headers = {'Authorization': 'token '+token, 'Content-Type': 'application/json'};
+    
+    // 读取文件
+    var dataURL = await readAsDataURL(file);
+    var base64 = dataURL.split(',')[1];
+    var fname = 'img_' + Date.now() + '.jpg';
+    
+    // 上传图片
+    var r1 = await fetch(apiURL(IMAGES_DIR+'/'+fname), {
+      method: 'PUT',
+      headers: headers,
+      body: JSON.stringify({message: '上传图片: '+fname, content: base64, branch: GH_BRANCH})
+    });
+    if(!r1.ok) throw new Error('上传失败');
+    var d1 = await r1.json();
+    
+    // 更新列表
+    allImages.push({
+      name: fname,
+      url: rawURL(IMAGES_DIR+'/'+fname)+'?t='+Date.now(),
+      sha: d1.content.sha,
+      time: new Date().toISOString()
+    });
+    
+    await saveImagesData();
+    showToast('上传成功');
+    renderGallery();
+  } catch(e) {
+    showToast('上传失败: '+e.message, 'error');
+  }
+  
+  this.value = '';
+});
+
+// 删除展厅图片
+window.deleteImage = async function(index){
+  if(!confirm('确定删除此图片？')) return;
+  
+  try {
+    var token = localStorage.getItem('yxf_gh_token');
+    var headers = {'Authorization': 'token '+token, 'Content-Type': 'application/json'};
+    var img = allImages[index];
+    
+    // 删除文件
+    var fileSha = img.sha;
+    if(!fileSha){
+      var ri = await fetch(apiURL(IMAGES_DIR+'/'+img.name)+'?ref='+GH_BRANCH, {headers:headers});
+      if(ri.ok){var id = await ri.json(); fileSha = id.sha;}
+    }
+    
+    await fetch(apiURL(IMAGES_DIR+'/'+img.name), {
+      method: 'DELETE',
+      headers: headers,
+      body: JSON.stringify({message: '删除图片: '+img.name, sha: fileSha, branch: GH_BRANCH})
+    });
+    
+    allImages.splice(index, 1);
+    await saveImagesData();
+    showToast('已删除');
+    renderGallery();
+  } catch(e) {
+    showToast('删除失败: '+e.message, 'error');
+  }
+};
+
+// 保存图片数据
+async function saveImagesData(){
+  var token = localStorage.getItem('yxf_gh_token');
+  var headers = {'Authorization': 'token '+token, 'Content-Type': 'application/json'};
+  
+  var curSha = null;
+  try {
+    var rc = await fetch(apiURL(IMAGES_JSON_PATH)+'?ref='+GH_BRANCH, {headers:headers});
+    if(rc.ok){var cd = await rc.json(); curSha = cd.sha;}
+  } catch(e){}
+  
+  await fetch(apiURL(IMAGES_JSON_PATH), {
+    method: 'PUT',
+    headers: headers,
+    body: JSON.stringify({
+      message: '更新图片列表',
+      content: btoa(unescape(encodeURIComponent(JSON.stringify(allImages, null, 2)))),
+      branch: GH_BRANCH,
+      sha: curSha
+    })
+  });
+}
+
+function readAsDataURL(f){
+  return new Promise(function(r,j){
+    var rd = new FileReader();
+    rd.onload = function(){r(rd.result)};
+    rd.onerror = j;
+    rd.readAsDataURL(f);
+  });
+}
+
+// 检查登录状态
+if(localStorage.getItem('yxf_gh_token')){
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('appLayout').style.display = 'flex';
+  loadData();
+}
+</script>
+
+</body>
+</html>
