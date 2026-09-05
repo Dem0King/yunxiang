@@ -124,9 +124,6 @@ ul{list-style:none}
 .nav-cta:hover{background:#2a1e15;transform:scale(1.02)}
 .nav-cta:active{transform:scale(.98)}
 .nav-cta svg{width:16px;height:16px}
-.nav-share{width:40px;height:40px;border-radius:50%;background:rgba(200,155,111,.15);border:none;display:flex;align-items:center;justify-content:center;color:var(--c-secondary);cursor:pointer;transition:all .2s}
-.nav-share:hover{background:rgba(200,155,111,.25)}
-.nav-share svg{width:20px;height:20px}
 .nav-toggle{display:none;width:44px;height:44px;align-items:center;justify-content:center}
 .nav-toggle svg{width:24px;height:24px}
 @media(max-width:768px){
@@ -541,14 +538,6 @@ body.admin-mode .product-overlay{display:none}
       </svg>
       <span>立即咨询</span>
     </a>
-    <button class="nav-share" id="shareBtn" aria-label="分享">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="2"/>
-        <circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
-        <circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="2"/>
-        <path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98" stroke="currentColor" stroke-width="2"/>
-      </svg>
-    </button>
     <button class="nav-toggle" id="navToggle" aria-label="菜单" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -722,8 +711,8 @@ body.admin-mode .product-overlay{display:none}
         <div class="guarantee-icon">
           <svg viewBox="0 0 48 48" fill="none"><path d="M6 24h36M6 24l8-8M6 24l8 8M42 24l-8-8M42 24l-8 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <h3>免费送货</h3>
-        <p>恭城县内免费送货上门</p>
+        <h3>送货上门</h3>
+        <p>送货上门</p>
       </div>
       <div class="guarantee-card scroll-reveal delay-1">
         <div class="guarantee-icon">
@@ -2023,34 +2012,6 @@ body.admin-mode .product-overlay{display:none}
   // ── 字体加载优化：页面加载完成后才加载字体 ──
   if('fonts'in document){
     document.fonts.ready.then(function(){document.body.classList.add('fonts-loaded')});
-  }
-
-  // ── 分享功能 ──
-  var shareBtn = document.getElementById('shareBtn');
-  if(shareBtn){
-    shareBtn.addEventListener('click', function(){
-      var shareData = {
-        title: '云祥家具城 — 恭城燕新路品牌家具',
-        text: '代理喜临门床垫、琪辉功能沙发，到店体验更放心',
-        url: window.location.href
-      };
-      
-      // 优先使用原生分享API
-      if(navigator.share){
-        navigator.share(shareData).catch(function(){});
-      } else {
-        // 复制链接
-        var textarea = document.createElement('textarea');
-        textarea.value = window.location.href;
-        textarea.style.position = 'fixed';
-        textarea.style.opacity = '0';
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-        showToast('链接已复制，可以粘贴发送给朋友');
-      }
-    });
   }
 
   // ── 初始化 ──
