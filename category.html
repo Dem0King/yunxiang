@@ -8,7 +8,6 @@
 <title>云祥家具城 — 产品分类</title>
 <link rel="manifest" href="manifest.json">
 <style>
-/* ═══ 基础样式 ═══ */
 :root {
   --space-xs:4px; --space-sm:8px; --space-md:12px; --space-base:16px;
   --space-lg:20px; --space-xl:24px; --space-2xl:32px; --space-3xl:40px;
@@ -33,7 +32,6 @@ body{font-family:var(--font-body);font-size:16px;line-height:1.6;color:var(--c-t
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 
-/* ═══ 顶部导航 ═══ */
 .nav{position:sticky;top:0;z-index:100;padding:var(--space-base) 0;background:rgba(250,248,245,.95);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border-bottom:1px solid var(--c-border)}
 .nav-inner{max-width:1200px;margin:0 auto;padding:0 var(--space-xl);display:flex;align-items:center;justify-content:space-between}
 .nav-back{display:inline-flex;align-items:center;gap:var(--space-sm);padding:8px 16px;border-radius:var(--radius-md);transition:background var(--ease);font-weight:500}
@@ -43,23 +41,26 @@ a{color:inherit;text-decoration:none}
 .nav-contact{display:inline-flex;align-items:center;gap:var(--space-sm);padding:10px 20px;background:var(--c-primary);color:#fff;border-radius:var(--radius-md);font-size:14px;font-weight:500}
 .nav-contact svg{width:16px;height:16px}
 
-/* ═══ 品类标题 ═══ */
 .category-hero{padding:var(--space-3xl) 0 var(--space-2xl);text-align:center;background:linear-gradient(135deg,#3d2b1f,#2a1e15);color:#faf8f5}
 .category-hero h1{font-family:var(--font-heading);font-size:clamp(28px,5vw,40px);font-weight:700;margin-bottom:var(--space-sm)}
 .category-hero p{font-size:16px;opacity:.8}
 
-/* ═══ 产品网格 ═══ */
+/* 子分类标签 */
+.sub-tabs{display:flex;gap:var(--space-sm);justify-content:center;flex-wrap:wrap;padding:var(--space-xl) var(--space-xl) 0;background:var(--c-bg)}
+.sub-tab{padding:8px 20px;border-radius:100px;border:1.5px solid var(--c-border);font-size:14px;font-weight:500;color:var(--c-text-muted);cursor:pointer;transition:all var(--ease);background:#fff}
+.sub-tab:hover{border-color:var(--c-secondary);color:var(--c-secondary)}
+.sub-tab.active{background:var(--c-primary);color:#fff;border-color:var(--c-primary)}
+
 .container{max-width:1200px;margin:0 auto;padding:0 var(--space-xl)}
 .products-section{padding:var(--space-3xl) 0}
 .products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-xl);margin-top:var(--space-2xl)}
 @media(min-width:769px){.products-grid{grid-template-columns:repeat(3,1fr)}}
 @media(min-width:1024px){.products-grid{grid-template-columns:repeat(4,1fr)}}
 
-/* ═══ 产品卡片 ═══ */
 .product-card{background:var(--c-card-bg);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);transition:transform var(--ease),box-shadow var(--ease)}
 .product-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
 .product-card:active{transform:scale(.98)}
-.product-img{width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,#f0e6d8,#dcc9b3);position:relative;overflow:hidden}
+.product-img{width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,#f0e6d8,#dcc9b3);position:relative;overflow:hidden;cursor:pointer}
 .product-img img{width:100%;height:100%;object-fit:cover}
 .product-tag{position:absolute;top:var(--space-sm);left:var(--space-sm);font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px;background:rgba(200,155,111,.9);color:#fff}
 .product-tag.new{background:rgba(22,163,74,.85)}
@@ -70,13 +71,11 @@ a{color:inherit;text-decoration:none}
 .product-action{display:inline-flex;align-items:center;gap:var(--space-xs);padding:10px 20px;background:var(--c-secondary);color:#fff;border-radius:var(--radius-md);font-size:14px;font-weight:500;width:100%;justify-content:center}
 .product-action svg{width:16px;height:16px}
 
-/* ═══ 空状态 ═══ */
 .empty-state{text-align:center;padding:var(--space-5xl) var(--space-xl);color:var(--c-text-muted)}
 .empty-state svg{width:64px;height:64px;margin-bottom:var(--space-lg);opacity:.3}
 .empty-state h3{font-size:18px;margin-bottom:var(--space-sm);color:var(--c-text)}
 .empty-state p{font-size:14px}
 
-/* ═══ 底部联系 ═══ */
 .contact-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.95);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border-top:1px solid var(--c-border);padding:var(--space-md) var(--space-xl);display:flex;gap:var(--space-md);padding-bottom:calc(var(--space-md) + env(safe-area-inset-bottom))}
 .contact-bar a{flex:1;display:flex;align-items:center;justify-content:center;gap:var(--space-sm);padding:12px;border-radius:var(--radius-md);font-size:14px;font-weight:600}
 .contact-bar .btn-call{background:var(--c-secondary);color:#fff}
@@ -84,7 +83,6 @@ a{color:inherit;text-decoration:none}
 .contact-bar svg{width:18px;height:18px}
 .main-content{padding-bottom:80px}
 
-/* ═══ 灯箱 ═══ */
 .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:600;display:none;align-items:center;justify-content:center}
 .lightbox.active{display:flex}
 .lightbox img{max-width:95vw;max-height:90vh;object-fit:contain}
@@ -93,7 +91,6 @@ a{color:inherit;text-decoration:none}
 </head>
 <body>
 
-<!-- 顶部导航 -->
 <nav class="nav">
   <div class="nav-inner">
     <a href="index.html" class="nav-back">
@@ -108,19 +105,23 @@ a{color:inherit;text-decoration:none}
   </div>
 </nav>
 
-<!-- 品类标题 -->
 <section class="category-hero">
   <h1 id="categoryTitle">产品分类</h1>
   <p id="categoryDesc">为您精选优质家具</p>
 </section>
 
-<!-- 产品列表 -->
+<!-- 子分类标签（沙发品类显示） -->
+<div class="sub-tabs" id="subTabs" style="display:none">
+  <div class="sub-tab active" data-sub="all">全部沙发</div>
+  <div class="sub-tab" data-sub="wood">实木沙发</div>
+  <div class="sub-tab" data-sub="leather">软皮沙发</div>
+  <div class="sub-tab" data-sub="recliner">多功能沙发</div>
+</div>
+
 <main class="main-content">
   <section class="products-section">
     <div class="container">
-      <div class="products-grid" id="productsGrid">
-        <!-- 动态加载 -->
-      </div>
+      <div class="products-grid" id="productsGrid"></div>
       <div class="empty-state" id="emptyState" style="display:none">
         <svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><rect x="8" y="16" width="48" height="36" rx="4" stroke="currentColor" stroke-width="2.5"/><path d="M8 28h48" stroke="currentColor" stroke-width="2"/><circle cx="32" cy="40" r="4" stroke="currentColor" stroke-width="2"/></svg>
         <h3>暂无产品</h3>
@@ -130,19 +131,17 @@ a{color:inherit;text-decoration:none}
   </section>
 </main>
 
-<!-- 底部联系栏 -->
 <div class="contact-bar">
   <a href="tel:18177310007" class="btn-call">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     电话咨询
   </a>
-  <a href="#contact" class="btn-wechat">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <a href="index.html#contact" class="btn-wechat">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     微信咨询
   </a>
 </div>
 
-<!-- 灯箱 -->
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="lightboxClose">&times;</button>
   <img id="lightboxImg" src="" alt="">
@@ -154,90 +153,103 @@ var categories = {
   sofa: {
     name: '沙发',
     desc: '客厅的核心，家的温度',
-    keywords: ['沙发', '云呼吸'],
-    icon: '🛋️'
-  },
-  recliner: {
-    name: '功能沙发',
-    desc: '琪辉电动调节，可躺可睡',
-    keywords: ['功能沙发', '电动', '琪辉'],
-    icon: '🪑'
-  },
-  bed: {
-    name: '床',
-    desc: '好床，好梦，好日子',
-    keywords: ['床'],
-    icon: '🛏️'
+    hasSub: true,
+    subs: {
+      all: { name: '全部沙发', match: function(p) { return p.category === 'sofa'; } },
+      wood: { name: '实木沙发', match: function(p) { return p.category === 'sofa' && p.sub === 'wood'; } },
+      leather: { name: '软皮沙发', match: function(p) { return p.category === 'sofa' && p.sub === 'leather'; } },
+      recliner: { name: '多功能沙发', match: function(p) { return p.category === 'sofa' && p.sub === 'recliner'; } }
+    }
   },
   mattress: {
     name: '床垫',
     desc: '喜临门核心品类，健康好睡眠',
-    keywords: ['床垫', '深睡', '弹簧', '乳胶'],
-    icon: '💤'
+    hasSub: false,
+    match: function(p) { return p.category === 'mattress'; }
+  },
+  bed: {
+    name: '床',
+    desc: '好床，好梦，好日子',
+    hasSub: false,
+    match: function(p) { return p.category === 'bed'; }
   },
   dining: {
     name: '餐桌',
     desc: '一日三餐，家的团聚',
-    keywords: ['餐桌', '餐'],
-    icon: '🍽️'
+    hasSub: false,
+    match: function(p) { return p.category === 'dining'; }
   },
   wardrobe: {
     name: '衣柜',
     desc: '收纳美好，整理生活',
-    keywords: ['衣柜', '柜'],
-    icon: '🚪'
+    hasSub: false,
+    match: function(p) { return p.category === 'wardrobe'; }
   }
 };
 
-// 获取URL参数
+var allProducts = [];
+var currentCategory = 'sofa';
+var currentSub = 'all';
+
 function getUrlParam(name) {
   var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
   return results ? decodeURIComponent(results[1]) : null;
 }
 
-// 加载产品数据
 async function loadProducts() {
-  var category = getUrlParam('category') || 'sofa';
-  var config = categories[category];
+  currentCategory = getUrlParam('category') || 'sofa';
+  currentSub = getUrlParam('sub') || 'all';
   
+  var config = categories[currentCategory];
   if (!config) {
     config = categories.sofa;
-    category = 'sofa';
+    currentCategory = 'sofa';
   }
 
-  // 更新页面标题
   document.title = '云祥家具城 — ' + config.name;
   document.getElementById('navTitle').textContent = config.name;
   document.getElementById('categoryTitle').textContent = config.name;
   document.getElementById('categoryDesc').textContent = config.desc;
 
+  // 显示/隐藏子分类标签
+  var subTabs = document.getElementById('subTabs');
+  if (config.hasSub) {
+    subTabs.style.display = 'flex';
+    // 更新子分类标签状态
+    document.querySelectorAll('.sub-tab').forEach(function(tab) {
+      tab.classList.toggle('active', tab.dataset.sub === currentSub);
+    });
+  } else {
+    subTabs.style.display = 'none';
+  }
+
   try {
-    // 加载产品数据
     var r = await fetch('images/products.json?t=' + Date.now());
     if (!r.ok) throw new Error('加载失败');
     var data = await r.json();
-    
-    // 筛选该品类的产品
-    var products = (data.products || []).filter(function(p) {
-      var text = (p.name + ' ' + p.brand + ' ' + p.desc).toLowerCase();
-      return config.keywords.some(function(kw) {
-        return text.indexOf(kw.toLowerCase()) >= 0;
-      });
-    });
-
-    // 如果没有匹配的产品，显示所有产品
-    if (products.length === 0) {
-      products = data.products || [];
-    }
-
-    renderProducts(products);
+    allProducts = data.products || [];
+    filterAndRender();
   } catch (e) {
-    console.error('加载产品失败:', e);
+    console.error('加载失败:', e);
     showEmpty();
   }
 }
 
-// 渲染产品
+function filterAndRender() {
+  var config = categories[currentCategory];
+  var products;
+  
+  if (config.hasSub && config.subs[currentSub]) {
+    products = allProducts.filter(config.subs[currentSub].match);
+  } else if (config.match) {
+    products = allProducts.filter(config.match);
+  } else {
+    products = [];
+  }
+  
+  renderProducts(products);
+}
+
 function renderProducts(products) {
   var grid = document.getElementById('productsGrid');
   var empty = document.getElementById('emptyState');
@@ -259,8 +271,7 @@ function renderProducts(products) {
     
     return '<div class="product-card">' +
       '<div class="product-img" onclick="openLightbox(\'' + (p.image || '') + '\')">' +
-        imgHtml +
-        tagHtml +
+        imgHtml + tagHtml +
       '</div>' +
       '<div class="product-body">' +
         '<div class="product-brand">' + (p.brand || '') + '</div>' +
@@ -280,24 +291,37 @@ function showEmpty() {
   document.getElementById('emptyState').style.display = 'block';
 }
 
-// 灯箱功能
+// 子分类标签点击
+document.getElementById('subTabs').addEventListener('click', function(e) {
+  var tab = e.target.closest('.sub-tab');
+  if (!tab) return;
+  
+  currentSub = tab.dataset.sub;
+  document.querySelectorAll('.sub-tab').forEach(function(t) {
+    t.classList.toggle('active', t === tab);
+  });
+  
+  // 更新URL参数
+  var url = new URL(window.location);
+  url.searchParams.set('sub', currentSub);
+  history.replaceState(null, '', url);
+  
+  filterAndRender();
+});
+
+// 灯箱
 function openLightbox(url) {
   if (!url) return;
-  var lightbox = document.getElementById('lightbox');
-  var img = document.getElementById('lightboxImg');
-  img.src = url;
-  lightbox.classList.add('active');
+  document.getElementById('lightboxImg').src = url;
+  document.getElementById('lightbox').classList.add('active');
 }
-
 document.getElementById('lightboxClose').addEventListener('click', function() {
   document.getElementById('lightbox').classList.remove('active');
 });
-
 document.getElementById('lightbox').addEventListener('click', function(e) {
   if (e.target === this) this.classList.remove('active');
 });
 
-// 初始化
 loadProducts();
 </script>
 
